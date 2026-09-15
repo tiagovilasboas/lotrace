@@ -1,4 +1,4 @@
-import type { BoardCell } from './types.ts';
+import type { BoardCell, ColorGroup } from './types.ts';
 import { BOARD_SIZE } from './types.ts';
 
 export const BOARD: BoardCell[] = [
@@ -140,4 +140,10 @@ export function getCell(index: number): BoardCell {
 
 export function isPurchasable(cell: BoardCell): boolean {
   return cell.kind === 'property' || cell.kind === 'station';
+}
+
+export function getPropertyCellsByColorGroup(colorGroup: ColorGroup): BoardCell[] {
+  return BOARD.filter(
+    (cell) => cell.kind === 'property' && cell.colorGroup === colorGroup,
+  );
 }

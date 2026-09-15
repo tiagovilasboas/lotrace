@@ -18,6 +18,8 @@ function formatEvent(
         : `${nameOf(players, event.playerID)} parou em ${getCell(event.to).name}`;
     case 'buy':
       return `${nameOf(players, event.playerID)} comprou ${getCell(event.cell).name}`;
+    case 'buy-house':
+      return `${nameOf(players, event.playerID)} construiu em ${getCell(event.cell).name}`;
     case 'skip-buy':
       return `${nameOf(players, event.playerID)} passou de ${getCell(event.cell).name}`;
     case 'rent':
@@ -27,7 +29,7 @@ function formatEvent(
     case 'salary':
       return `${nameOf(players, event.playerID)} recebeu R$${event.amount}`;
     case 'jail':
-      if (event.reason === 'goto') {
+      if (event.reason === 'goto' || event.reason === 'doubles') {
         return `${nameOf(players, event.playerID)} foi preso`;
       }
       if (event.reason === 'pay') {

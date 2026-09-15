@@ -1,8 +1,10 @@
 import type { Game } from 'boardgame.io';
 import { INVALID_MOVE } from 'boardgame.io/core';
 import { getCell, isPurchasable } from './board.ts';
+import { registerRollDoubles, shouldGrantExtraRoll } from './rules/doubles.ts';
 import { payToBank } from './rules/economy.ts';
-import { resolveLanding } from './rules/landing.ts';
+import { applyBuyHouse } from './rules/houses.ts';
+import { resolveLanding, sendToJail } from './rules/landing.ts';
 import { advancePosition, collectSalary } from './rules/movement.ts';
 import { findWinner, getPlayer, pushLog } from './rules/players.ts';
 import {
@@ -41,8 +43,10 @@ function createInitialState(
   return {
     players,
     owners,
+    houses: {},
     lastDice: null,
     pendingCell: null,
+    consecutiveDoubles: 0,
     log: [],
   };
 }
@@ -76,6 +80,7 @@ export const Imobiliario: Game<
   },
   turn: {
     onBegin: ({ G, ctx, events }) => {
+      G.consecutiveDoubles = 0;
       const player = getPlayer(G, ctx.currentPlayer);
       if (player.bankrupt) {
         events.endTurn();
@@ -118,6 +123,12 @@ export const Imobiliario: Game<
               const total = die1 + die2;
               G.lastDice = { die1, die2, total };
               pushLog(G, { type: 'roll', playerID, die1, die2 });
+
+              if (registerRollDoubles(G, die1, die2)) {
+                sendToJail(G, playerID, 'doubles');
+                setStage(events, 'end');
+                return undefined;
+              }
 
               const from = player.position;
               const moved = advancePosition(from, total);
@@ -241,10 +252,29 @@ export const Imobiliario: Game<
       },
       end: {
         moves: {
-          endTurn: {
-            move: ({ ctx, events, playerID }) => {
+          buyHouse: {
+            move: ({ G, ctx, playerID }, cellIndex: unknown) => {
               if (playerID !== ctx.currentPlayer) {
                 return INVALID_MOVE;
+              }
+              if (typeof cellIndex !== 'number' || !Number.isInteger(cellIndex)) {
+                return INVALID_MOVE;
+              }
+              if (!applyBuyHouse(G, playerID, cellIndex)) {
+                return INVALID_MOVE;
+              }
+              return undefined;
+            },
+            client: false,
+          },
+          endTurn: {
+            move: ({ G, ctx, events, playerID }) => {
+              if (playerID !== ctx.currentPlayer) {
+                return INVALID_MOVE;
+              }
+              if (shouldGrantExtraRoll(G, playerID)) {
+                setStage(events, 'roll');
+                return undefined;
               }
               events.endTurn();
               return undefined;
