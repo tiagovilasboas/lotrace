@@ -105,6 +105,21 @@
   }
 }
 
+@keyframes dice-face-roll {
+  0% {
+    transform: rotate(-16deg) scale(0.88);
+  }
+  35% {
+    transform: rotate(10deg) scale(1.08);
+  }
+  65% {
+    transform: rotate(-5deg) scale(0.98);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
 @layer utilities {
   .surface-card {
     @apply rounded-xl border border-border bg-card shadow-sm;
@@ -112,5 +127,15 @@
 
   .touch-cta {
     @apply flex min-h-12 w-full items-center justify-center rounded-xl text-base font-semibold;
+  }
+
+  .dice-face-roll {
+    animation: dice-face-roll 0.45s ease-out both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dice-face-roll {
+      animation: none;
+    }
   }
 }
