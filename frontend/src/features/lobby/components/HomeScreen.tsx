@@ -2,6 +2,7 @@ import { useState, type FormEvent, type ReactElement } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { Card } from '@/components/ui/card.tsx';
 import { Input } from '@/components/ui/input.tsx';
+import { isLayoutCode } from '@/features/lobby/lib/layout-code.ts';
 import { t } from '@/lib/i18n.ts';
 
 type HomeScreenProps = {
@@ -22,10 +23,11 @@ export function HomeScreen({
 
   const nicknameReady = nickname.trim().length >= 2;
   const codeReady = code.trim().length === 6;
+  const layoutJoin = isLayoutCode(code);
   const createDisabled = busy || !nicknameReady;
-  const joinDisabled = busy || !nicknameReady || !codeReady;
+  const joinDisabled = busy || !codeReady || (!layoutJoin && !nicknameReady);
   const showCreateHint = !nicknameReady;
-  const showJoinHint = !nicknameReady || !codeReady;
+  const showJoinHint = !layoutJoin && (!nicknameReady || !codeReady);
 
   const submitCreate = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
@@ -43,6 +45,7 @@ export function HomeScreen({
         <p className="text-sm font-medium text-primary">{t('appName')}</p>
         <h1 className="mt-1 text-2xl font-bold tracking-tight">{t('tagline')}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t('homeMinPlayers')}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{t('layoutCodeHint')}</p>
       </header>
 
       <Card>
