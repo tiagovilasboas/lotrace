@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { ThemeToggle } from '@/components/theme-toggle.tsx';
 import { HomeScreen } from '@/features/lobby/components/HomeScreen.tsx';
 import { useRoom } from '@/features/lobby/hooks/use-room.ts';
+import {
+  isLayoutCode,
+  LAYOUT_CODE,
+  rememberLayoutNickname,
+} from '@/features/lobby/lib/layout-code.ts';
 
 export function HomeRoute(): ReactElement {
   const navigate = useNavigate();
@@ -21,6 +26,11 @@ export function HomeRoute(): ReactElement {
           await navigate(`/sala/${session.code}`);
         }}
         onJoin={async (code, nickname) => {
+          if (isLayoutCode(code)) {
+            rememberLayoutNickname(nickname);
+            await navigate(`/sala/${LAYOUT_CODE}`);
+            return;
+          }
           const session = await joinRoom(code, nickname);
           await navigate(`/sala/${session.code}`);
         }}
