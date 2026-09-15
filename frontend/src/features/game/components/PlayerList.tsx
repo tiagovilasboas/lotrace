@@ -1,6 +1,6 @@
 import type { PlayerState } from '@lotrace/shared';
 import type { ReactElement } from 'react';
-import { tokenClass } from '@/features/game/player-tokens.ts';
+import { CarToken } from '@/features/game/components/CarToken.tsx';
 import { t } from '@/lib/i18n.ts';
 import { cn } from '@/lib/utils.ts';
 
@@ -16,25 +16,25 @@ export function PlayerList({
   viewerID,
 }: PlayerListProps): ReactElement {
   return (
-    <ul className="grid grid-cols-2 gap-2">
+    <ul className="flex gap-1.5 overflow-x-auto pb-0.5">
       {players.map((player) => (
         <li
           key={player.id}
           className={cn(
-            'surface-card flex items-center gap-2 px-3 py-2',
-            player.id === currentPlayer && 'bg-accent player-turn-pulse',
+            'flex min-w-0 shrink-0 items-center gap-1.5 rounded-full bg-card/95 px-2 py-1 shadow-sm ring-1 ring-border',
+            player.id === currentPlayer && 'player-turn-pulse bg-accent',
             player.bankrupt && 'opacity-50',
           )}
         >
-          <span className={cn('size-2.5 shrink-0 rounded-full', tokenClass(player.id))} />
-          <div className="min-w-0">
-            <p className="truncate text-sm font-medium">
+          <CarToken playerID={player.id} size="hud" />
+          <div className="min-w-0 pr-0.5">
+            <p className="max-w-20 truncate text-xs font-semibold leading-tight">
               {player.nickname}
               {player.id === viewerID ? (
-                <span className="ml-1 text-xs text-muted-foreground">({t('you')})</span>
+                <span className="ml-1 text-[10px] font-medium text-muted-foreground">{t('you')}</span>
               ) : null}
             </p>
-            <p className="text-xs tabular-nums text-muted-foreground">
+            <p className="text-[11px] font-bold tabular-nums leading-tight">
               {player.bankrupt ? t('bankrupt') : `R$ ${player.cash}`}
             </p>
           </div>
