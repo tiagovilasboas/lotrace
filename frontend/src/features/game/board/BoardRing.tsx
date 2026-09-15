@@ -11,6 +11,7 @@ import type { BoardTileProps } from '@/features/game/board/tile-types.ts';
 type BoardRingProps = {
   players: Record<string, PlayerState>;
   owners: Record<number, string | null>;
+  houses: Record<number, number>;
   pendingCell: number | null;
   center: ReactElement;
 };
@@ -43,6 +44,7 @@ function renderRingTile(props: BoardTileProps): ReactElement {
 export function BoardRing({
   players,
   owners,
+  houses,
   pendingCell,
   center,
 }: BoardRingProps): ReactElement {
@@ -71,6 +73,7 @@ export function BoardRing({
                 ownerID: owners[cell.index] ?? null,
                 isPending: pendingCell === cell.index,
                 side: ringCellSide(cell.index),
+                houseCount: houses[cell.index] ?? 0,
               })}
             </div>
           );

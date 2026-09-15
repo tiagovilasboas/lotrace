@@ -7,4 +7,5 @@ export type BoardTileProps = {
   ownerID: string | null;
   isPending: boolean;
   side: RingSide;
+  houseCount: number;
 };

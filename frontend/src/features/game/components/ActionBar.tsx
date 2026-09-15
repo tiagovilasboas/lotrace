@@ -1,7 +1,9 @@
 import { getCell, JAIL_FEE, type ImobiliarioState, type TurnStage } from '@lotrace/shared';
 import type { ReactElement } from 'react';
 import { Button } from '@/components/ui/button.tsx';
+import { BuyHouseActions } from '@/features/game/components/BuyHouseActions.tsx';
 import { useRollBusy } from '@/features/game/hooks/use-roll-busy.ts';
+import { listBuildableLots } from '@/features/game/lib/buildable-lots.ts';
 import { t } from '@/lib/i18n.ts';
 
 type GameMoves = {
@@ -11,6 +13,7 @@ type GameMoves = {
   endTurn?: () => void;
   payJail?: () => void;
   waitJail?: () => void;
+  buyHouse?: (cellIndex: number) => void;
 };
 
 type ActionBarProps = {
@@ -54,6 +57,7 @@ export function ActionBar({
   const canAfford =
     pending?.price !== undefined && player !== undefined && player.cash >= pending.price;
   const canPayJail = player !== undefined && player.cash >= JAIL_FEE;
+  const buildableLots = listBuildableLots(G, viewerID);
 
   return (
     <div className="flex flex-col gap-2">
@@ -96,9 +100,19 @@ export function ActionBar({
         </>
       ) : null}
       {!rollBusy && stage === 'end' ? (
-        <Button size="lg" onClick={() => moves.endTurn?.()}>
-          {t('endTurn')}
-        </Button>
+        <>
+          <BuyHouseActions
+            lots={buildableLots}
+            onBuy={(cellIndex) => moves.buyHouse?.(cellIndex)}
+          />
+          <Button
+            size="lg"
+            variant={buildableLots.length > 0 ? 'outline' : 'default'}
+            onClick={() => moves.endTurn?.()}
+          >
+            {t('endTurn')}
+          </Button>
+        </>
       ) : null}
     </div>
   );

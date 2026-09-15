@@ -14,6 +14,7 @@ export {
   MIN_PLAYERS,
   STARTING_CASH,
 } from './types.ts';
+export { canBuyHouse, houseCost } from './rules/houses.ts';
 export type {
   BoardCell,
   CellKind,
