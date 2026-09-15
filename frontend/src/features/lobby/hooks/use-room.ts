@@ -38,6 +38,9 @@ export function useRoom(code?: string): UseRoomResult {
     if (!code) {
       return undefined;
     }
+    if (session?.matchID && session.credentials) {
+      return undefined;
+    }
     const token = readSession()?.token;
     let cancelled = false;
 
@@ -64,7 +67,7 @@ export function useRoom(code?: string): UseRoomResult {
       cancelled = true;
       window.clearInterval(id);
     };
-  }, [apply, code]);
+  }, [apply, code, session?.credentials, session?.matchID]);
 
   const createRoom = async (nickname: string): Promise<SessionPayload> => {
     setBusy(true);
