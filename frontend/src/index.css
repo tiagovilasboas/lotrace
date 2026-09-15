@@ -153,6 +153,46 @@
     color: #e8eef8;
   }
 
+  .board-tile {
+    container-type: size;
+  }
+
+  .tile-name-line {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: clamp(0.46rem, 16cqmin, 0.8rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+
+  .tile-price {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: clamp(0.4rem, 12cqmin, 0.62rem);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    opacity: 0.72;
+  }
+
+  .match-cta {
+    border-radius: 999px;
+    background: #2f6bff;
+    color: #fff;
+    box-shadow: 0 8px 18px rgb(47 107 255 / 0.4);
+  }
+
+  .match-cta:hover {
+    background: #2563eb;
+  }
+
   .surface-card {
     @apply rounded-xl border border-border bg-card shadow-sm;
   }
