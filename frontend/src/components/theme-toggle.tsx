@@ -6,7 +6,7 @@ import { t } from '@/lib/i18n.ts';
 const KEY = 'lotrace.theme';
 
 function readTheme(): 'light' | 'dark' {
-  const stored = localStorage.getItem(KEY);
+  const stored = localStorage.getItem(KEY) ?? localStorage.getItem('imobiliario.theme');
   if (stored === 'dark' || stored === 'light') {
     return stored;
   }
