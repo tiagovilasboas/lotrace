@@ -16,8 +16,8 @@ export default defineConfig({
       includeAssets: ['favicon.svg', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'],
       manifest: {
         id: 'imobiliario',
-        name: 'Imobiliário',
-        short_name: 'Imobiliário',
+        name: 'LotRace',
+        short_name: 'LotRace',
         description: 'Tabuleiro clássico para 2 a 6 jogadores. Host cria a sala; convidados entram por código.',
         lang: 'pt-BR',
         theme_color: '#2563eb',

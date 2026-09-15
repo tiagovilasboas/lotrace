@@ -1,5 +1,5 @@
 const messages = {
-  appName: 'Imobiliário',
+  appName: 'LotRace',
   tagline: 'Tabuleiro clássico para 2 a 6 jogadores.',
   nickname: 'Seu apelido',
   nicknamePlaceholder: 'Como te chamam na mesa',
