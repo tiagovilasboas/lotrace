@@ -1,4 +1,4 @@
-import type { SessionPayload } from '@imobiliario/shared';
+import type { SessionPayload } from '@lotrace/shared';
 
 const KEY = 'imobiliario.session';
 

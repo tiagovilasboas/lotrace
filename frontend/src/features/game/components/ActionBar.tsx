@@ -1,4 +1,4 @@
-import { getCell, JAIL_FEE, type ImobiliarioState, type TurnStage } from '@imobiliario/shared';
+import { getCell, JAIL_FEE, type ImobiliarioState, type TurnStage } from '@lotrace/shared';
 import type { ReactElement } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { t } from '@/lib/i18n.ts';

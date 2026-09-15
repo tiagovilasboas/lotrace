@@ -1,5 +1,5 @@
 {
-  "name": "@imobiliario/backend",
+  "name": "@lotrace/backend",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,7 +11,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@imobiliario/shared": "*",
+    "@lotrace/shared": "*",
     "@koa/bodyparser": "^6.1.0",
     "boardgame.io": "^0.50.2",
     "tsx": "^4.19.3"

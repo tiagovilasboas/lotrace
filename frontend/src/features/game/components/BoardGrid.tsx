@@ -1,4 +1,4 @@
-import { BOARD, type BoardCell, type PlayerState } from '@imobiliario/shared';
+import { BOARD, type BoardCell, type PlayerState } from '@lotrace/shared';
 import type { ReactElement } from 'react';
 import { CellTile } from '@/features/game/components/CellTile.tsx';
 

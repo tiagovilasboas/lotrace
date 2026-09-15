@@ -1,4 +1,4 @@
-import type { RoomView, SessionPayload } from '@imobiliario/shared';
+import type { RoomView, SessionPayload } from '@lotrace/shared';
 import { useCallback, useEffect, useState } from 'react';
 import { roomRepository } from '@/lib/repositories/room-repository.ts';
 import {

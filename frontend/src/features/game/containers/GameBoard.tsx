@@ -1,4 +1,4 @@
-import type { ImobiliarioState, TurnStage } from '@imobiliario/shared';
+import type { ImobiliarioState, TurnStage } from '@lotrace/shared';
 import type { BoardProps } from 'boardgame.io/react';
 import type { ReactElement } from 'react';
 import { ActionBar } from '@/features/game/components/ActionBar.tsx';

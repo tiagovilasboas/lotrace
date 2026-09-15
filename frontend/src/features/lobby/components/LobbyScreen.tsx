@@ -1,4 +1,4 @@
-import type { RoomView, SessionPayload } from '@imobiliario/shared';
+import type { RoomView, SessionPayload } from '@lotrace/shared';
 import { useState, type ReactElement } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { Card } from '@/components/ui/card.tsx';

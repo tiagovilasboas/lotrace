@@ -2,7 +2,7 @@ import {
   MAX_PLAYERS,
   MIN_PLAYERS,
   type RoomStatus,
-} from '@imobiliario/shared';
+} from '@lotrace/shared';
 import { randomInviteCode, randomToken } from './codes.ts';
 
 export type RoomPlayer = {

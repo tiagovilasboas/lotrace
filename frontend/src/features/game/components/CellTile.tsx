@@ -1,4 +1,4 @@
-import type { BoardCell, ColorGroup } from '@imobiliario/shared';
+import type { BoardCell, ColorGroup } from '@lotrace/shared';
 import type { ReactElement } from 'react';
 import { CarToken } from '@/features/game/components/CarToken.tsx';
 import { tokenClass } from '@/features/game/player-tokens.ts';

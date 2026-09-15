@@ -1,4 +1,4 @@
-import { GAME_NAME, type ImobiliarioSetupData } from '@imobiliario/shared';
+import { GAME_NAME, type ImobiliarioSetupData } from '@lotrace/shared';
 import type { Game, StorageAPI } from 'boardgame.io';
 import { createMatch } from 'boardgame.io/internal';
 import { randomToken } from './codes.ts';
