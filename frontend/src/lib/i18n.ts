@@ -14,6 +14,7 @@ const messages = {
   you: 'você',
   host: 'anfitrião',
   roll: 'Lançar dados',
+  rolling: 'Lançando…',
   dice: '2d6',
   diceAriaRolled: 'Dados {die1} e {die2}, total {total}',
   diceAriaEmpty: 'Dados ainda não lançados',

@@ -1,6 +1,7 @@
 import { getCell, JAIL_FEE, type ImobiliarioState, type TurnStage } from '@lotrace/shared';
 import type { ReactElement } from 'react';
 import { Button } from '@/components/ui/button.tsx';
+import { useRollBusy } from '@/features/game/hooks/use-roll-busy.ts';
 import { t } from '@/lib/i18n.ts';
 
 type GameMoves = {
@@ -29,6 +30,15 @@ export function ActionBar({
   viewerID,
   moves,
 }: ActionBarProps): ReactElement {
+  const { rollBusy, beginRoll } = useRollBusy(stage, isActive);
+
+  const handleRoll = (): void => {
+    if (!beginRoll()) {
+      return;
+    }
+    moves.rollDice?.();
+  };
+
   if (!isActive) {
     return (
       <div
@@ -56,12 +66,17 @@ export function ActionBar({
       >
         <p className="text-sm font-bold tracking-wide">{t('yourTurn')}</p>
       </div>
-      {stage === 'roll' ? (
-        <Button size="lg" onClick={() => moves.rollDice?.()}>
-          {t('roll')}
+      {stage === 'roll' || rollBusy ? (
+        <Button
+          size="lg"
+          loading={rollBusy}
+          onClick={handleRoll}
+          aria-label={rollBusy ? t('rolling') : t('roll')}
+        >
+          {rollBusy ? t('rolling') : t('roll')}
         </Button>
       ) : null}
-      {stage === 'buy' && pending ? (
+      {!rollBusy && stage === 'buy' && pending ? (
         <>
           <p className="text-center text-sm text-muted-foreground">
             {pending.name} · R${pending.price}
@@ -74,7 +89,7 @@ export function ActionBar({
           </Button>
         </>
       ) : null}
-      {stage === 'jail' ? (
+      {!rollBusy && stage === 'jail' ? (
         <>
           <Button size="lg" disabled={!canPayJail} onClick={() => moves.payJail?.()}>
             {t('payJail')}
@@ -84,7 +99,7 @@ export function ActionBar({
           </Button>
         </>
       ) : null}
-      {stage === 'end' ? (
+      {!rollBusy && stage === 'end' ? (
         <Button size="lg" onClick={() => moves.endTurn?.()}>
           {t('endTurn')}
         </Button>
