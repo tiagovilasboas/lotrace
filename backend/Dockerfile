@@ -1,0 +1,19 @@
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+COPY shared/package.json shared/package.json
+COPY backend/package.json backend/package.json
+COPY frontend/package.json frontend/package.json
+
+RUN npm ci --omit=dev --workspace=@imobiliario/shared --workspace=@imobiliario/backend
+
+COPY shared ./shared
+COPY backend ./backend
+
+ENV NODE_ENV=production
+EXPOSE 8000
+
+WORKDIR /app/backend
+CMD ["npx", "tsx", "src/index.ts"]
