@@ -31,7 +31,7 @@ Contract for code agents working on **LotRace** (classic property board — not 
 - **Doubles:** after resolving movement/landing/buy for that roll, `die1 === die2` grants another roll in the same turn (automatic if there is nothing left to choose). Consecutive doubles are tracked on G. **3 doubles in a row** → jail (`JAIL_INDEX`, `inJail=true`, log reason `'doubles'`), counter cleared, turn ends; the third roll does not move. A non-doubles roll resets the counter.
 - **Turns:** skip `end` and pass (or extra roll) automatically when there is no buy/jail/house choice. Stay on `end` only to build or skip building.
 - **Buildings:** from the `end` stage, `buyHouse` on a property you own if you hold the entire `colorGroup` monopoly, the cell is below a hotel (`HOTEL_LEVEL` 5), and you can afford it. Even-build across the group. **House/hotel cost** is by color band: brown/sky R$50, pink/orange R$100, red/yellow R$150, green/navy R$200. Rent uses each lot’s ladder (0–4 houses, then hotel). Bankruptcy returns properties to the bank and clears buildings.
-- **Jail:** pay R$50 then roll this turn, **or** try 2d6 — doubles leave and move (no extra turn). A failed roll stays in jail. On the **3rd** try, pay R$50 and move with that roll (bankrupt if you cannot pay).
+- **Jail:** miss **2** upcoming turns (`JAIL_WAIT_TURNS`). Pay R$50 to leave early and roll this turn, or `waitJail` to skip the turn. After two waits, the next turn starts free (`reason: 'free'`) on `roll`. No dice-to-leave.
 - **Win:** last solvent player. Cannot pay rent/tax → bankrupt; properties return to the bank.
 
 ## Do

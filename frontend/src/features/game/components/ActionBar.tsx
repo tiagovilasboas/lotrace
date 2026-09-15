@@ -1,4 +1,4 @@
-import { getCell, JAIL_FEE, type ImobiliarioState, type TurnStage } from '@lotrace/shared';
+import { getCell, JAIL_FEE, JAIL_WAIT_TURNS, type ImobiliarioState, type TurnStage } from '@lotrace/shared';
 import type { ReactElement } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { BuyHouseActions } from '@/features/game/components/BuyHouseActions.tsx';
@@ -12,6 +12,7 @@ type GameMoves = {
   skipBuy?: () => void;
   endTurn?: () => void;
   payJail?: () => void;
+  waitJail?: () => void;
   buyHouse?: (cellIndex: number) => void;
 };
 
@@ -57,7 +58,7 @@ export function ActionBar({
     pending?.price !== undefined && player !== undefined && player.cash >= pending.price;
   const canPayJail = player !== undefined && player.cash >= JAIL_FEE;
   const buildableLots = listBuildableLots(G, viewerID);
-  const triesLeft = 3 - (player?.jailTurns ?? 0);
+  const waitsLeft = JAIL_WAIT_TURNS - (player?.jailTurns ?? 0);
 
   return (
     <div className="flex flex-col gap-2">
@@ -92,13 +93,13 @@ export function ActionBar({
       {!rollBusy && stage === 'jail' ? (
         <>
           <p className="text-center text-sm text-muted-foreground">
-            {t('jailHint', { tries: String(triesLeft) })}
+            {t('jailHint', { turns: String(waitsLeft) })}
           </p>
           <Button size="lg" disabled={!canPayJail} onClick={() => moves.payJail?.()}>
             {t('payJail')}
           </Button>
-          <Button size="lg" variant="outline" onClick={handleRoll}>
-            {t('rollJail')}
+          <Button size="lg" variant="outline" onClick={() => moves.waitJail?.()}>
+            {t('waitJail')}
           </Button>
         </>
       ) : null}
