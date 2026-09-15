@@ -17,6 +17,8 @@ npm run dev
 
 Open `http://localhost:5173`. Create a room on one phone-sized window, join with the 6-character code on another.
 
+**Layout hotseat:** room code `LAYOUT` opens a local 2-player board (no API) to validate match UI.
+
 ```bash
 npm run typecheck
 npm run lint
