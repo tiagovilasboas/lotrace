@@ -2,6 +2,7 @@ import { useState, type FormEvent, type ReactElement } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { Card } from '@/components/ui/card.tsx';
 import { Input } from '@/components/ui/input.tsx';
+import { HomeTrackPreview } from '@/features/lobby/components/HomeTrackPreview.tsx';
 import { t } from '@/lib/i18n.ts';
 
 type HomeScreenProps = {
@@ -44,6 +45,8 @@ export function HomeScreen({
         <h1 className="mt-1 text-2xl font-bold tracking-tight">{t('tagline')}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t('homeMinPlayers')}</p>
       </header>
+
+      <HomeTrackPreview />
 
       <Card>
         <form className="flex flex-col gap-3" onSubmit={submitCreate}>
