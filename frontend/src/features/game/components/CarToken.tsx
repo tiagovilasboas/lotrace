@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { tokenFillClass } from '@/features/game/player-tokens.ts';
+import { tokenTextClass } from '@/features/game/player-tokens.ts';
 import { cn } from '@/lib/utils.ts';
 
 type CarTokenProps = {
@@ -8,9 +8,9 @@ type CarTokenProps = {
 };
 
 const SIZE_CLASS = {
-  board: 'h-8 w-9',
-  hud: 'h-6 w-7',
-  lobby: 'h-7 w-8',
+  board: 'h-9 w-10',
+  hud: 'h-7 w-8',
+  lobby: 'h-8 w-9',
 } as const;
 
 export function CarToken({
@@ -19,31 +19,35 @@ export function CarToken({
 }: CarTokenProps): ReactElement {
   return (
     <svg
-      viewBox="0 0 36 32"
-      className={cn('car-token-arrive shrink-0 drop-shadow-md', SIZE_CLASS[size])}
+      viewBox="0 0 48 36"
+      className={cn(
+        'car-token-arrive shrink-0 overflow-visible drop-shadow-md',
+        tokenTextClass(playerID),
+        SIZE_CLASS[size],
+      )}
       aria-hidden="true"
       focusable="false"
     >
-      <ellipse cx="18" cy="28.2" rx="12" ry="2.4" fill="#1c1917" opacity="0.32" />
-      <rect x="6" y="16.4" width="5.2" height="7.2" rx="1.6" fill="#1c1917" />
-      <rect x="24.8" y="16.4" width="5.2" height="7.2" rx="1.6" fill="#1c1917" />
-      <path
-        className={tokenFillClass(playerID)}
-        d="M8.2 18.6c0-1.2.7-2.3 1.8-2.8L13.4 14l2-6.2c.3-.9 1.1-1.5 2.1-1.5h3c1 0 1.8.6 2.1 1.5L24.6 14l3.4 1.8c1.1.5 1.8 1.6 1.8 2.8v3.2c0 .7-.6 1.3-1.3 1.3H9.5c-.7 0-1.3-.6-1.3-1.3z"
-      />
-      <path d="M15.6 8.4h4.8l1.8 5.4H13.8z" fill="#fff" opacity="0.42" />
-      <path className={tokenFillClass(playerID)} d="M9.2 20.4h17.6v2.6H9.2z" opacity="0.55" />
-      <circle cx="12.2" cy="24.2" r="2.15" fill="#1c1917" />
-      <circle cx="23.8" cy="24.2" r="2.15" fill="#1c1917" />
-      <circle cx="12.2" cy="24.2" r="0.7" fill="#e7e5e4" />
-      <circle cx="23.8" cy="24.2" r="0.7" fill="#e7e5e4" />
+      <ellipse cx="24" cy="32.4" rx="15" ry="2.6" fill="#1c1917" opacity="0.3" />
+      <ellipse cx="15" cy="24.4" rx="4.1" ry="2.3" fill="#1c1917" />
+      <ellipse cx="34.4" cy="22.2" rx="4.1" ry="2.3" fill="#1c1917" />
+      <path fill="currentColor" d="M9.2 20.4 22.6 13.6 40.6 17.4 27.4 25.2Z" />
+      <path fill="currentColor" opacity="0.72" d="M9.2 20.4 27.4 25.2 27.4 29.2 9.2 24.4Z" />
+      <path fill="currentColor" opacity="0.9" d="M27.4 25.2 40.6 17.4 40.6 21.4 27.4 29.2Z" />
+      <path fill="currentColor" d="M16.6 18.8 22.8 14.2 31.2 16.2 24.8 21.2Z" />
+      <path fill="#fff" opacity="0.48" d="M18.4 18.2 23.4 14.8 29.6 16.4 24.4 20.2Z" />
+      <path fill="#1c1917" opacity="0.22" d="M11.2 21.6 26.4 26.2 26.4 27.6 11.2 23Z" />
+      <ellipse cx="17.2" cy="27.6" rx="4.4" ry="2.5" fill="#1c1917" />
+      <ellipse cx="32.6" cy="25.6" rx="4.4" ry="2.5" fill="#1c1917" />
+      <ellipse cx="17.2" cy="26.8" rx="1.4" ry="0.8" fill="#e7e5e4" />
+      <ellipse cx="32.6" cy="24.8" rx="1.4" ry="0.8" fill="#e7e5e4" />
+      <path fill="#fef08a" d="M37.8 18.2 40.2 18.8 40.2 20.4 37.8 19.8Z" />
     </svg>
   );
 }
 
 type CarTokenStackProps = {
   playerIDs: string[];
-  side?: unknown;
 };
 
 export function CarTokenStack({
@@ -52,10 +56,15 @@ export function CarTokenStack({
   if (playerIDs.length === 0) {
     return null;
   }
+
   return (
     <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex items-end justify-center pb-0.5">
       {playerIDs.map((id, index) => (
-        <span key={id} className="relative" style={{ marginLeft: index === 0 ? 0 : -14, zIndex: index + 1 }}>
+        <span
+          key={id}
+          className="relative"
+          style={{ marginLeft: index === 0 ? 0 : -16, zIndex: index + 1 }}
+        >
           <CarToken playerID={id} size="board" />
         </span>
       ))}
