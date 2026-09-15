@@ -40,9 +40,9 @@ export function HomeScreen({
   };
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-4 px-4 py-6">
+    <div className="home-felt mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-4 px-4 py-6">
       <header>
-        <p className="text-sm font-medium text-primary">{t('appName')}</p>
+        <p className="text-sm font-semibold tracking-wide text-go">{t('appName')}</p>
         <h1 className="mt-1 text-2xl font-bold tracking-tight">{t('tagline')}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t('homeMinPlayers')}</p>
         <p className="mt-1 text-sm text-muted-foreground">{t('layoutCodeHint')}</p>
