@@ -37,10 +37,10 @@ export function HouseMarkers({ count, side }: HouseMarkersProps): ReactElement |
       }
     >
       {isHotel(level) ? (
-        <HotelIso className="h-6 w-6" />
+        <HotelIso className="h-7 w-7 drop-shadow-md" />
       ) : (
         Array.from({ length: houses }, (_, index) => (
-          <HouseIso key={index} className="h-[18px] w-[18px]" />
+          <HouseIso key={index} className="h-5 w-5 drop-shadow-sm" />
         ))
       )}
     </span>
