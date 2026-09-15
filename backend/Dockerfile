@@ -7,7 +7,7 @@ COPY shared/package.json shared/package.json
 COPY backend/package.json backend/package.json
 COPY frontend/package.json frontend/package.json
 
-RUN npm ci --omit=dev --workspace=@imobiliario/shared --workspace=@imobiliario/backend
+RUN npm ci --omit=dev --workspace=@lotrace/shared --workspace=@lotrace/backend
 
 COPY shared ./shared
 COPY backend ./backend
