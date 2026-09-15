@@ -21,7 +21,11 @@ function applyTheme(theme: 'light' | 'dark'): void {
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color);
 }
 
-export function ThemeToggle(): ReactElement {
+type ThemeToggleProps = {
+  className?: string;
+};
+
+export function ThemeToggle({ className }: ThemeToggleProps = {}): ReactElement {
   const [theme, setTheme] = useState<'light' | 'dark'>(() =>
     typeof window === 'undefined' ? 'light' : readTheme(),
   );
@@ -37,6 +41,7 @@ export function ThemeToggle(): ReactElement {
     <Button
       variant="ghost"
       size="sm"
+      className={className}
       aria-label={next === 'dark' ? t('themeDark') : t('themeLight')}
       onClick={() => setTheme(next)}
     >
