@@ -1,4 +1,4 @@
-import type { PlayerState } from '@imobiliario/shared';
+import type { PlayerState } from '@lotrace/shared';
 import type { ReactElement } from 'react';
 import { tokenClass } from '@/features/game/player-tokens.ts';
 import { t } from '@/lib/i18n.ts';

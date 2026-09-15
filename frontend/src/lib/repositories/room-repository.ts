@@ -1,4 +1,4 @@
-import type { RoomView, SessionPayload } from '@imobiliario/shared';
+import type { RoomView, SessionPayload } from '@lotrace/shared';
 import { apiUrl } from '../api-base.ts';
 
 export type RoomResponse = {

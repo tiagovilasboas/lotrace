@@ -1,4 +1,4 @@
-import { Imobiliario } from '@imobiliario/shared';
+import { Imobiliario } from '@lotrace/shared';
 import { SocketIO } from 'boardgame.io/multiplayer';
 import { Client } from 'boardgame.io/react';
 import type { ReactElement } from 'react';

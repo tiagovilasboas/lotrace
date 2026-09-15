@@ -1,4 +1,4 @@
-import { Imobiliario } from '@imobiliario/shared';
+import { Imobiliario } from '@lotrace/shared';
 import { Origins, Server } from 'boardgame.io/server';
 import { loadConfig } from './config.ts';
 import { registerRoomRoutes } from './http/room-routes.ts';

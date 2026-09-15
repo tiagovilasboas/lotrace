@@ -3,7 +3,7 @@ import {
   MIN_PLAYERS,
   type RoomView,
   type SessionPayload,
-} from '@imobiliario/shared';
+} from '@lotrace/shared';
 import type { Room, RoomPlayer } from './room-store.ts';
 
 export function toRoomView(room: Room): RoomView {

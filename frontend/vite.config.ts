@@ -37,7 +37,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(rootDir, './src'),
-      '@imobiliario/shared': path.resolve(rootDir, '../shared/src/index.ts'),
+      '@lotrace/shared': path.resolve(rootDir, '../shared/src/index.ts'),
     },
   },
   server: {

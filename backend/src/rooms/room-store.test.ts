@@ -1,4 +1,4 @@
-import { MAX_PLAYERS } from '@imobiliario/shared';
+import { MAX_PLAYERS } from '@lotrace/shared';
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
   assertHost,

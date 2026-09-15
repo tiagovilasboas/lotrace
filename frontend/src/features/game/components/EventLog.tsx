@@ -1,4 +1,4 @@
-import { getCell, type GameLogEvent, type PlayerState } from '@imobiliario/shared';
+import { getCell, type GameLogEvent, type PlayerState } from '@lotrace/shared';
 import type { ReactElement } from 'react';
 
 function nameOf(players: Record<string, PlayerState>, id: string): string {
