@@ -19,7 +19,7 @@ export function CarToken({ playerID, size = 'md' }: CarTokenProps): ReactElement
     <svg
       viewBox="0 0 16 10"
       className={cn(
-        'shrink-0 text-board-ink',
+        'car-token-arrive shrink-0 text-board-ink',
         SIZE_CLASS[size],
         tokenFillClass(playerID),
       )}
