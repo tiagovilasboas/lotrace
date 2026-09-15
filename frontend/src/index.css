@@ -1,73 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import '../../design-system/tokens/colors.css';
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
-
-:root {
-  color-scheme: light;
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --radius: 0.75rem;
-  --page: #f8fafc;
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --card: #ffffff;
-  --card-foreground: #0f172a;
-  --primary: #2563eb;
-  --primary-foreground: #ffffff;
-  --primary-strong: #1d4ed8;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #334155;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #eff6ff;
-  --accent-foreground: #1d4ed8;
-  --destructive: #dc2626;
-  --destructive-foreground: #ffffff;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #3b82f6;
-  --success: #16a34a;
-
-  --group-brown: #955436;
-  --group-sky: #AAE0FA;
-  --group-pink: #D93A96;
-  --group-orange: #F7941D;
-  --group-red: #ED1B24;
-  --group-yellow: #FEF200;
-  --group-green: #1FB25A;
-  --group-navy: #0072BB;
-  --board-track: #F5F2E8;
-  --board-felt: #1B4D3E;
-  --board-ink: #1c1917;
-  --station: #111111;
-  --tax: #9B0000;
-  --go: #1FB25A;
-  --jail: #6B7280;
-}
-
-.dark {
-  color-scheme: dark;
-  --page: #0f172a;
-  --background: #0f172a;
-  --foreground: #f8fafc;
-  --card: #1e293b;
-  --card-foreground: #f8fafc;
-  --primary: #3b82f6;
-  --primary-foreground: #ffffff;
-  --primary-strong: #2563eb;
-  --secondary: #334155;
-  --secondary-foreground: #f8fafc;
-  --muted: #334155;
-  --muted-foreground: #94a3b8;
-  --accent: #1e3a5f;
-  --accent-foreground: #93c5fd;
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-  --border: #334155;
-  --input: #334155;
-  --ring: #60a5fa;
-  --success: #22c55e;
-}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -200,6 +135,16 @@
 }
 
 @layer utilities {
+  .home-felt {
+    background:
+      radial-gradient(
+        circle at 50% 12%,
+        color-mix(in srgb, var(--go) 22%, transparent),
+        transparent 58%
+      ),
+      var(--page);
+  }
+
   .surface-card {
     @apply rounded-xl border border-border bg-card shadow-sm;
   }

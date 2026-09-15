@@ -17,7 +17,7 @@ function readTheme(): 'light' | 'dark' {
 
 function applyTheme(theme: 'light' | 'dark'): void {
   document.documentElement.classList.toggle('dark', theme === 'dark');
-  const color = theme === 'dark' ? '#0f172a' : '#f8fafc';
+  const color = theme === 'dark' ? '#0c1a16' : '#f4f1e8';
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color);
 }
 

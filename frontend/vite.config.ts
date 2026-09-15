@@ -20,8 +20,8 @@ export default defineConfig({
         short_name: 'LotRace',
         description: 'Tabuleiro clássico para 2 a 6 jogadores. Host cria a sala; convidados entram por código.',
         lang: 'pt-BR',
-        theme_color: '#2563eb',
-        background_color: '#f8fafc',
+        theme_color: '#1b4d3e',
+        background_color: '#f4f1e8',
         display: 'standalone',
         orientation: 'portrait-primary',
         start_url: '/',
@@ -38,6 +38,7 @@ export default defineConfig({
     alias: {
       '@': path.resolve(rootDir, './src'),
       '@lotrace/shared': path.resolve(rootDir, '../shared/src/index.ts'),
+      '@lotrace/design-system': path.resolve(rootDir, '../design-system'),
     },
   },
   server: {
