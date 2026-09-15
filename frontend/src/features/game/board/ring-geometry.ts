@@ -41,39 +41,26 @@ export function ringCellSide(index: number): RingSide {
 export function hueBarLayout(side: RingSide): HueBarLayout {
   switch (side) {
     case 'south':
-      return { containerClass: 'flex-col', barClass: 'h-3.5 w-full shrink-0' };
+      return { containerClass: 'flex-col', barClass: 'h-2.5 w-full shrink-0 sm:h-3' };
     case 'north':
-      return { containerClass: 'flex-col-reverse', barClass: 'h-3.5 w-full shrink-0' };
+      return { containerClass: 'flex-col-reverse', barClass: 'h-2.5 w-full shrink-0 sm:h-3' };
     case 'west':
-      return { containerClass: 'flex-row-reverse', barClass: 'h-full w-3.5 shrink-0' };
+      return { containerClass: 'flex-row-reverse', barClass: 'h-full w-2.5 shrink-0 sm:w-3' };
     case 'east':
-      return { containerClass: 'flex-row', barClass: 'h-full w-3.5 shrink-0' };
+      return { containerClass: 'flex-row', barClass: 'h-full w-2.5 shrink-0 sm:w-3' };
   }
 }
 
 export function tokenDockClass(side: RingSide): string {
   switch (side) {
     case 'south':
-      return 'inset-x-0 bottom-0 justify-center pb-px';
+      return 'inset-x-0 top-0 h-2.5 justify-center sm:h-3';
     case 'north':
-      return 'inset-x-0 top-0 justify-center pt-px';
+      return 'inset-x-0 bottom-0 h-2.5 justify-center sm:h-3';
     case 'west':
-      return 'inset-y-0 right-0 flex-col justify-center pr-px';
+      return 'inset-y-0 right-0 w-2.5 flex-col justify-center sm:w-3';
     case 'east':
-      return 'inset-y-0 left-0 flex-col justify-center pl-px';
-  }
-}
-
-export function tileBodyPadClass(side: RingSide): string {
-  switch (side) {
-    case 'south':
-      return 'pb-8';
-    case 'north':
-      return 'pt-8';
-    case 'west':
-      return 'pr-8';
-    case 'east':
-      return 'pl-8';
+      return 'inset-y-0 left-0 w-2.5 flex-col justify-center sm:w-3';
   }
 }
 
