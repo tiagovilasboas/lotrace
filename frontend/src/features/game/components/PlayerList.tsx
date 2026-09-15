@@ -22,7 +22,7 @@ export function PlayerList({
           key={player.id}
           className={cn(
             'surface-card flex items-center gap-2 px-3 py-2',
-            player.id === currentPlayer && 'ring-2 ring-primary',
+            player.id === currentPlayer && 'bg-accent player-turn-pulse',
             player.bankrupt && 'opacity-50',
           )}
         >
