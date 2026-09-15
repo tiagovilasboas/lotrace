@@ -20,6 +20,13 @@ export function HomeScreen({
   const [nickname, setNickname] = useState('');
   const [code, setCode] = useState('');
 
+  const nicknameReady = nickname.trim().length >= 2;
+  const codeReady = code.trim().length === 6;
+  const createDisabled = busy || !nicknameReady;
+  const joinDisabled = busy || !nicknameReady || !codeReady;
+  const showCreateHint = !nicknameReady;
+  const showJoinHint = !nicknameReady || !codeReady;
+
   const submitCreate = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
     await onCreate(nickname);
@@ -31,10 +38,11 @@ export function HomeScreen({
   };
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-4 px-4 py-6">
-      <header className="pt-4">
+    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-4 px-4 py-6">
+      <header>
         <p className="text-sm font-medium text-primary">{t('appName')}</p>
         <h1 className="mt-1 text-2xl font-bold tracking-tight">{t('tagline')}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{t('homeMinPlayers')}</p>
       </header>
 
       <Card>
@@ -52,9 +60,19 @@ export function HomeScreen({
             minLength={2}
             maxLength={20}
           />
-          <Button type="submit" size="lg" disabled={busy || nickname.trim().length < 2}>
+          <Button
+            type="submit"
+            size="lg"
+            disabled={createDisabled}
+            aria-describedby={showCreateHint ? 'create-need-nickname' : undefined}
+          >
             {t('createRoom')}
           </Button>
+          {showCreateHint ? (
+            <p id="create-need-nickname" className="text-xs text-muted-foreground">
+              {t('createNeedNickname')}
+            </p>
+          ) : null}
         </form>
       </Card>
 
@@ -77,10 +95,16 @@ export function HomeScreen({
             type="submit"
             variant="outline"
             size="lg"
-            disabled={busy || nickname.trim().length < 2 || code.trim().length !== 6}
+            disabled={joinDisabled}
+            aria-describedby={showJoinHint ? 'join-need-nickname-and-code' : undefined}
           >
             {t('joinRoom')}
           </Button>
+          {showJoinHint ? (
+            <p id="join-need-nickname-and-code" className="text-xs text-muted-foreground">
+              {t('joinNeedNicknameAndCode')}
+            </p>
+          ) : null}
         </form>
       </Card>
 
