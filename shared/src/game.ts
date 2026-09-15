@@ -1,9 +1,9 @@
 import type { Game } from 'boardgame.io';
 import { INVALID_MOVE } from 'boardgame.io/core';
-import { getCell, isPurchasable } from './board.ts';
+import { BOARD, getCell, isPurchasable } from './board.ts';
 import { registerRollDoubles, shouldGrantExtraRoll } from './rules/doubles.ts';
 import { declareBankrupt, payToBank } from './rules/economy.ts';
-import { applyBuyHouse } from './rules/houses.ts';
+import { applyBuyHouse, canBuyHouse } from './rules/houses.ts';
 import { resolveLanding, sendToJail } from './rules/landing.ts';
 import { advancePosition, collectSalary } from './rules/movement.ts';
 import { findWinner, getPlayer, pushLog } from './rules/players.ts';
@@ -51,22 +51,53 @@ function createInitialState(
   };
 }
 
-function setStage(
-  events: {
-    setActivePlayers: (arg: { currentPlayer: { stage: TurnStage } }) => void;
-  },
-  stage: TurnStage,
-): void {
+type TurnEvents = {
+  setActivePlayers: (arg: { currentPlayer: { stage: TurnStage } }) => void;
+  endTurn: () => void;
+};
+
+function setStage(events: TurnEvents, stage: TurnStage): void {
   events.setActivePlayers({ currentPlayer: { stage } });
+}
+
+function hasHouseChoice(G: ImobiliarioState, playerID: string): boolean {
+  return BOARD.some((cell) => canBuyHouse(G, playerID, cell.index));
+}
+
+function continueAfterAction(
+  G: ImobiliarioState,
+  playerID: string,
+  events: TurnEvents,
+): void {
+  if (hasHouseChoice(G, playerID)) {
+    setStage(events, 'end');
+    return;
+  }
+  if (shouldGrantExtraRoll(G, playerID)) {
+    setStage(events, 'roll');
+    return;
+  }
+  events.endTurn();
+}
+
+function applyLanding(
+  G: ImobiliarioState,
+  playerID: string,
+  events: TurnEvents,
+): void {
+  const stage = resolveLanding(G, playerID);
+  if (stage === 'end') {
+    continueAfterAction(G, playerID, events);
+    return;
+  }
+  setStage(events, stage);
 }
 
 function moveAfterDice(
   G: ImobiliarioState,
   playerID: string,
   total: number,
-  events: {
-    setActivePlayers: (arg: { currentPlayer: { stage: TurnStage } }) => void;
-  },
+  events: TurnEvents,
 ): void {
   const player = getPlayer(G, playerID);
   const from = player.position;
@@ -82,7 +113,7 @@ function moveAfterDice(
     to: moved.position,
     passedGo: moved.passedGo,
   });
-  setStage(events, resolveLanding(G, playerID));
+  applyLanding(G, playerID, events);
 }
 
 export const Imobiliario: Game<
@@ -148,11 +179,13 @@ export const Imobiliario: Game<
               const total = die1 + die2;
               G.lastDice = { die1, die2, total };
               pushLog(G, { type: 'roll', playerID, die1, die2 });
+
               if (registerRollDoubles(G, die1, die2)) {
                 sendToJail(G, playerID, 'doubles');
-                setStage(events, 'end');
+                continueAfterAction(G, playerID, events);
                 return undefined;
               }
+
               moveAfterDice(G, playerID, total, events);
               return undefined;
             },
@@ -196,14 +229,17 @@ export const Imobiliario: Game<
               const total = die1 + die2;
               G.lastDice = { die1, die2, total };
               pushLog(G, { type: 'roll', playerID, die1, die2 });
+
               const doubles = die1 === die2;
               const lastTry = player.jailTurns + 1 >= JAIL_MAX_TURNS;
+
               if (!doubles && !lastTry) {
                 player.jailTurns += 1;
                 pushLog(G, { type: 'jail', playerID, reason: 'wait' });
                 events.endTurn();
                 return undefined;
               }
+
               if (!doubles && lastTry) {
                 if (player.cash < JAIL_FEE) {
                   declareBankrupt(G, playerID);
@@ -215,6 +251,7 @@ export const Imobiliario: Game<
               } else {
                 pushLog(G, { type: 'jail', playerID, reason: 'free' });
               }
+
               player.inJail = false;
               player.jailTurns = 0;
               G.consecutiveDoubles = 0;
@@ -251,7 +288,7 @@ export const Imobiliario: Game<
               G.owners[cell.index] = playerID;
               G.pendingCell = null;
               pushLog(G, { type: 'buy', playerID, cell: cell.index });
-              setStage(events, 'end');
+              continueAfterAction(G, playerID, events);
               return undefined;
             },
             client: false,
@@ -270,7 +307,7 @@ export const Imobiliario: Game<
                 cell: G.pendingCell,
               });
               G.pendingCell = null;
-              setStage(events, 'end');
+              continueAfterAction(G, playerID, events);
               return undefined;
             },
             client: false,
@@ -280,7 +317,7 @@ export const Imobiliario: Game<
       end: {
         moves: {
           buyHouse: {
-            move: ({ G, ctx, playerID }, cellIndex: unknown) => {
+            move: ({ G, ctx, events, playerID }, cellIndex: unknown) => {
               if (playerID !== ctx.currentPlayer) {
                 return INVALID_MOVE;
               }
@@ -290,6 +327,7 @@ export const Imobiliario: Game<
               if (!applyBuyHouse(G, playerID, cellIndex)) {
                 return INVALID_MOVE;
               }
+              continueAfterAction(G, playerID, events);
               return undefined;
             },
             client: false,

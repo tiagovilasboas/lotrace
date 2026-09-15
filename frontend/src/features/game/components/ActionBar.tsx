@@ -67,29 +67,48 @@ export function ActionBar({
         </p>
       </div>
       {rollBusy ? (
-        <Button size="lg" loading aria-label={t('rolling')}>{t('rolling')}</Button>
+        <Button size="lg" loading aria-label={t('rolling')}>
+          {t('rolling')}
+        </Button>
       ) : null}
       {!rollBusy && stage === 'roll' ? (
-        <Button size="lg" onClick={handleRoll} aria-label={t('roll')}>{t('roll')}</Button>
+        <Button size="lg" onClick={handleRoll} aria-label={t('roll')}>
+          {t('roll')}
+        </Button>
       ) : null}
       {!rollBusy && stage === 'buy' && pending ? (
         <>
-          <p className="text-center text-sm font-medium">{pending.name} · R${pending.price}</p>
-          <Button size="lg" disabled={!canAfford} onClick={() => moves.buyProperty?.()}>{t('buy')}</Button>
-          <Button size="lg" variant="outline" onClick={() => moves.skipBuy?.()}>{t('skip')}</Button>
+          <p className="text-center text-sm font-medium">
+            {pending.name} · R${pending.price}
+          </p>
+          <Button size="lg" disabled={!canAfford} onClick={() => moves.buyProperty?.()}>
+            {t('buy')}
+          </Button>
+          <Button size="lg" variant="outline" onClick={() => moves.skipBuy?.()}>
+            {t('skip')}
+          </Button>
         </>
       ) : null}
       {!rollBusy && stage === 'jail' ? (
         <>
-          <p className="text-center text-sm text-muted-foreground">{t('jailHint', { tries: String(triesLeft) })}</p>
-          <Button size="lg" disabled={!canPayJail} onClick={() => moves.payJail?.()}>{t('payJail')}</Button>
-          <Button size="lg" variant="outline" onClick={handleRoll}>{t('rollJail')}</Button>
+          <p className="text-center text-sm text-muted-foreground">
+            {t('jailHint', { tries: String(triesLeft) })}
+          </p>
+          <Button size="lg" disabled={!canPayJail} onClick={() => moves.payJail?.()}>
+            {t('payJail')}
+          </Button>
+          <Button size="lg" variant="outline" onClick={handleRoll}>
+            {t('rollJail')}
+          </Button>
         </>
       ) : null}
-      {!rollBusy && stage === 'end' ? (
+      {!rollBusy && stage === 'end' && buildableLots.length > 0 ? (
         <>
-          <BuyHouseActions lots={buildableLots} onBuy={(cellIndex) => moves.buyHouse?.(cellIndex)} />
-          <Button size="lg" variant={buildableLots.length > 0 ? 'outline' : 'default'} onClick={() => moves.endTurn?.()}>
+          <BuyHouseActions
+            lots={buildableLots}
+            onBuy={(cellIndex) => moves.buyHouse?.(cellIndex)}
+          />
+          <Button size="lg" variant="outline" onClick={() => moves.endTurn?.()}>
             {t('endTurn')}
           </Button>
         </>
