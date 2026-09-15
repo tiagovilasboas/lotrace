@@ -120,6 +120,24 @@
   }
 }
 
+@keyframes player-turn-pulse {
+  0% {
+    box-shadow:
+      0 0 0 2px var(--primary),
+      0 0 0 0 color-mix(in srgb, var(--primary) 45%, transparent);
+  }
+  70% {
+    box-shadow:
+      0 0 0 2px var(--primary),
+      0 0 0 8px color-mix(in srgb, var(--primary) 0%, transparent);
+  }
+  100% {
+    box-shadow:
+      0 0 0 2px var(--primary),
+      0 0 0 0 color-mix(in srgb, var(--primary) 0%, transparent);
+  }
+}
+
 @layer utilities {
   .surface-card {
     @apply rounded-xl border border-border bg-card shadow-sm;
@@ -133,8 +151,14 @@
     animation: dice-face-roll 0.45s ease-out both;
   }
 
+  .player-turn-pulse {
+    box-shadow: 0 0 0 2px var(--primary);
+    animation: player-turn-pulse 1.8s ease-out infinite;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .dice-face-roll {
+    .dice-face-roll,
+    .player-turn-pulse {
       animation: none;
     }
   }
