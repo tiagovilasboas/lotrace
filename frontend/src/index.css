@@ -27,6 +27,22 @@
   --input: #e2e8f0;
   --ring: #3b82f6;
   --success: #16a34a;
+
+  --group-brown: #955436;
+  --group-sky: #AAE0FA;
+  --group-pink: #D93A96;
+  --group-orange: #F7941D;
+  --group-red: #ED1B24;
+  --group-yellow: #FEF200;
+  --group-green: #1FB25A;
+  --group-navy: #0072BB;
+  --board-track: #F5F2E8;
+  --board-felt: #1B4D3E;
+  --board-ink: #1c1917;
+  --station: #111111;
+  --tax: #9B0000;
+  --go: #1FB25A;
+  --jail: #6B7280;
 }
 
 .dark {
@@ -79,6 +95,21 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-success: var(--success);
+  --color-group-brown: var(--group-brown);
+  --color-group-sky: var(--group-sky);
+  --color-group-pink: var(--group-pink);
+  --color-group-orange: var(--group-orange);
+  --color-group-red: var(--group-red);
+  --color-group-yellow: var(--group-yellow);
+  --color-group-green: var(--group-green);
+  --color-group-navy: var(--group-navy);
+  --color-board-track: var(--board-track);
+  --color-board-felt: var(--board-felt);
+  --color-board-ink: var(--board-ink);
+  --color-station: var(--station);
+  --color-tax: var(--tax);
+  --color-go: var(--go);
+  --color-jail: var(--jail);
 }
 
 @layer base {

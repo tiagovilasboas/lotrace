@@ -1,8 +1,8 @@
 import type { ImobiliarioState, TurnStage } from '@lotrace/shared';
 import type { BoardProps } from 'boardgame.io/react';
 import type { ReactElement } from 'react';
+import { BoardRing } from '@/features/game/board/BoardRing.tsx';
 import { ActionBar } from '@/features/game/components/ActionBar.tsx';
-import { BoardGrid } from '@/features/game/components/BoardGrid.tsx';
 import { DiceDisplay } from '@/features/game/components/DiceDisplay.tsx';
 import { EventLog } from '@/features/game/components/EventLog.tsx';
 import { PlayerList } from '@/features/game/components/PlayerList.tsx';
@@ -43,17 +43,17 @@ export function GameBoard({
         viewerID={viewerID}
       />
 
-      <BoardGrid
+      <BoardRing
         players={G.players}
         owners={G.owners}
         pendingCell={G.pendingCell}
         center={
           <div className="text-center">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-board-track/90">
               {t('appName')}
             </p>
             <DiceDisplay dice={dice} />
-            <p className="mt-1.5 text-sm font-semibold">
+            <p className="mt-1 text-sm font-semibold text-board-track">
               {t('cash')}: R$ {G.players[viewerID]?.cash ?? 0}
             </p>
           </div>
