@@ -238,41 +238,46 @@ describe('doubles', () => {
 });
 
 describe('jail', () => {
-  it('leaves jail and moves when rolling doubles, without an extra turn', () => {
-    const client = createClient([4, 4], (G) => {
+  it('leaves jail by paying and then rolls this turn', () => {
+    const client = createClient([1, 2], (G) => {
       G.players['0']!.inJail = true;
       G.players['0']!.position = JAIL_INDEX;
     });
     expect(client.getState()?.ctx.activePlayers?.['0']).toBe('jail');
+    const before = requireG(client).players['0']!.cash;
+    client.moves.payJail();
+    expect(requireG(client).players['0']?.inJail).toBe(false);
+    expect(requireG(client).players['0']?.cash).toBe(before - JAIL_FEE);
+    expect(client.getState()?.ctx.activePlayers?.['0']).toBe('roll');
     client.moves.rollDice();
-    const G = requireG(client);
-    expect(G.players['0']?.inJail).toBe(false);
-    expect(G.players['0']?.position).toBe(14);
-    expect(G.consecutiveDoubles).toBe(0);
-    expect(client.getState()?.ctx.activePlayers?.['0']).toBe('buy');
+    expect(requireG(client).players['0']?.position).toBe(9);
   });
 
-  it('stays in jail after a failed roll and forces pay plus move on the third try', () => {
-    const client = createClient([1, 2, 1, 3, 2, 3], (G) => {
+  it('skips the turn when waiting in jail', () => {
+    const client = createClient([], (G) => {
       G.players['0']!.inJail = true;
       G.players['0']!.position = JAIL_INDEX;
     });
-    client.moves.rollDice();
+    client.moves.waitJail();
     expect(requireG(client).players['0']?.inJail).toBe(true);
     expect(requireG(client).players['0']?.jailTurns).toBe(1);
     expect(client.getState()?.ctx.currentPlayer).toBe('1');
+  });
 
-    const second = createClient([2, 3], (G) => {
+  it('releases for free after two waited turns', () => {
+    const client = createClient([], (G) => {
       G.players['0']!.inJail = true;
       G.players['0']!.jailTurns = 2;
       G.players['0']!.position = JAIL_INDEX;
     });
-    const before = requireG(second).players['0']!.cash;
-    second.moves.rollDice();
-    const G = requireG(second);
-    expect(G.players['0']?.inJail).toBe(false);
-    expect(G.players['0']?.cash).toBe(before - JAIL_FEE);
-    expect(G.players['0']?.position).toBe(11);
+    expect(requireG(client).players['0']?.inJail).toBe(false);
+    expect(requireG(client).players['0']?.jailTurns).toBe(0);
+    expect(client.getState()?.ctx.activePlayers?.['0']).toBe('roll');
+    expect(
+      requireG(client).log.some(
+        (event) => event.type === 'jail' && event.reason === 'free',
+      ),
+    ).toBe(true);
   });
 });
 
