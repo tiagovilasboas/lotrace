@@ -21,17 +21,19 @@ export function PlayerList({
         <li
           key={player.id}
           className={cn(
-            'flex min-w-0 shrink-0 items-center gap-1.5 rounded-full bg-card/95 px-2 py-1 shadow-sm ring-1 ring-border',
+            'flex min-w-0 shrink-0 items-center gap-1.5 rounded-full bg-card px-2 py-1 shadow-sm ring-1 ring-border',
             player.id === currentPlayer && 'player-turn-pulse bg-accent',
             player.bankrupt && 'opacity-50',
           )}
         >
           <CarToken playerID={player.id} size="hud" />
           <div className="min-w-0 pr-0.5">
-            <p className="max-w-20 truncate text-xs font-semibold leading-tight">
+            <p className="max-w-28 truncate text-xs font-semibold leading-tight">
               {player.nickname}
               {player.id === viewerID ? (
-                <span className="ml-1 text-[10px] font-medium text-muted-foreground">{t('you')}</span>
+                <span className="ml-1 text-[10px] font-medium text-muted-foreground">
+                  {t('you')}
+                </span>
               ) : null}
             </p>
             <p className="text-[11px] font-bold tabular-nums leading-tight">

@@ -90,7 +90,7 @@ export function DiceDisplay({ dice }: DiceDisplayProps): ReactElement {
 
   return (
     <div className="flex flex-col items-center gap-1.5" role="img" aria-label={label}>
-      <div className="flex items-center justify-center gap-3">
+      <div className="flex items-center justify-center gap-1.5">
         <span className="-rotate-[9deg]">
           <DieFace value={die1} rolling={rolling} delayMs={0} />
         </span>
@@ -99,7 +99,9 @@ export function DiceDisplay({ dice }: DiceDisplayProps): ReactElement {
         </span>
       </div>
       {hasFaces && dice !== null ? (
-        <p className="text-2xl font-black tabular-nums leading-none tracking-tight">{dice.total}</p>
+        <p className="text-lg font-black tabular-nums leading-none tracking-tight text-board-track">
+          {dice.total}
+        </p>
       ) : null}
     </div>
   );

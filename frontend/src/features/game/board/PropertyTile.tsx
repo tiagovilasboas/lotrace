@@ -2,7 +2,9 @@ import type { ReactElement } from 'react';
 import { colorGroupHue } from '@/features/game/board/board-colors.ts';
 import { HouseMarkers } from '@/features/game/board/HouseMarkers.tsx';
 import { HueStripe } from '@/features/game/board/HueStripe.tsx';
-import { hueBarLayout } from '@/features/game/board/ring-geometry.ts';
+import { hueBarLayout, tileBodyPadClass } from '@/features/game/board/ring-geometry.ts';
+import { tileCaption } from '@/features/game/board/tile-caption.ts';
+import { TileName } from '@/features/game/board/TileName.tsx';
 import type { BoardTileProps } from '@/features/game/board/tile-types.ts';
 import { tileSurfaceClass } from '@/features/game/board/tile-surface.ts';
 import { CarTokenStack } from '@/features/game/components/CarToken.tsx';
@@ -26,13 +28,20 @@ export function PropertyTile({
     >
       {hue ? <HueStripe hue={hue} side={side} ownerID={ownerID} /> : null}
       <HouseMarkers count={houseCount} side={side} />
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col pb-4">
-        <span className="px-0.5 pt-0.5 font-semibold [overflow-wrap:anywhere]">{cell.name}</span>
+      <CarTokenStack playerIDs={occupants} side={side} />
+      <div
+        className={cn(
+          'flex min-h-0 min-w-0 flex-1 flex-col justify-center',
+          tileBodyPadClass(side),
+        )}
+      >
+        <TileName>{tileCaption(cell)}</TileName>
         {cell.price !== undefined ? (
-          <span className="px-0.5 tabular-nums opacity-70">R${cell.price}</span>
+          <span className="px-px text-[0.5rem] tabular-nums leading-none opacity-70 sm:text-[0.62rem]">
+            R${cell.price}
+          </span>
         ) : null}
       </div>
-      <CarTokenStack playerIDs={occupants} side={side} />
     </div>
   );
 }

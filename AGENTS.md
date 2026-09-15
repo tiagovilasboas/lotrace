@@ -39,7 +39,7 @@ Contract for code agents working on **LotRace** (classic property board — not 
 - Keep modules SRP-sized. Annotate exported function return types.
 - Rooms and matches are **durable** when `DATABASE_URL` is set (Railway Postgres). Local `npm run dev` without it keeps in-memory stores (restart wipes them). Never commit the URL value.
 - CORS via `CORS_ORIGIN`; frontend API via `VITE_API_URL`. No invented secrets.
-- Match UI is mobile-first: the board is the hero (`min(100%, 100dvh − chrome)`), HUD chips overlay the top, CTAs sit in a sticky bottom bar, events announce on the felt. Board pieces (cars, houses, hotels, stations, corners) use isometric SVG glyphs in `IsoIcons.tsx` / `CarToken.tsx`.
+- Match UI is mobile-first: the board is the hero (`min(100%, 100dvh − chrome)`). Player chips and layout tools sit **above** the board (never over tiles). CTAs sit in a sticky bottom bar; events announce on the felt. Cars are top-down tokens in `CarToken.tsx` at tabletop scale (~half the tile), rotated clockwise around the track. Houses/hotels/stations/corners stay isometric in `IsoIcons.tsx` and fill the color bar / corner. Tile labels never break mid-word.
 
 ## Don't
 

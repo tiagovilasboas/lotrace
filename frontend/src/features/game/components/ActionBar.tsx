@@ -62,11 +62,9 @@ export function ActionBar({
 
   return (
     <div className="flex flex-col gap-2">
-      <div role="status" className="flex justify-center">
-        <p className="your-turn-pulse rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground">
-          {t('yourTurn')}
-        </p>
-      </div>
+      <p role="status" className="text-center text-xs font-semibold text-primary">
+        {t('yourTurn')}
+      </p>
       {rollBusy ? (
         <Button size="lg" loading aria-label={t('rolling')}>
           {t('rolling')}

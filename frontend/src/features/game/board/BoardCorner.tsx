@@ -8,7 +8,9 @@ import {
   JailIso,
   ParkIso,
 } from '@/features/game/board/IsoIcons.tsx';
-import { hueBarLayout } from '@/features/game/board/ring-geometry.ts';
+import { hueBarLayout, tileBodyPadClass } from '@/features/game/board/ring-geometry.ts';
+import { tileCaption } from '@/features/game/board/tile-caption.ts';
+import { TileName } from '@/features/game/board/TileName.tsx';
 import type { BoardTileProps } from '@/features/game/board/tile-types.ts';
 import { tileSurfaceClass } from '@/features/game/board/tile-surface.ts';
 import { CarTokenStack } from '@/features/game/components/CarToken.tsx';
@@ -29,7 +31,7 @@ function cornerHue(kind: CellKind): string {
 }
 
 function CornerMark({ kind }: { kind: CellKind }): ReactElement | null {
-  const iconClass = 'mb-0.5 h-8 w-8';
+  const iconClass = 'h-10 w-10';
   if (kind === 'go') {
     return <GoIso className={iconClass} />;
   }
@@ -56,12 +58,17 @@ export function BoardCorner({
   return (
     <div className={cn(tileSurfaceClass(isPending), bar.containerClass)}>
       <HueStripe hue={cornerHue(cell.kind)} side={side} />
-      <CarTokenStack playerIDs={occupants} />
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col items-center justify-center px-0.5 pb-7 text-center">
+      <CarTokenStack playerIDs={occupants} side={side} />
+      <div
+        className={cn(
+          'flex min-h-0 min-w-0 flex-1 flex-col items-center justify-center px-px',
+          tileBodyPadClass(side),
+        )}
+      >
         <CornerMark kind={cell.kind} />
-        <span className="font-bold uppercase tracking-wide [overflow-wrap:anywhere]">
-          {cell.name}
-        </span>
+        <TileName align="center" strong>
+          {tileCaption(cell)}
+        </TileName>
       </div>
     </div>
   );

@@ -1,73 +1,93 @@
 import type { ReactElement } from 'react';
-import type { RingSide } from '@/features/game/board/ring-geometry.ts';
+import {
+  tokenRotateClass,
+  tokenDockClass,
+  type RingSide,
+} from '@/features/game/board/ring-geometry.ts';
 import { tokenTextClass } from '@/features/game/player-tokens.ts';
 import { cn } from '@/lib/utils.ts';
 
 type CarTokenProps = {
   playerID: string;
   size?: 'board' | 'hud' | 'lobby';
+  side?: RingSide;
 };
 
 const SIZE_CLASS = {
-  board: 'h-9 w-10',
-  hud: 'h-7 w-8',
-  lobby: 'h-8 w-9',
+  board: 'h-9 w-6',
+  hud: 'h-8 w-5',
+  lobby: 'h-9 w-6',
 } as const;
 
 export function CarToken({
   playerID,
   size = 'board',
+  side,
 }: CarTokenProps): ReactElement {
   return (
     <svg
-      viewBox="0 0 48 36"
+      viewBox="0 0 28 44"
       className={cn(
         'car-token-arrive shrink-0 overflow-visible drop-shadow-md',
         tokenTextClass(playerID),
         SIZE_CLASS[size],
+        side ? tokenRotateClass(side) : undefined,
       )}
       aria-hidden="true"
       focusable="false"
     >
-      <ellipse cx="24" cy="32.4" rx="15" ry="2.6" fill="#1c1917" opacity="0.3" />
-      <ellipse cx="15" cy="24.4" rx="4.1" ry="2.3" fill="#1c1917" />
-      <ellipse cx="34.4" cy="22.2" rx="4.1" ry="2.3" fill="#1c1917" />
-      <path fill="currentColor" d="M9.2 20.4 22.6 13.6 40.6 17.4 27.4 25.2Z" />
-      <path fill="currentColor" opacity="0.72" d="M9.2 20.4 27.4 25.2 27.4 29.2 9.2 24.4Z" />
-      <path fill="currentColor" opacity="0.9" d="M27.4 25.2 40.6 17.4 40.6 21.4 27.4 29.2Z" />
-      <path fill="currentColor" d="M16.6 18.8 22.8 14.2 31.2 16.2 24.8 21.2Z" />
-      <path fill="#fff" opacity="0.48" d="M18.4 18.2 23.4 14.8 29.6 16.4 24.4 20.2Z" />
-      <path fill="#1c1917" opacity="0.22" d="M11.2 21.6 26.4 26.2 26.4 27.6 11.2 23Z" />
-      <ellipse cx="17.2" cy="27.6" rx="4.4" ry="2.5" fill="#1c1917" />
-      <ellipse cx="32.6" cy="25.6" rx="4.4" ry="2.5" fill="#1c1917" />
-      <ellipse cx="17.2" cy="26.8" rx="1.4" ry="0.8" fill="#e7e5e4" />
-      <ellipse cx="32.6" cy="24.8" rx="1.4" ry="0.8" fill="#e7e5e4" />
-      <path fill="#fef08a" d="M37.8 18.2 40.2 18.8 40.2 20.4 37.8 19.8Z" />
+      <ellipse cx="14" cy="41.4" rx="8.2" ry="2" fill="#1c1917" opacity="0.28" />
+      <rect x="3.2" y="12" width="3.6" height="7.2" rx="1.1" fill="#1c1917" />
+      <rect x="21.2" y="12" width="3.6" height="7.2" rx="1.1" fill="#1c1917" />
+      <rect x="3.2" y="26.2" width="3.6" height="7.2" rx="1.1" fill="#1c1917" />
+      <rect x="21.2" y="26.2" width="3.6" height="7.2" rx="1.1" fill="#1c1917" />
+      <path
+        fill="currentColor"
+        stroke="#faf6e8"
+        strokeWidth="1.15"
+        d="M9.2 5.2c.4-2.2 9.2-2.2 9.6 0l3.6 10.4v16.2c0 4.6-16.8 4.6-16.8 0V15.6Z"
+      />
+      <path fill="#0c1917" opacity="0.38" d="M10.2 8.1h7.6l1.3 7.2H8.9Z" />
+      <path fill="#fff" opacity="0.55" d="M11 8.6h6l.8 4.4h-7.6Z" />
+      <path fill="#faf6e8" opacity="0.35" d="M13.2 17.2h1.6v14.2h-1.6Z" />
+      <path fill="currentColor" d="M10.6 36.4h6.8l.8 2.2h-8.4Z" />
     </svg>
   );
 }
 
 type CarTokenStackProps = {
   playerIDs: string[];
-  side?: RingSide;
+  side: RingSide;
 };
 
 export function CarTokenStack({
   playerIDs,
+  side,
 }: CarTokenStackProps): ReactElement | null {
   if (playerIDs.length === 0) {
     return null;
   }
 
+  const stacked = side === 'west' || side === 'east';
+
   return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex items-end justify-center pb-0.5">
+    <div
+      className={cn(
+        'pointer-events-none absolute z-20 flex items-center',
+        tokenDockClass(side),
+      )}
+    >
       {playerIDs.map((id, index) => (
         <span
           key={id}
           className="relative"
-          style={{ marginLeft: index === 0 ? 0 : -16, zIndex: index + 1 }}
+          style={
+            stacked
+              ? { marginTop: index === 0 ? 0 : -14, zIndex: index + 1 }
+              : { marginLeft: index === 0 ? 0 : -12, zIndex: index + 1 }
+          }
         >
-          <CarToken playerID={id} size="board" />
+          <CarToken playerID={id} size="board" side={side} />
         </span>
       ))}
     </div>

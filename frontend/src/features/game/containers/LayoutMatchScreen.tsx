@@ -4,8 +4,8 @@ import { Client } from 'boardgame.io/react';
 import { useMemo, useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button.tsx';
-import { ThemeToggle } from '@/components/theme-toggle.tsx';
 import { GameBoard } from '@/features/game/containers/GameBoard.tsx';
+import { MatchChromeProvider } from '@/features/game/lib/match-chrome.tsx';
 import {
   LAYOUT_GUEST_NAME,
   LAYOUT_MATCH_ID,
@@ -43,20 +43,11 @@ export function LayoutMatchScreen({
   const otherName = names[Number(otherSeat)] ?? LAYOUT_GUEST_NAME;
 
   return (
-    <div className="relative">
-      <div className="absolute right-2 top-2 z-40">
-        <ThemeToggle />
-      </div>
-      <div className="pointer-events-none absolute inset-x-0 bottom-[7.5rem] z-40 flex justify-center px-3">
-        <div className="pointer-events-auto flex max-w-md flex-wrap items-center justify-center gap-2 rounded-full bg-card/95 px-2 py-1 shadow-sm ring-1 ring-border">
-          <p className="px-2 text-[11px] font-medium text-muted-foreground">
-            {t('layoutMode')}
-          </p>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setSeat(otherSeat)}
-          >
+    <MatchChromeProvider
+      chrome={
+        <>
+          <p className="sr-only">{t('layoutMode')}</p>
+          <Button size="sm" variant="outline" onClick={() => setSeat(otherSeat)}>
             {t('layoutSwitch', { name: otherName })}
           </Button>
           <Button
@@ -68,14 +59,15 @@ export function LayoutMatchScreen({
           >
             {t('leave')}
           </Button>
-        </div>
-      </div>
+        </>
+      }
+    >
       <div className={seat === '0' ? 'contents' : 'hidden'}>
         <LayoutClient matchID={LAYOUT_MATCH_ID} playerID="0" />
       </div>
       <div className={seat === '1' ? 'contents' : 'hidden'}>
         <LayoutClient matchID={LAYOUT_MATCH_ID} playerID="1" />
       </div>
-    </div>
+    </MatchChromeProvider>
   );
 }

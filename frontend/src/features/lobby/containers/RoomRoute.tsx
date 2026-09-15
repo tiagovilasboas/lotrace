@@ -36,9 +36,11 @@ function OnlineRoomRoute({ code }: { code: string }): ReactElement {
 
   return (
     <div className="relative">
-      <div className="absolute right-2 top-2 z-10">
-        <ThemeToggle />
-      </div>
+      {playing ? null : (
+        <div className="absolute right-2 top-2 z-10">
+          <ThemeToggle />
+        </div>
+      )}
       {playing ? (
         <MatchScreen
           matchID={session.matchID as string}
