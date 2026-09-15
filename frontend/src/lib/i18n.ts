@@ -10,6 +10,7 @@ const messages = {
   waiting: 'Aguardando o anfitrião…',
   players: 'Jogadores',
   startGame: 'Começar partida',
+  needMorePlayers: 'Falta mais {count} pra começar',
   inviteHint: 'Manda o código pro rolê. Precisa de pelo menos 2.',
   createNeedNickname: 'Coloca um apelido pra criar',
   joinNeedNicknameAndCode: 'Apelido + código de 6 pra entrar',
