@@ -54,13 +54,13 @@ export function BoardRing({
   return (
     <div
       className={cn(
-        'aspect-square w-full rounded-xl p-[6px] shadow-[0_12px_28px_rgba(28,25,23,0.38)]',
+        'aspect-square h-full w-full rounded-2xl p-[5px] shadow-[0_16px_36px_rgba(3,10,24,0.55)]',
         className,
       )}
       style={{ backgroundColor: 'var(--group-brown)' }}
     >
       <div
-        className="grid h-full w-full grid-cols-[minmax(0,1.22fr)_repeat(5,minmax(0,1fr))_minmax(0,1.22fr)] grid-rows-[minmax(0,1.22fr)_repeat(5,minmax(0,1fr))_minmax(0,1.22fr)] gap-px rounded-[5px] p-0.5"
+        className="grid h-full w-full grid-cols-[minmax(0,1.28fr)_repeat(5,minmax(0,1fr))_minmax(0,1.28fr)] grid-rows-[minmax(0,1.28fr)_repeat(5,minmax(0,1fr))_minmax(0,1.28fr)] gap-px rounded-xl p-0.5"
         style={{ backgroundColor: BOARD_COLOR.felt }}
       >
         {BOARD.map((cell: BoardCell) => {
@@ -84,7 +84,7 @@ export function BoardRing({
             </div>
           );
         })}
-        <div className="col-start-2 col-end-7 row-start-2 row-end-7 flex items-center justify-center p-1.5 text-board-track">
+        <div className="col-start-2 col-end-7 row-start-2 row-end-7 flex items-center justify-center overflow-hidden p-1 text-board-track">
           {center}
         </div>
       </div>
