@@ -1,6 +1,6 @@
 import type { SessionPayload } from '@lotrace/shared';
 
-const KEY = 'imobiliario.session';
+const KEY = 'lotrace.session';
 
 export function readSession(): SessionPayload | null {
   try {
