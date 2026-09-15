@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import { colorGroupHue } from '@/features/game/board/board-colors.ts';
+import { HouseMarkers } from '@/features/game/board/HouseMarkers.tsx';
 import { HueStripe } from '@/features/game/board/HueStripe.tsx';
 import { hueBarLayout } from '@/features/game/board/ring-geometry.ts';
 import type { BoardTileProps } from '@/features/game/board/tile-types.ts';
@@ -13,13 +14,18 @@ export function PropertyTile({
   ownerID,
   isPending,
   side,
+  houseCount,
 }: BoardTileProps): ReactElement {
   const bar = hueBarLayout(side);
   const hue = cell.colorGroup ? colorGroupHue(cell.colorGroup) : undefined;
 
   return (
-    <div className={cn(tileSurfaceClass(isPending), bar.containerClass)}>
+    <div
+      className={cn(tileSurfaceClass(isPending), bar.containerClass)}
+      data-house-count={houseCount}
+    >
       {hue ? <HueStripe hue={hue} side={side} ownerID={ownerID} /> : null}
+      <HouseMarkers count={houseCount} side={side} />
       <div className="flex min-h-0 min-w-0 flex-1 flex-col pb-4">
         <span className="px-0.5 pt-0.5 font-semibold [overflow-wrap:anywhere]">{cell.name}</span>
         {cell.price !== undefined ? (

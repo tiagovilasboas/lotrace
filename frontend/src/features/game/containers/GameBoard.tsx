@@ -46,6 +46,7 @@ export function GameBoard({
       <BoardRing
         players={G.players}
         owners={G.owners}
+        houses={G.houses}
         pendingCell={G.pendingCell}
         center={
           <div className="board-center-felt flex h-full w-full flex-col items-center justify-center gap-2 px-2">

@@ -31,6 +31,7 @@ const messages = {
   waitTurn: 'Vez de {name}',
   cash: 'Caixa',
   owned: 'Dono',
+  housesOnLot: '{count} casas',
   free: 'Livre',
   winner: '{name} venceu!',
   bankrupt: 'Falido',
