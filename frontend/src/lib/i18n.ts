@@ -48,6 +48,9 @@ const messages = {
   copyCode: 'Copiar código',
   copied: 'Copiado',
   leave: 'Sair',
+  layoutMode: 'Modo layout · sem mesa real',
+  layoutSwitch: 'Jogar como {name}',
+  layoutCodeHint: 'Só validar o tabuleiro? Entra com o código LAYOUT.',
 } as const;
 
 export type MessageKey = keyof typeof messages;

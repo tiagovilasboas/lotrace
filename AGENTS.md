@@ -8,7 +8,7 @@ Contract for code agents working on **LotRace** (classic property board — not 
 - **shared**: boardgame.io `Game`, board, types, pure rules
 - **backend**: boardgame.io `Server` + Koa HTTP rooms (Postgres when `DATABASE_URL` is set; otherwise in-memory)
 - **frontend**: Vite 6 + React 19 + Tailwind 4 PWA (Quinto-like: cards, big CTAs, PT-BR, light/dark)
-- Node **22.12+**. No login — nickname + 6-char room code.
+- Node **22.12+**. No login — nickname + 6-char room code. Code **`LAYOUT`** opens a local 2-seat hotseat (no API) to check match UI.
 
 ## Layers
 
