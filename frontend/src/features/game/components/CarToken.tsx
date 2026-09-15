@@ -10,7 +10,7 @@ export function CarToken({ playerID }: CarTokenProps): ReactElement {
   return (
     <svg
       viewBox="0 0 16 10"
-      className={cn('h-2 w-3 shrink-0', tokenFillClass(playerID))}
+      className={cn('car-token-arrive h-2 w-3 shrink-0', tokenFillClass(playerID))}
       aria-hidden="true"
       focusable="false"
     >

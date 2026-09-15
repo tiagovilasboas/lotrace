@@ -138,6 +138,17 @@
   }
 }
 
+@keyframes car-token-arrive {
+  0% {
+    opacity: 0;
+    transform: translateX(-5px) scale(0.72);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
 @layer utilities {
   .surface-card {
     @apply rounded-xl border border-border bg-card shadow-sm;
@@ -156,9 +167,14 @@
     animation: player-turn-pulse 1.8s ease-out infinite;
   }
 
+  .car-token-arrive {
+    animation: car-token-arrive 0.32s ease-out;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .dice-face-roll,
-    .player-turn-pulse {
+    .player-turn-pulse,
+    .car-token-arrive {
       animation: none;
     }
   }
