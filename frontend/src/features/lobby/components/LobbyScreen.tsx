@@ -2,6 +2,7 @@ import type { RoomView, SessionPayload } from '@lotrace/shared';
 import { useState, type ReactElement } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { Card } from '@/components/ui/card.tsx';
+import { LobbyPlayerChip } from '@/features/lobby/components/LobbyPlayerChip.tsx';
 import { t } from '@/lib/i18n.ts';
 
 type LobbyScreenProps = {
@@ -22,7 +23,8 @@ export function LobbyScreen({
   onLeave,
 }: LobbyScreenProps): ReactElement {
   const [copied, setCopied] = useState(false);
-  const canStart = session.isHost && room.players.length >= room.minPlayers;
+  const missingPlayers = Math.max(0, room.minPlayers - room.players.length);
+  const canStart = session.isHost && missingPlayers === 0;
 
   const copy = async (): Promise<void> => {
     await navigator.clipboard.writeText(room.code);
@@ -55,16 +57,19 @@ export function LobbyScreen({
           {room.players.map((player) => (
             <li
               key={player.seat}
-              className="flex items-center justify-between rounded-lg bg-muted px-3 py-2"
+              className="flex items-center justify-between gap-2 rounded-lg bg-muted px-3 py-2"
             >
-              <span className="font-medium">
-                {player.nickname}
-                {player.seat === Number(session.playerID) ? (
-                  <span className="ml-2 text-xs text-muted-foreground">({t('you')})</span>
-                ) : null}
+              <span className="flex min-w-0 items-center gap-2">
+                <LobbyPlayerChip seat={player.seat} />
+                <span className="truncate font-medium">
+                  {player.nickname}
+                  {player.seat === Number(session.playerID) ? (
+                    <span className="ml-2 text-xs text-muted-foreground">({t('you')})</span>
+                  ) : null}
+                </span>
               </span>
               {player.isHost ? (
-                <span className="text-xs font-semibold text-primary">{t('host')}</span>
+                <span className="shrink-0 text-xs font-semibold text-primary">{t('host')}</span>
               ) : null}
             </li>
           ))}
@@ -72,9 +77,16 @@ export function LobbyScreen({
       </Card>
 
       {session.isHost ? (
-        <Button size="lg" disabled={!canStart || busy} onClick={() => void onStart()}>
-          {t('startGame')}
-        </Button>
+        <div className="flex flex-col gap-2">
+          <Button size="lg" disabled={!canStart || busy} onClick={() => void onStart()}>
+            {t('startGame')}
+          </Button>
+          {missingPlayers > 0 ? (
+            <p className="text-center text-sm text-muted-foreground">
+              {t('needMorePlayers', { count: String(missingPlayers) })}
+            </p>
+          ) : null}
+        </div>
       ) : (
         <p className="text-center text-sm text-muted-foreground">{t('waiting')}</p>
       )}
