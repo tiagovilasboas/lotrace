@@ -48,13 +48,13 @@ export function GameBoard({
         owners={G.owners}
         pendingCell={G.pendingCell}
         center={
-          <div className="text-center">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-board-track/90">
-              {t('appName')}
-            </p>
+          <div className="board-center-felt flex h-full w-full flex-col items-center justify-center gap-2 px-2">
             <DiceDisplay dice={dice} />
-            <p className="mt-1 text-sm font-semibold text-board-track">
-              {t('cash')}: R$ {G.players[viewerID]?.cash ?? 0}
+            <p
+              className="rounded-full bg-board-track px-3 py-1 text-sm font-bold tabular-nums text-board-ink shadow-sm"
+              aria-label={`${t('cash')}: R$ ${G.players[viewerID]?.cash ?? 0}`}
+            >
+              R$ {G.players[viewerID]?.cash ?? 0}
             </p>
           </div>
         }
