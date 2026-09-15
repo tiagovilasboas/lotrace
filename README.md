@@ -1,4 +1,4 @@
-# Imobiliário
+# LotRace
 
 Classic property board PWA for 2–6 players. Host creates a room; guests join by code.
 

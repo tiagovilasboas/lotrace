@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Contract for code agents working on **Imobiliário** (classic property board — not Monopoly® / Banco Imobiliário®).
+Contract for code agents working on **LotRace** (classic property board — not Monopoly® / Banco Imobiliário®).
 
 ## Stack
 

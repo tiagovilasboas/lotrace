@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping with Imobiliário.
+Thanks for helping with LotRace.
 
 ## Setup
 
