@@ -7,7 +7,9 @@ export function returnPropertiesToBank(
 ): void {
   for (const [index, owner] of Object.entries(G.owners)) {
     if (owner === playerID) {
-      G.owners[Number(index)] = null;
+      const cellIndex = Number(index);
+      G.owners[cellIndex] = null;
+      G.houses[cellIndex] = 0;
     }
   }
 }

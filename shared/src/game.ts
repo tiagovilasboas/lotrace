@@ -3,6 +3,7 @@ import { INVALID_MOVE } from 'boardgame.io/core';
 import { getCell, isPurchasable } from './board.ts';
 import { registerRollDoubles, shouldGrantExtraRoll } from './rules/doubles.ts';
 import { payToBank } from './rules/economy.ts';
+import { applyBuyHouse } from './rules/houses.ts';
 import { resolveLanding, sendToJail } from './rules/landing.ts';
 import { advancePosition, collectSalary } from './rules/movement.ts';
 import { findWinner, getPlayer, pushLog } from './rules/players.ts';
@@ -42,6 +43,7 @@ function createInitialState(
   return {
     players,
     owners,
+    houses: {},
     lastDice: null,
     pendingCell: null,
     consecutiveDoubles: 0,
@@ -250,6 +252,21 @@ export const Imobiliario: Game<
       },
       end: {
         moves: {
+          buyHouse: {
+            move: ({ G, ctx, playerID }, cellIndex: unknown) => {
+              if (playerID !== ctx.currentPlayer) {
+                return INVALID_MOVE;
+              }
+              if (typeof cellIndex !== 'number' || !Number.isInteger(cellIndex)) {
+                return INVALID_MOVE;
+              }
+              if (!applyBuyHouse(G, playerID, cellIndex)) {
+                return INVALID_MOVE;
+              }
+              return undefined;
+            },
+            client: false,
+          },
           endTurn: {
             move: ({ G, ctx, events, playerID }) => {
               if (playerID !== ctx.currentPlayer) {

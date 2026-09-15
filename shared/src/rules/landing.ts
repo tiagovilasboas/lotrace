@@ -6,6 +6,7 @@ import {
   type TurnStage,
 } from '../types.ts';
 import { payRent, payToBank } from './economy.ts';
+import { rentWithHouses } from './houses.ts';
 import { getPlayer, pushLog } from './players.ts';
 
 export function sendToJail(
@@ -56,7 +57,14 @@ export function resolveLanding(
       return 'buy';
     }
     if (owner !== playerID && !getPlayer(G, owner).bankrupt) {
-      payRent(G, playerID, owner, cell.rent ?? 0, cell.index);
+      const houses = cell.kind === 'property' ? (G.houses[cell.index] ?? 0) : 0;
+      payRent(
+        G,
+        playerID,
+        owner,
+        rentWithHouses(cell.rent ?? 0, houses),
+        cell.index,
+      );
     }
     G.pendingCell = null;
     return 'end';

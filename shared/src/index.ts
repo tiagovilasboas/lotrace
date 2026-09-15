@@ -1,4 +1,4 @@
-export { BOARD, getCell, isPurchasable } from './board.ts';
+export { BOARD, getCell, getPropertyCellsByColorGroup, isPurchasable } from './board.ts';
 export { Imobiliario } from './game.ts';
 export {
   BOARD_SIZE,
@@ -9,6 +9,7 @@ export {
   JAIL_INDEX,
   JAIL_MAX_TURNS,
   MAX_CONSECUTIVE_DOUBLES,
+  MAX_HOUSES,
   MAX_PLAYERS,
   MIN_PLAYERS,
   STARTING_CASH,
