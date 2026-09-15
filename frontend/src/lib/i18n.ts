@@ -49,7 +49,7 @@ const messages = {
   copied: 'Copiado',
   leave: 'Sair',
   layoutMode: 'Modo layout · sem mesa real',
-  layoutSwitch: 'Jogar como {name}',
+  layoutSwitch: 'Como {name}',
   layoutCodeHint: 'Só validar o tabuleiro? Entra com o código LAYOUT.',
 } as const;
 

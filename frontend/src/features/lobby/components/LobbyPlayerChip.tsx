@@ -8,10 +8,10 @@ type LobbyPlayerChipProps = {
 export function LobbyPlayerChip({ seat }: LobbyPlayerChipProps): ReactElement {
   return (
     <span
-      className="inline-flex h-8 w-9 shrink-0 items-center justify-center rounded-lg bg-background ring-1 ring-border [&_.car-token-arrive]:animate-none"
+      className="inline-flex h-10 w-11 shrink-0 items-center justify-center rounded-lg bg-background ring-1 ring-border [&_.car-token-arrive]:animate-none"
       aria-hidden="true"
     >
-      <CarToken playerID={String(seat)} />
+      <CarToken playerID={String(seat)} size="lobby" />
     </span>
   );
 }
