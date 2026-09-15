@@ -34,7 +34,7 @@ export function useRollBusy(
       return undefined;
     }
 
-    if (stage !== 'roll') {
+    if (stage !== 'roll' && stage !== 'jail') {
       const elapsed = Date.now() - (rollStartedAtRef.current ?? Date.now());
       const remaining = Math.max(0, ROLL_BUSY_MIN_MS - elapsed);
       const id = window.setTimeout(clearBusy, remaining);
