@@ -1,5 +1,26 @@
-import { describe, expect, it } from 'vitest';
-import { parseOrigins } from './config.ts';
+import { afterEach, describe, expect, it } from 'vitest';
+import { loadConfig, parseOrigins } from './config.ts';
+
+const original = {
+  PORT: process.env.PORT,
+  CORS_ORIGIN: process.env.CORS_ORIGIN,
+  DATABASE_URL: process.env.DATABASE_URL,
+};
+
+function restoreEnv(name: 'PORT' | 'CORS_ORIGIN' | 'DATABASE_URL'): void {
+  const value = original[name];
+  if (value === undefined) {
+    delete process.env[name];
+    return;
+  }
+  process.env[name] = value;
+}
+
+afterEach(() => {
+  restoreEnv('PORT');
+  restoreEnv('CORS_ORIGIN');
+  restoreEnv('DATABASE_URL');
+});
 
 describe('parseOrigins', () => {
   it('keeps comma-separated exact origin strings', (): void => {
@@ -36,5 +57,19 @@ describe('parseOrigins', () => {
     expect(parseOrigins('https://lotrace.vercel.app,//i')).toEqual([
       'https://lotrace.vercel.app',
     ]);
+  });
+});
+
+describe('loadConfig', () => {
+  it('treats blank DATABASE_URL as unset', (): void => {
+    process.env.DATABASE_URL = '   ';
+    expect(loadConfig().databaseUrl).toBeUndefined();
+  });
+
+  it('reads DATABASE_URL when set', (): void => {
+    process.env.DATABASE_URL = 'postgresql://lotrace@localhost:5432/lotrace';
+    expect(loadConfig().databaseUrl).toBe(
+      'postgresql://lotrace@localhost:5432/lotrace',
+    );
   });
 });
