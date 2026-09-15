@@ -13,7 +13,7 @@ const CAPTION_LINES: Record<string, readonly string[]> = {
   'Estação SP': ['Estação', 'SP'],
   Paulista: ['Paulista'],
   Pinheiros: ['Pinheiros'],
-  Parque: ['Estacionamento', 'Livre'],
+  Parque: ['Estacion.', 'Livre'],
   Recife: ['Recife'],
   Salvador: ['Salvador'],
   'Estação NE': ['Estação', 'NE'],

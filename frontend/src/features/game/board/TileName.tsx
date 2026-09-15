@@ -17,14 +17,11 @@ export function TileName({
       className={cn(
         'flex min-w-0 max-w-full flex-col px-0.5',
         align === 'center' && 'items-center text-center',
-        strong && 'font-bold uppercase tracking-wide',
+        strong && 'uppercase tracking-wide',
       )}
     >
       {lines.map((line) => (
-        <span
-          key={line}
-          className="max-w-full truncate text-[0.58rem] font-semibold leading-[1.05] sm:text-[0.7rem]"
-        >
+        <span key={line} className="tile-name-line">
           {line}
         </span>
       ))}

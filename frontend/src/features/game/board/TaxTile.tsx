@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import { BOARD_COLOR } from '@/features/game/board/board-colors.ts';
 import { HueStripe } from '@/features/game/board/HueStripe.tsx';
 import { TaxIso } from '@/features/game/board/IsoIcons.tsx';
-import { hueBarLayout } from '@/features/game/board/ring-geometry.ts';
+import { hueBarLayout, tileBodyClass } from '@/features/game/board/ring-geometry.ts';
 import { tileCaptionLines } from '@/features/game/board/tile-caption.ts';
 import { TileName } from '@/features/game/board/TileName.tsx';
 import type { BoardTileProps } from '@/features/game/board/tile-types.ts';
@@ -23,13 +23,16 @@ export function TaxTile({
     <div className={cn(tileSurfaceClass(isPending), bar.containerClass)}>
       <HueStripe hue={BOARD_COLOR.tax} side={side} />
       <CarTokenStack playerIDs={occupants} side={side} />
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 py-0.5">
+      <div
+        className={cn(
+          'flex min-h-0 min-w-0 flex-1 flex-col gap-0.5',
+          tileBodyClass(side),
+        )}
+      >
         <TaxIso className="h-5 w-5 sm:h-6 sm:w-6" />
         <TileName lines={tileCaptionLines(cell)} align="center" />
         {cell.tax !== undefined ? (
-          <span className="px-px text-[0.48rem] font-medium tabular-nums leading-none opacity-70 sm:text-[0.58rem]">
-            {formatCash(cell.tax)}
-          </span>
+          <span className="tile-price">{formatCash(cell.tax)}</span>
         ) : null}
       </div>
     </div>

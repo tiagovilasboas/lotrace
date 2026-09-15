@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import { colorGroupHue } from '@/features/game/board/board-colors.ts';
 import { HouseMarkers } from '@/features/game/board/HouseMarkers.tsx';
 import { HueStripe } from '@/features/game/board/HueStripe.tsx';
-import { hueBarLayout } from '@/features/game/board/ring-geometry.ts';
+import { hueBarLayout, tileBodyClass } from '@/features/game/board/ring-geometry.ts';
 import { tileCaptionLines } from '@/features/game/board/tile-caption.ts';
 import { TileName } from '@/features/game/board/TileName.tsx';
 import type { BoardTileProps } from '@/features/game/board/tile-types.ts';
@@ -30,12 +30,15 @@ export function PropertyTile({
       {hue ? <HueStripe hue={hue} side={side} ownerID={ownerID} /> : null}
       <HouseMarkers count={houseCount} side={side} />
       <CarTokenStack playerIDs={occupants} side={side} />
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 py-0.5">
+      <div
+        className={cn(
+          'flex min-h-0 min-w-0 flex-1 flex-col gap-0.5',
+          tileBodyClass(side),
+        )}
+      >
         <TileName lines={tileCaptionLines(cell)} align="center" />
         {cell.price !== undefined ? (
-          <span className="px-px text-[0.48rem] font-medium tabular-nums leading-none opacity-70 sm:text-[0.58rem]">
-            {formatCash(cell.price)}
-          </span>
+          <span className="tile-price">{formatCash(cell.price)}</span>
         ) : null}
       </div>
     </div>
