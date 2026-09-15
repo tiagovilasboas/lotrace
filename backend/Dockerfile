@@ -7,6 +7,7 @@ COPY shared/package.json shared/package.json
 COPY backend/package.json backend/package.json
 COPY frontend/package.json frontend/package.json
 
+# pg is pure JavaScript; no extra alpine packages (libpq) are required.
 RUN npm ci --omit=dev --workspace=@lotrace/shared --workspace=@lotrace/backend
 
 COPY shared ./shared

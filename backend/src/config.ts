@@ -51,12 +51,19 @@ export function parseOrigins(raw: string | undefined): (string | RegExp)[] {
 export type ServerConfig = {
   port: number;
   origins: (string | RegExp)[];
+  databaseUrl: string | undefined;
 };
+
+function readOptionalEnv(raw: string | undefined): string | undefined {
+  const trimmed = raw?.trim();
+  return trimmed && trimmed.length > 0 ? trimmed : undefined;
+}
 
 export function loadConfig(): ServerConfig {
   const port = Number.parseInt(process.env.PORT ?? '8000', 10);
   return {
     port: Number.isNaN(port) ? 8000 : port,
     origins: parseOrigins(process.env.CORS_ORIGIN),
+    databaseUrl: readOptionalEnv(process.env.DATABASE_URL),
   };
 }
