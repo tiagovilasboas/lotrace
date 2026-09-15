@@ -109,7 +109,7 @@ export function ActionBar({
       {rollBusy ? (
         <Button
           size="lg"
-          className="rounded-full bg-[#2f6bff] text-white shadow-[0_8px_18px_rgba(47,107,255,0.4)] hover:bg-[#2563eb]"
+          className="match-cta"
           loading
           aria-label={t('rolling')}
         >
@@ -119,7 +119,7 @@ export function ActionBar({
       {!rollBusy && stage === 'roll' ? (
         <Button
           size="lg"
-          className="rounded-full bg-[#2f6bff] text-white shadow-[0_8px_18px_rgba(47,107,255,0.4)] hover:bg-[#2563eb]"
+          className="match-cta"
           onClick={handleRoll}
           aria-label={t('roll')}
         >
@@ -131,7 +131,7 @@ export function ActionBar({
         <div className="grid grid-cols-2 gap-2">
           <Button
             size="lg"
-            className="rounded-full bg-[#2f6bff] text-white hover:bg-[#2563eb]"
+            className="match-cta"
             disabled={!canAfford}
             onClick={() => moves.buyProperty?.()}
           >
@@ -151,7 +151,7 @@ export function ActionBar({
         <div className="grid grid-cols-2 gap-2">
           <Button
             size="lg"
-            className="rounded-full bg-[#2f6bff] text-white hover:bg-[#2563eb]"
+            className="match-cta"
             disabled={!canPayJail}
             onClick={() => moves.payJail?.()}
           >

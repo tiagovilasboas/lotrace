@@ -41,8 +41,8 @@ export function BuyHouseActions({
                 className={cn(
                   'min-h-9 rounded-full px-3 text-xs font-semibold',
                   isSelected
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted text-muted-foreground',
+                    ? 'bg-sky-400 text-slate-950'
+                    : 'bg-white/10 text-white',
                 )}
                 aria-pressed={isSelected}
               >
@@ -54,6 +54,7 @@ export function BuyHouseActions({
       ) : null}
       <Button
         size="lg"
+        className="match-cta"
         onClick={() => onBuy(selected.index)}
         aria-label={t(selected.hotel ? 'buyHotelOn' : 'buyHouseOn', {
           name: selected.name,

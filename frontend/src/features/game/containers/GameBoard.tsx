@@ -1,10 +1,12 @@
 import type { ImobiliarioState, TurnStage } from '@lotrace/shared';
 import type { BoardProps } from 'boardgame.io/react';
+import { Dices } from 'lucide-react';
 import type { ReactElement } from 'react';
 import { ThemeToggle } from '@/components/theme-toggle.tsx';
 import { BoardCenter } from '@/features/game/board/BoardCenter.tsx';
 import { BoardRing } from '@/features/game/board/BoardRing.tsx';
 import { ActionBar } from '@/features/game/components/ActionBar.tsx';
+import { EventLog } from '@/features/game/components/EventLog.tsx';
 import { PlayerList } from '@/features/game/components/PlayerList.tsx';
 import { useMatchChrome } from '@/features/game/lib/match-chrome.ts';
 import { t } from '@/lib/i18n.ts';
@@ -40,11 +42,16 @@ export function GameBoard({
   return (
     <div className="match-table grid min-h-dvh w-full grid-rows-[auto_auto_minmax(0,1fr)_auto]">
       <header className="flex items-center gap-2 px-3 pb-1 pt-[max(0.4rem,env(safe-area-inset-top))]">
-        <div className="min-w-0 flex-1">
-          <p className="text-lg font-black tracking-tight text-white">{t('appName')}</p>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-300/80">
-            {t('brandSub')}
-          </p>
+        <div className="flex min-w-0 flex-1 items-center gap-2">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sky-400/15 text-sky-300">
+            <Dices className="size-4" aria-hidden />
+          </span>
+          <div className="min-w-0">
+            <p className="text-lg font-black tracking-tight text-white">{t('appName')}</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-300/80">
+              {t('brandSub')}
+            </p>
+          </div>
         </div>
         {chrome ? (
           <div className="flex shrink-0 items-center gap-1 [&_button]:h-8 [&_button]:border-white/20 [&_button]:bg-white/5 [&_button]:px-2.5 [&_button]:text-xs [&_button]:text-white">
@@ -94,6 +101,9 @@ export function GameBoard({
         <p className="mt-2 text-center text-[11px] font-medium text-white/45">
           {t('playerCount', { count: String(playerCount) })}
         </p>
+        <div className="sr-only">
+          <EventLog events={G.log} players={G.players} />
+        </div>
       </div>
     </div>
   );

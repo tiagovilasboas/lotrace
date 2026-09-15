@@ -10,7 +10,7 @@ type EventLogProps = {
 export function EventLog({ events, players }: EventLogProps): ReactElement {
   const latest = [...events].reverse().slice(0, 4);
   return (
-    <ul className="space-y-1 text-xs text-muted-foreground">
+    <ul className="space-y-1">
       {latest.map((event, index) => (
         <li key={`${event.type}-${index}`}>{formatEvent(event, players)}</li>
       ))}

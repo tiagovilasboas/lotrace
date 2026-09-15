@@ -25,7 +25,7 @@ export function CarToken({
       <svg
         viewBox="0 0 56 32"
         className={cn(
-          'car-token-arrive h-7 w-12 shrink-0 overflow-visible drop-shadow-md',
+          'car-token-arrive h-8 w-[3.35rem] shrink-0 overflow-visible drop-shadow-md',
           colorClass,
         )}
         aria-hidden="true"
@@ -52,7 +52,7 @@ export function CarToken({
       className={cn(
         'car-token-arrive shrink-0 overflow-visible drop-shadow-md',
         colorClass,
-        size === 'lobby' ? 'h-8 w-5' : 'h-7 w-[1.15rem]',
+        size === 'lobby' ? 'h-8 w-5' : 'h-[1.45rem] w-[0.95rem]',
         side ? tokenRotateClass(side) : undefined,
       )}
       aria-hidden="true"
@@ -98,7 +98,9 @@ export function CarTokenStack({
     <div
       className={cn(
         'pointer-events-none absolute z-20 flex items-center',
-        dock === 'center' ? 'inset-0 justify-center' : tokenDockClass(side),
+        dock === 'center'
+          ? 'inset-0 justify-center'
+          : tokenDockClass(side),
       )}
     >
       {playerIDs.map((id, index) => (
