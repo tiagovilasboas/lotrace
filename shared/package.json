@@ -15,7 +15,7 @@
     "boardgame.io": "^0.50.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.21.0",
+    "@eslint/js": "^10.0.1",
     "eslint": "^9.21.0",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
