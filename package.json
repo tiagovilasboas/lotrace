@@ -20,6 +20,6 @@
     "build:backend": "npm run typecheck -w @lotrace/backend"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^10.0.5"
   }
 }
