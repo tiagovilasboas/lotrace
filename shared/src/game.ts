@@ -2,7 +2,7 @@ import type { Game } from 'boardgame.io';
 import { INVALID_MOVE } from 'boardgame.io/core';
 import { BOARD, getCell, isPurchasable } from './board.ts';
 import { registerRollDoubles, shouldGrantExtraRoll } from './rules/doubles.ts';
-import { declareBankrupt, payToBank } from './rules/economy.ts';
+import { payToBank } from './rules/economy.ts';
 import { applyBuyHouse, canBuyHouse } from './rules/houses.ts';
 import { resolveLanding, sendToJail } from './rules/landing.ts';
 import { advancePosition, collectSalary } from './rules/movement.ts';
@@ -10,7 +10,7 @@ import { findWinner, getPlayer, pushLog } from './rules/players.ts';
 import {
   GAME_NAME,
   JAIL_FEE,
-  JAIL_MAX_TURNS,
+  JAIL_WAIT_TURNS,
   MAX_PLAYERS,
   MIN_PLAYERS,
   STARTING_CASH,
@@ -143,6 +143,18 @@ export const Imobiliario: Game<
         return;
       }
       if (player.inJail) {
+        if (player.jailTurns >= JAIL_WAIT_TURNS) {
+          player.inJail = false;
+          player.jailTurns = 0;
+          G.consecutiveDoubles = 0;
+          pushLog(G, {
+            type: 'jail',
+            playerID: ctx.currentPlayer,
+            reason: 'free',
+          });
+          setStage(events, 'roll');
+          return;
+        }
         setStage(events, 'jail');
         return;
       }
@@ -215,8 +227,8 @@ export const Imobiliario: Game<
             },
             client: false,
           },
-          rollDice: {
-            move: ({ G, ctx, random, events, playerID }) => {
+          waitJail: {
+            move: ({ G, ctx, events, playerID }) => {
               if (playerID !== ctx.currentPlayer) {
                 return INVALID_MOVE;
               }
@@ -224,42 +236,12 @@ export const Imobiliario: Game<
               if (!player.inJail || player.bankrupt) {
                 return INVALID_MOVE;
               }
-              const die1 = random.D6();
-              const die2 = random.D6();
-              const total = die1 + die2;
-              G.lastDice = { die1, die2, total };
-              pushLog(G, { type: 'roll', playerID, die1, die2 });
-
-              const doubles = die1 === die2;
-              const lastTry = player.jailTurns + 1 >= JAIL_MAX_TURNS;
-
-              if (!doubles && !lastTry) {
-                player.jailTurns += 1;
-                pushLog(G, { type: 'jail', playerID, reason: 'wait' });
-                events.endTurn();
-                return undefined;
-              }
-
-              if (!doubles && lastTry) {
-                if (player.cash < JAIL_FEE) {
-                  declareBankrupt(G, playerID);
-                  events.endTurn();
-                  return undefined;
-                }
-                payToBank(G, playerID, JAIL_FEE);
-                pushLog(G, { type: 'jail', playerID, reason: 'pay' });
-              } else {
-                pushLog(G, { type: 'jail', playerID, reason: 'free' });
-              }
-
-              player.inJail = false;
-              player.jailTurns = 0;
-              G.consecutiveDoubles = 0;
-              moveAfterDice(G, playerID, total, events);
+              player.jailTurns += 1;
+              pushLog(G, { type: 'jail', playerID, reason: 'wait' });
+              events.endTurn();
               return undefined;
             },
             client: false,
-            undoable: false,
           },
         },
       },
