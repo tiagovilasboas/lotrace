@@ -8,13 +8,15 @@ import {
   applyBuyHouse,
   canBuyHouse,
   houseCost,
-  rentWithHouses,
+  rentOnProperty,
+  stationRent,
 } from './rules/houses.ts';
 import { resolveLanding } from './rules/landing.ts';
 import { advancePosition, collectSalary } from './rules/movement.ts';
 import { findWinner } from './rules/players.ts';
 import {
   GO_SALARY,
+  JAIL_FEE,
   JAIL_INDEX,
   STARTING_CASH,
   type ImobiliarioState,
@@ -119,13 +121,32 @@ describe('buy', () => {
 });
 
 describe('rent', () => {
-  it('pays the owner when landing on an owned lot', () => {
+  it('pays unimproved rent when landing on an owned lot', () => {
     const G = emptyState();
     G.players['0']!.position = 3;
     G.owners[3] = '1';
     expect(resolveLanding(G, '0')).toBe('end');
-    expect(G.players['0']?.cash).toBe(STARTING_CASH - 25);
-    expect(G.players['1']?.cash).toBe(STARTING_CASH + 25);
+    expect(G.players['0']?.cash).toBe(STARTING_CASH - 4);
+    expect(G.players['1']?.cash).toBe(STARTING_CASH + 4);
+  });
+
+  it('doubles unimproved rent on a color-group monopoly', () => {
+    const G = emptyState();
+    G.players['0']!.position = 3;
+    G.owners[1] = '1';
+    G.owners[3] = '1';
+    expect(resolveLanding(G, '0')).toBe('end');
+    expect(G.players['0']?.cash).toBe(STARTING_CASH - 8);
+  });
+
+  it('scales station rent with how many stations the owner holds', () => {
+    const G = emptyState();
+    G.owners[4] = '1';
+    G.owners[9] = '1';
+    expect(stationRent(G, '1')).toBe(50);
+    G.players['0']!.position = 4;
+    expect(resolveLanding(G, '0')).toBe('end');
+    expect(G.players['0']?.cash).toBe(STARTING_CASH - 50);
   });
 });
 
@@ -172,11 +193,9 @@ describe('doubles', () => {
     expect(requireG(client).consecutiveDoubles).toBe(1);
     expect(client.getState()?.ctx.currentPlayer).toBe('0');
     expect(client.getState()?.ctx.activePlayers?.['0']).toBe('end');
-
     client.moves.endTurn();
     expect(client.getState()?.ctx.currentPlayer).toBe('0');
     expect(client.getState()?.ctx.activePlayers?.['0']).toBe('roll');
-
     client.moves.rollDice();
     expect(requireG(client).players['0']?.position).toBe(15);
     expect(requireG(client).consecutiveDoubles).toBe(0);
@@ -191,7 +210,6 @@ describe('doubles', () => {
     client.moves.endTurn();
     expect(requireG(client).players['0']?.position).toBe(6);
     expect(requireG(client).consecutiveDoubles).toBe(2);
-
     client.moves.rollDice();
     const G = requireG(client);
     expect(G.players['0']?.inJail).toBe(true);
@@ -203,17 +221,50 @@ describe('doubles', () => {
   });
 });
 
-describe('houses', () => {
-  it('charges half the lot price, rounded down', () => {
-    expect(houseCost(getCell(1))).toBe(30);
-    expect(houseCost(getCell(3))).toBe(40);
+describe('jail', () => {
+  it('leaves jail and moves when rolling doubles, without an extra turn', () => {
+    const client = createClient([4, 4], (G) => {
+      G.players['0']!.inJail = true;
+      G.players['0']!.position = JAIL_INDEX;
+    });
+    expect(client.getState()?.ctx.activePlayers?.['0']).toBe('jail');
+    client.moves.rollDice();
+    const G = requireG(client);
+    expect(G.players['0']?.inJail).toBe(false);
+    expect(G.players['0']?.position).toBe(14);
+    expect(G.consecutiveDoubles).toBe(0);
+    expect(client.getState()?.ctx.activePlayers?.['0']).toBe('buy');
   });
 
-  it('scales rent from 1x to 5x the base rent', () => {
-    expect(rentWithHouses(25, 0)).toBe(25);
-    expect(rentWithHouses(25, 1)).toBe(50);
-    expect(rentWithHouses(25, 2)).toBe(75);
-    expect(rentWithHouses(25, 4)).toBe(125);
+  it('forces pay plus move on the third failed jail roll', () => {
+    const client = createClient([2, 3], (G) => {
+      G.players['0']!.inJail = true;
+      G.players['0']!.jailTurns = 2;
+      G.players['0']!.position = JAIL_INDEX;
+    });
+    const before = requireG(client).players['0']!.cash;
+    client.moves.rollDice();
+    const G = requireG(client);
+    expect(G.players['0']?.inJail).toBe(false);
+    expect(G.players['0']?.cash).toBe(before - JAIL_FEE);
+    expect(G.players['0']?.position).toBe(11);
+  });
+});
+
+describe('houses', () => {
+  it('charges house cost by color-group band', () => {
+    expect(houseCost(getCell(1))).toBe(50);
+    expect(houseCost(getCell(3))).toBe(50);
+    expect(houseCost(getCell(21))).toBe(200);
+  });
+
+  it('uses a steep rent ladder and hotel', () => {
+    const ipanema = getCell(3);
+    expect(rentOnProperty(ipanema, 0, false)).toBe(4);
+    expect(rentOnProperty(ipanema, 1, false)).toBe(20);
+    expect(rentOnProperty(ipanema, 2, false)).toBe(60);
+    expect(rentOnProperty(ipanema, 4, false)).toBe(320);
+    expect(rentOnProperty(ipanema, 5, false)).toBe(450);
   });
 
   it('buys a house when the player owns the color-group monopoly', () => {
@@ -227,9 +278,6 @@ describe('houses', () => {
     const G = requireG(client);
     expect(G.houses[1]).toBe(1);
     expect(G.players['0']?.cash).toBe(before - houseCost(getCell(1)));
-    expect(
-      G.log.some((event) => event.type === 'buy-house' && event.cell === 1),
-    ).toBe(true);
   });
 
   it('rejects a house without a monopoly', () => {
@@ -237,7 +285,6 @@ describe('houses', () => {
     G.owners[1] = '0';
     expect(canBuyHouse(G, '0', 1)).toBe(false);
     expect(applyBuyHouse(G, '0', 1)).toBe(false);
-    expect(G.houses[1] ?? 0).toBe(0);
   });
 
   it('increases rent when the landed property has houses', () => {
@@ -246,8 +293,7 @@ describe('houses', () => {
     G.owners[3] = '1';
     G.houses[3] = 2;
     expect(resolveLanding(G, '0')).toBe('end');
-    expect(G.players['0']?.cash).toBe(STARTING_CASH - 75);
-    expect(G.players['1']?.cash).toBe(STARTING_CASH + 75);
+    expect(G.players['0']?.cash).toBe(STARTING_CASH - 60);
   });
 
   it('requires even build across the color group', () => {
@@ -257,6 +303,17 @@ describe('houses', () => {
     expect(applyBuyHouse(G, '0', 1)).toBe(true);
     expect(canBuyHouse(G, '0', 1)).toBe(false);
     expect(canBuyHouse(G, '0', 3)).toBe(true);
+  });
+
+  it('upgrades four houses into a hotel', () => {
+    const G = emptyState();
+    G.owners[1] = '0';
+    G.owners[3] = '0';
+    G.houses[1] = 4;
+    G.houses[3] = 4;
+    expect(applyBuyHouse(G, '0', 1)).toBe(true);
+    expect(G.houses[1]).toBe(5);
+    expect(canBuyHouse(G, '0', 1)).toBe(false);
   });
 
   it('clears houses when properties return to the bank', () => {

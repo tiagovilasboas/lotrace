@@ -7,6 +7,7 @@ import { ringCellPosition, ringCellSide } from '@/features/game/board/ring-geome
 import { StationTile } from '@/features/game/board/StationTile.tsx';
 import { TaxTile } from '@/features/game/board/TaxTile.tsx';
 import type { BoardTileProps } from '@/features/game/board/tile-types.ts';
+import { cn } from '@/lib/utils.ts';
 
 type BoardRingProps = {
   players: Record<string, PlayerState>;
@@ -14,6 +15,7 @@ type BoardRingProps = {
   houses: Record<number, number>;
   pendingCell: number | null;
   center: ReactElement;
+  className?: string;
 };
 
 function occupantsOnCell(
@@ -47,14 +49,18 @@ export function BoardRing({
   houses,
   pendingCell,
   center,
+  className,
 }: BoardRingProps): ReactElement {
   return (
     <div
-      className="aspect-square w-full rounded-xl p-[5px] shadow-[0_10px_24px_rgba(28,25,23,0.35)]"
+      className={cn(
+        'aspect-square w-full rounded-xl p-[6px] shadow-[0_12px_28px_rgba(28,25,23,0.38)]',
+        className,
+      )}
       style={{ backgroundColor: 'var(--group-brown)' }}
     >
       <div
-        className="grid h-full w-full grid-cols-[minmax(0,1.4fr)_repeat(5,minmax(0,1fr))_minmax(0,1.4fr)] grid-rows-[minmax(0,1.4fr)_repeat(5,minmax(0,1fr))_minmax(0,1.4fr)] gap-px rounded-[4px] p-0.5"
+        className="grid h-full w-full grid-cols-[minmax(0,1.22fr)_repeat(5,minmax(0,1fr))_minmax(0,1.22fr)] grid-rows-[minmax(0,1.22fr)_repeat(5,minmax(0,1fr))_minmax(0,1.22fr)] gap-px rounded-[5px] p-0.5"
         style={{ backgroundColor: BOARD_COLOR.felt }}
       >
         {BOARD.map((cell: BoardCell) => {
@@ -78,7 +84,7 @@ export function BoardRing({
             </div>
           );
         })}
-        <div className="col-start-2 col-end-7 row-start-2 row-end-7 flex items-center justify-center p-2 text-board-track">
+        <div className="col-start-2 col-end-7 row-start-2 row-end-7 flex items-center justify-center p-1.5 text-board-track">
           {center}
         </div>
       </div>

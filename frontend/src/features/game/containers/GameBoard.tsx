@@ -36,47 +36,48 @@ export function GameBoard({
   const dice = G.lastDice;
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-3 px-3 pb-6 pt-3">
-      <PlayerList
-        players={Object.values(G.players)}
-        currentPlayer={ctx.currentPlayer}
-        viewerID={viewerID}
-      />
-
-      <BoardRing
-        players={G.players}
-        owners={G.owners}
-        houses={G.houses}
-        pendingCell={G.pendingCell}
-        center={
-          <div className="board-center-felt flex h-full w-full flex-col items-center justify-center gap-2 px-2">
-            <DiceDisplay dice={dice} />
-            <p
-              className="rounded-full bg-board-track px-3 py-1 text-sm font-bold tabular-nums text-board-ink shadow-sm"
-              aria-label={`${t('cash')}: R$ ${G.players[viewerID]?.cash ?? 0}`}
-            >
-              R$ {G.players[viewerID]?.cash ?? 0}
-            </p>
+    <div className="flex min-h-dvh w-full flex-col bg-page">
+      <div className="flex min-h-0 flex-1 items-center justify-center px-1 pt-1">
+        <div className="relative w-full max-w-[min(100%,calc(100dvh-9.25rem))]">
+          <div className="absolute inset-x-1 top-1 z-30">
+            <PlayerList
+              players={Object.values(G.players)}
+              currentPlayer={ctx.currentPlayer}
+              viewerID={viewerID}
+            />
           </div>
-        }
-      />
-
-      {winner ? (
-        <p className="rounded-xl bg-primary px-4 py-3 text-center text-lg font-bold text-primary-foreground">
-          {t('winner', { name: winner })}
-        </p>
-      ) : (
-        <ActionBar
-          G={G}
-          stage={isActive ? (ctx.activePlayers?.[viewerID] as TurnStage | undefined) : stage}
-          isActive={Boolean(isActive && !ctx.gameover)}
-          currentName={current?.nickname ?? ctx.currentPlayer}
-          viewerID={viewerID}
-          moves={moves}
-        />
-      )}
-
-      <EventLog events={G.log} players={G.players} />
+          <BoardRing
+            players={G.players}
+            owners={G.owners}
+            houses={G.houses}
+            pendingCell={G.pendingCell}
+            center={
+              <div className="board-center-felt flex h-full w-full flex-col items-center justify-center gap-2 px-2 pt-8">
+                <DiceDisplay dice={dice} />
+                <div className="max-w-[16rem] rounded-xl bg-board-track/95 px-3 py-2 text-board-ink shadow-md">
+                  <EventLog events={G.log} players={G.players} />
+                </div>
+              </div>
+            }
+          />
+        </div>
+      </div>
+      <div className="shrink-0 border-t border-border/70 bg-page/95 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2">
+        {winner ? (
+          <p className="rounded-xl bg-primary px-4 py-3 text-center text-lg font-bold text-primary-foreground">
+            {t('winner', { name: winner })}
+          </p>
+        ) : (
+          <ActionBar
+            G={G}
+            stage={isActive ? (ctx.activePlayers?.[viewerID] as TurnStage | undefined) : stage}
+            isActive={Boolean(isActive && !ctx.gameover)}
+            currentName={current?.nickname ?? ctx.currentPlayer}
+            viewerID={viewerID}
+            moves={moves}
+          />
+        )}
+      </div>
     </div>
   );
 }
