@@ -99,9 +99,7 @@ export function DiceDisplay({ dice }: DiceDisplayProps): ReactElement {
         </span>
       </div>
       {hasFaces && dice !== null ? (
-        <p className="text-lg font-black tabular-nums leading-none tracking-tight text-board-track">
-          {dice.total}
-        </p>
+        <span className="sr-only">{dice.total}</span>
       ) : null}
     </div>
   );
