@@ -1,0 +1,258 @@
+import type { Game } from 'boardgame.io';
+import { INVALID_MOVE } from 'boardgame.io/core';
+import { getCell, isPurchasable } from './board.ts';
+import { payToBank } from './rules/economy.ts';
+import { resolveLanding } from './rules/landing.ts';
+import { advancePosition, collectSalary } from './rules/movement.ts';
+import { findWinner, getPlayer, pushLog } from './rules/players.ts';
+import {
+  GAME_NAME,
+  JAIL_FEE,
+  JAIL_MAX_TURNS,
+  MAX_PLAYERS,
+  MIN_PLAYERS,
+  STARTING_CASH,
+  type ImobiliarioSetupData,
+  type ImobiliarioState,
+  type TurnStage,
+} from './types.ts';
+
+function createInitialState(
+  numPlayers: number,
+  setupData: ImobiliarioSetupData | undefined,
+): ImobiliarioState {
+  const players: ImobiliarioState['players'] = {};
+  const owners: ImobiliarioState['owners'] = {};
+  const nicknames = setupData?.nicknames ?? [];
+
+  for (let seat = 0; seat < numPlayers; seat += 1) {
+    const id = String(seat);
+    players[id] = {
+      id,
+      nickname: nicknames[seat] ?? `Jogador ${seat + 1}`,
+      cash: STARTING_CASH,
+      position: 0,
+      inJail: false,
+      jailTurns: 0,
+      bankrupt: false,
+    };
+  }
+
+  return {
+    players,
+    owners,
+    lastDice: null,
+    pendingCell: null,
+    log: [],
+  };
+}
+
+function setStage(
+  events: {
+    setActivePlayers: (arg: { currentPlayer: { stage: TurnStage } }) => void;
+  },
+  stage: TurnStage,
+): void {
+  events.setActivePlayers({ currentPlayer: { stage } });
+}
+
+export const Imobiliario: Game<
+  ImobiliarioState,
+  Record<string, unknown>,
+  ImobiliarioSetupData
+> = {
+  name: GAME_NAME,
+  minPlayers: MIN_PLAYERS,
+  maxPlayers: MAX_PLAYERS,
+  disableUndo: true,
+  setup: ({ ctx }, setupData) =>
+    createInitialState(ctx.numPlayers, setupData),
+  endIf: ({ G }) => {
+    const winner = findWinner(G);
+    if (winner) {
+      return { winner };
+    }
+    return undefined;
+  },
+  turn: {
+    onBegin: ({ G, ctx, events }) => {
+      const player = getPlayer(G, ctx.currentPlayer);
+      if (player.bankrupt) {
+        events.endTurn();
+        return;
+      }
+      if (player.inJail) {
+        setStage(events, 'jail');
+        return;
+      }
+      setStage(events, 'roll');
+    },
+    order: {
+      first: () => 0,
+      next: ({ G, ctx }) => {
+        const count = ctx.playOrder.length;
+        for (let step = 1; step <= count; step += 1) {
+          const pos = (ctx.playOrderPos + step) % count;
+          const id = ctx.playOrder[pos];
+          if (id && !G.players[id]?.bankrupt) {
+            return pos;
+          }
+        }
+        return undefined;
+      },
+    },
+    stages: {
+      roll: {
+        moves: {
+          rollDice: {
+            move: ({ G, ctx, random, events, playerID }) => {
+              if (playerID !== ctx.currentPlayer) {
+                return INVALID_MOVE;
+              }
+              const player = getPlayer(G, playerID);
+              if (player.bankrupt || player.inJail) {
+                return INVALID_MOVE;
+              }
+              const die1 = random.D6();
+              const die2 = random.D6();
+              const total = die1 + die2;
+              G.lastDice = { die1, die2, total };
+              pushLog(G, { type: 'roll', playerID, die1, die2 });
+
+              const from = player.position;
+              const moved = advancePosition(from, total);
+              player.position = moved.position;
+              if (moved.passedGo) {
+                collectSalary(G, playerID);
+              }
+              pushLog(G, {
+                type: 'move',
+                playerID,
+                from,
+                to: moved.position,
+                passedGo: moved.passedGo,
+              });
+
+              const stage = resolveLanding(G, playerID);
+              setStage(events, stage);
+              return undefined;
+            },
+            client: false,
+            undoable: false,
+          },
+        },
+      },
+      jail: {
+        moves: {
+          payJail: {
+            move: ({ G, ctx, events, playerID }) => {
+              if (playerID !== ctx.currentPlayer) {
+                return INVALID_MOVE;
+              }
+              const player = getPlayer(G, playerID);
+              if (!player.inJail || player.cash < JAIL_FEE) {
+                return INVALID_MOVE;
+              }
+              payToBank(G, playerID, JAIL_FEE);
+              player.inJail = false;
+              player.jailTurns = 0;
+              pushLog(G, { type: 'jail', playerID, reason: 'pay' });
+              setStage(events, 'roll');
+              return undefined;
+            },
+            client: false,
+          },
+          waitJail: {
+            move: ({ G, ctx, events, playerID }) => {
+              if (playerID !== ctx.currentPlayer) {
+                return INVALID_MOVE;
+              }
+              const player = getPlayer(G, playerID);
+              if (!player.inJail) {
+                return INVALID_MOVE;
+              }
+              const nextTurns = player.jailTurns + 1;
+              if (nextTurns >= JAIL_MAX_TURNS) {
+                player.inJail = false;
+                player.jailTurns = 0;
+                pushLog(G, { type: 'jail', playerID, reason: 'free' });
+                setStage(events, 'roll');
+                return undefined;
+              }
+              player.jailTurns = nextTurns;
+              pushLog(G, { type: 'jail', playerID, reason: 'wait' });
+              events.endTurn();
+              return undefined;
+            },
+            client: false,
+          },
+        },
+      },
+      buy: {
+        moves: {
+          buyProperty: {
+            move: ({ G, ctx, events, playerID }) => {
+              if (playerID !== ctx.currentPlayer) {
+                return INVALID_MOVE;
+              }
+              const cellIndex = G.pendingCell;
+              if (cellIndex === null) {
+                return INVALID_MOVE;
+              }
+              const cell = getCell(cellIndex);
+              const player = getPlayer(G, playerID);
+              if (
+                !isPurchasable(cell) ||
+                G.owners[cell.index] ||
+                cell.price === undefined ||
+                player.cash < cell.price
+              ) {
+                return INVALID_MOVE;
+              }
+              player.cash -= cell.price;
+              G.owners[cell.index] = playerID;
+              G.pendingCell = null;
+              pushLog(G, { type: 'buy', playerID, cell: cell.index });
+              setStage(events, 'end');
+              return undefined;
+            },
+            client: false,
+          },
+          skipBuy: {
+            move: ({ G, ctx, events, playerID }) => {
+              if (playerID !== ctx.currentPlayer) {
+                return INVALID_MOVE;
+              }
+              if (G.pendingCell === null) {
+                return INVALID_MOVE;
+              }
+              pushLog(G, {
+                type: 'skip-buy',
+                playerID,
+                cell: G.pendingCell,
+              });
+              G.pendingCell = null;
+              setStage(events, 'end');
+              return undefined;
+            },
+            client: false,
+          },
+        },
+      },
+      end: {
+        moves: {
+          endTurn: {
+            move: ({ ctx, events, playerID }) => {
+              if (playerID !== ctx.currentPlayer) {
+                return INVALID_MOVE;
+              }
+              events.endTurn();
+              return undefined;
+            },
+            client: false,
+          },
+        },
+      },
+    },
+  },
+};
