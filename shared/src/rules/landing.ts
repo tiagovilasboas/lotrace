@@ -8,13 +8,18 @@ import {
 import { payRent, payToBank } from './economy.ts';
 import { getPlayer, pushLog } from './players.ts';
 
-export function sendToJail(G: ImobiliarioState, playerID: string): void {
+export function sendToJail(
+  G: ImobiliarioState,
+  playerID: string,
+  reason: 'goto' | 'doubles' = 'goto',
+): void {
   const player = getPlayer(G, playerID);
   player.position = JAIL_INDEX;
   player.inJail = true;
   player.jailTurns = 0;
   G.pendingCell = null;
-  pushLog(G, { type: 'jail', playerID, reason: 'goto' });
+  G.consecutiveDoubles = 0;
+  pushLog(G, { type: 'jail', playerID, reason });
 }
 
 export function resolveLanding(

@@ -66,7 +66,7 @@ export type GameLogEvent =
   | {
       type: 'jail';
       playerID: string;
-      reason: 'goto' | 'pay' | 'wait' | 'free';
+      reason: 'goto' | 'pay' | 'wait' | 'free' | 'doubles';
     }
   | { type: 'bankrupt'; playerID: string };
 
@@ -77,6 +77,7 @@ export type ImobiliarioState = {
   owners: Record<number, string | null>;
   lastDice: DiceRoll | null;
   pendingCell: number | null;
+  consecutiveDoubles: number;
   log: GameLogEvent[];
 };
 
@@ -121,4 +122,5 @@ export const JAIL_FEE = 50;
 export const JAIL_MAX_TURNS = 3;
 export const JAIL_INDEX = 6;
 export const GO_TO_JAIL_INDEX = 18;
+export const MAX_CONSECUTIVE_DOUBLES = 3;
 export const MAX_LOG = 12;

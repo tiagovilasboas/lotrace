@@ -38,6 +38,7 @@ function emptyState(): ImobiliarioState {
     owners: {},
     lastDice: null,
     pendingCell: null,
+    consecutiveDoubles: 0,
     log: [],
   };
 }
