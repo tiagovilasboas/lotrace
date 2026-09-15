@@ -31,9 +31,14 @@ export function ActionBar({
 }: ActionBarProps): ReactElement {
   if (!isActive) {
     return (
-      <p className="py-2 text-center text-sm text-muted-foreground">
-        {t('waitTurn', { name: currentName })}
-      </p>
+      <div
+        role="status"
+        className="rounded-xl border border-border bg-muted/80 px-3 py-2.5 text-center"
+      >
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          {t('waitTurn', { name: currentName })}
+        </p>
+      </div>
     );
   }
 
@@ -45,7 +50,12 @@ export function ActionBar({
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-center text-sm font-semibold">{t('yourTurn')}</p>
+      <div
+        role="status"
+        className="rounded-xl bg-primary px-3 py-2.5 text-center text-primary-foreground shadow-sm"
+      >
+        <p className="text-sm font-bold tracking-wide">{t('yourTurn')}</p>
+      </div>
       {stage === 'roll' ? (
         <Button size="lg" onClick={() => moves.rollDice?.()}>
           {t('roll')}
