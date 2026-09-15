@@ -6,7 +6,7 @@ Contract for code agents working on **LotRace** (classic property board — not 
 
 - Monorepo (npm workspaces): `shared/` · `backend/` · `frontend/`
 - **shared**: boardgame.io `Game`, board, types, pure rules
-- **backend**: boardgame.io `Server` + Koa HTTP rooms (in-memory)
+- **backend**: boardgame.io `Server` + Koa HTTP rooms (Postgres when `DATABASE_URL` is set; otherwise in-memory)
 - **frontend**: Vite 6 + React 19 + Tailwind 4 PWA (Quinto-like: cards, big CTAs, PT-BR, light/dark)
 - Node **22.12+**. No login — nickname + 6-char room code.
 
@@ -21,7 +21,7 @@ Contract for code agents working on **LotRace** (classic property board — not 
 | `npm run dev` | API `:8000` + Vite `:5173` |
 | `npm run typecheck` | `tsc` in all workspaces |
 | `npm run lint` | ESLint |
-| `npm test` | shared rule tests |
+| `npm test` | shared + backend tests |
 | `npm run build` | production bundles |
 
 ## MVP rules
@@ -34,7 +34,7 @@ Contract for code agents working on **LotRace** (classic property board — not 
 ## Do
 
 - Keep modules SRP-sized. Annotate exported function return types.
-- Rooms are **in-memory**: a Railway restart wipes lobbies and matches.
+- Rooms and matches are **durable** when `DATABASE_URL` is set (Railway Postgres). Local `npm run dev` without it keeps in-memory stores (restart wipes them). Never commit the URL value.
 - CORS via `CORS_ORIGIN`; frontend API via `VITE_API_URL`. No invented secrets.
 
 ## Don't

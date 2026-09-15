@@ -11,6 +11,7 @@ Thanks for helping with LotRace.
    - `frontend/.env.example` → `frontend/.env`
    - `backend/.env.example` → `backend/.env`
 5. Run `npm run dev` and open `http://localhost:5173`.
+6. Optional: set `DATABASE_URL` in `backend/.env` to persist rooms and matches in Postgres. Leave it unset to keep the in-memory local fallback.
 
 ## Pull requests
 
