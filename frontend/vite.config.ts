@@ -15,7 +15,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'],
       manifest: {
-        id: 'imobiliario',
+        id: 'lotrace',
         name: 'LotRace',
         short_name: 'LotRace',
         description: 'Tabuleiro clássico para 2 a 6 jogadores. Host cria a sala; convidados entram por código.',

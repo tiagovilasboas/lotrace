@@ -111,7 +111,7 @@ export type SessionPayload = {
   matchID: string | null;
 };
 
-export const GAME_NAME = 'imobiliario';
+export const GAME_NAME = 'lotrace';
 export const MIN_PLAYERS = 2;
 export const MAX_PLAYERS = 6;
 export const BOARD_SIZE = 24;
