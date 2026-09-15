@@ -13,24 +13,46 @@ type CarTokenProps = {
   side?: RingSide;
 };
 
-const SIZE_CLASS = {
-  board: 'h-9 w-6',
-  hud: 'h-8 w-5',
-  lobby: 'h-9 w-6',
-} as const;
-
 export function CarToken({
   playerID,
   size = 'board',
   side,
 }: CarTokenProps): ReactElement {
+  const colorClass = tokenTextClass(playerID);
+
+  if (size === 'hud') {
+    return (
+      <svg
+        viewBox="0 0 56 32"
+        className={cn(
+          'car-token-arrive h-8 w-[3.35rem] shrink-0 overflow-visible drop-shadow-md',
+          colorClass,
+        )}
+        aria-hidden="true"
+        focusable="false"
+      >
+        <ellipse cx="16" cy="27" rx="6.2" ry="4.2" fill="#1c1917" />
+        <ellipse cx="40" cy="27" rx="6.2" ry="4.2" fill="#1c1917" />
+        <ellipse cx="16" cy="27" rx="2.2" ry="1.5" fill="#d6d3d1" />
+        <ellipse cx="40" cy="27" rx="2.2" ry="1.5" fill="#d6d3d1" />
+        <path
+          fill="currentColor"
+          d="M7 22.2 12.4 11.6h18.2L42 18.4h7.4v7.4H7z"
+        />
+        <path fill="#0c1917" opacity="0.28" d="M12.6 12.2h16.8l10 6.4H18.2z" />
+        <path fill="#7dd3fc" opacity="0.9" d="M14.4 12.6h13.6l5.6 5.4H17.2z" />
+        <path fill="#fff" opacity="0.35" d="M15 12.8h5.2l1.4 5H16.2z" />
+      </svg>
+    );
+  }
+
   return (
     <svg
       viewBox="0 0 28 44"
       className={cn(
         'car-token-arrive shrink-0 overflow-visible drop-shadow-md',
-        tokenTextClass(playerID),
-        SIZE_CLASS[size],
+        colorClass,
+        size === 'lobby' ? 'h-8 w-5' : 'h-[1.45rem] w-[0.95rem]',
         side ? tokenRotateClass(side) : undefined,
       )}
       aria-hidden="true"
@@ -58,11 +80,13 @@ export function CarToken({
 type CarTokenStackProps = {
   playerIDs: string[];
   side: RingSide;
+  dock?: 'stripe' | 'center';
 };
 
 export function CarTokenStack({
   playerIDs,
   side,
+  dock = 'stripe',
 }: CarTokenStackProps): ReactElement | null {
   if (playerIDs.length === 0) {
     return null;
@@ -74,7 +98,9 @@ export function CarTokenStack({
     <div
       className={cn(
         'pointer-events-none absolute z-20 flex items-center',
-        tokenDockClass(side),
+        dock === 'center'
+          ? 'inset-0 justify-center'
+          : tokenDockClass(side),
       )}
     >
       {playerIDs.map((id, index) => (
@@ -82,9 +108,9 @@ export function CarTokenStack({
           key={id}
           className="relative"
           style={
-            stacked
-              ? { marginTop: index === 0 ? 0 : -14, zIndex: index + 1 }
-              : { marginLeft: index === 0 ? 0 : -12, zIndex: index + 1 }
+            stacked && dock !== 'center'
+              ? { marginTop: index === 0 ? 0 : -10, zIndex: index + 1 }
+              : { marginLeft: index === 0 ? 0 : -8, zIndex: index + 1 }
           }
         >
           <CarToken playerID={id} size="board" side={side} />

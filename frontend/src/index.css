@@ -45,6 +45,8 @@
   --color-tax: var(--tax);
   --color-go: var(--go);
   --color-jail: var(--jail);
+  --color-match-navy: var(--match-navy);
+  --color-match-card: var(--match-card);
 }
 
 @layer base {
@@ -145,6 +147,52 @@
       var(--page);
   }
 
+  .match-table {
+    background:
+      radial-gradient(ellipse at 50% -8%, #163a6a 0%, var(--match-navy) 54%);
+    color: #e8eef8;
+  }
+
+  .board-tile {
+    container-type: size;
+  }
+
+  .tile-name-line {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: clamp(0.46rem, 16cqmin, 0.8rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+
+  .tile-price {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: clamp(0.4rem, 12cqmin, 0.62rem);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    opacity: 0.72;
+  }
+
+  .match-cta {
+    border-radius: 999px;
+    background: #2f6bff;
+    color: #fff;
+    box-shadow: 0 8px 18px rgb(47 107 255 / 0.4);
+  }
+
+  .match-cta:hover {
+    background: #2563eb;
+  }
+
   .surface-card {
     @apply rounded-xl border border-border bg-card shadow-sm;
   }
@@ -159,8 +207,8 @@
 
   .die-face {
     display: grid;
-    width: 2.35rem;
-    height: 2.35rem;
+    width: 2.7rem;
+    height: 2.7rem;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 0.12rem;

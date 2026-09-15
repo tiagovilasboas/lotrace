@@ -1,10 +1,11 @@
 import type { ImobiliarioState, TurnStage } from '@lotrace/shared';
 import type { BoardProps } from 'boardgame.io/react';
+import { Dices } from 'lucide-react';
 import type { ReactElement } from 'react';
 import { ThemeToggle } from '@/components/theme-toggle.tsx';
+import { BoardCenter } from '@/features/game/board/BoardCenter.tsx';
 import { BoardRing } from '@/features/game/board/BoardRing.tsx';
 import { ActionBar } from '@/features/game/components/ActionBar.tsx';
-import { DiceDisplay } from '@/features/game/components/DiceDisplay.tsx';
 import { EventLog } from '@/features/game/components/EventLog.tsx';
 import { PlayerList } from '@/features/game/components/PlayerList.tsx';
 import { useMatchChrome } from '@/features/game/lib/match-chrome.ts';
@@ -35,45 +36,56 @@ export function GameBoard({
   const stage = ctx.activePlayers?.[ctx.currentPlayer] as TurnStage | undefined;
   const current = G.players[ctx.currentPlayer];
   const winner = readWinner(ctx.gameover, G.players);
-  const dice = G.lastDice;
   const chrome = useMatchChrome();
+  const playerCount = Object.keys(G.players).length;
 
   return (
-    <div className="flex min-h-dvh w-full flex-col bg-page">
-      <header className="flex shrink-0 items-center gap-1.5 px-2 pb-1 pt-[max(0.35rem,env(safe-area-inset-top))]">
-        {chrome ? <div className="flex shrink-0 items-center gap-1">{chrome}</div> : null}
-        <div className="min-w-0 flex-1">
-          <PlayerList
-            players={Object.values(G.players)}
-            currentPlayer={ctx.currentPlayer}
-            viewerID={viewerID}
-          />
+    <div className="match-table grid min-h-dvh w-full grid-rows-[auto_auto_minmax(0,1fr)_auto]">
+      <header className="flex items-center gap-2 px-3 pb-1 pt-[max(0.4rem,env(safe-area-inset-top))]">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sky-400/15 text-sky-300">
+            <Dices className="size-4" aria-hidden />
+          </span>
+          <div className="min-w-0">
+            <p className="text-lg font-black tracking-tight text-white">{t('appName')}</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-300/80">
+              {t('brandSub')}
+            </p>
+          </div>
         </div>
-        <ThemeToggle />
+        {chrome ? (
+          <div className="flex shrink-0 items-center gap-1 [&_button]:h-8 [&_button]:border-white/20 [&_button]:bg-white/5 [&_button]:px-2.5 [&_button]:text-xs [&_button]:text-white">
+            {chrome}
+          </div>
+        ) : null}
+        <ThemeToggle className="text-white hover:bg-white/10" />
       </header>
 
-      <div className="flex min-h-0 flex-1 items-center justify-center px-1">
-        <div className="relative w-full max-w-[min(100%,calc(100dvh-11rem))]">
-          <BoardRing
-            players={G.players}
-            owners={G.owners}
-            houses={G.houses}
-            pendingCell={G.pendingCell}
-            center={
-              <div className="board-center-felt flex h-full w-full flex-col items-center justify-center gap-2 px-2">
-                <DiceDisplay dice={dice} />
-                <div className="max-w-[16rem] rounded-xl bg-board-track/95 px-3 py-2 text-board-ink shadow-md">
-                  <EventLog events={G.log} players={G.players} />
-                </div>
-              </div>
-            }
-          />
+      <PlayerList
+        players={Object.values(G.players)}
+        currentPlayer={ctx.currentPlayer}
+        viewerID={viewerID}
+      />
+
+      <div className="relative min-h-0">
+        <div className="absolute inset-0 flex items-center justify-center px-2">
+          <div className="aspect-square h-full max-h-full w-auto max-w-full">
+            <BoardRing
+              players={G.players}
+              owners={G.owners}
+              houses={G.houses}
+              pendingCell={G.pendingCell}
+              center={
+                <BoardCenter dice={G.lastDice} events={G.log} players={G.players} />
+              }
+            />
+          </div>
         </div>
       </div>
 
-      <div className="shrink-0 border-t border-border/70 bg-page/95 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2">
+      <div className="px-3 pb-[max(0.85rem,env(safe-area-inset-bottom))] pt-2">
         {winner ? (
-          <p className="rounded-xl bg-primary px-4 py-3 text-center text-lg font-bold text-primary-foreground">
+          <p className="rounded-2xl bg-sky-400 px-4 py-3 text-center text-lg font-bold text-slate-950">
             {t('winner', { name: winner })}
           </p>
         ) : (
@@ -86,6 +98,12 @@ export function GameBoard({
             moves={moves}
           />
         )}
+        <p className="mt-2 text-center text-[11px] font-medium text-white/45">
+          {t('playerCount', { count: String(playerCount) })}
+        </p>
+        <div className="sr-only">
+          <EventLog events={G.log} players={G.players} />
+        </div>
       </div>
     </div>
   );
