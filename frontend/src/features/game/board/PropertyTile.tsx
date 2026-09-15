@@ -20,13 +20,13 @@ export function PropertyTile({
   return (
     <div className={cn(tileSurfaceClass(isPending), bar.containerClass)}>
       {hue ? <HueStripe hue={hue} side={side} ownerID={ownerID} /> : null}
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col pb-4">
         <span className="px-0.5 pt-0.5 font-semibold [overflow-wrap:anywhere]">{cell.name}</span>
         {cell.price !== undefined ? (
           <span className="px-0.5 tabular-nums opacity-70">R${cell.price}</span>
         ) : null}
-        <CarTokenStack playerIDs={occupants} />
       </div>
+      <CarTokenStack playerIDs={occupants} side={side} />
     </div>
   );
 }

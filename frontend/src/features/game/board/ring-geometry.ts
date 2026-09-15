@@ -41,12 +41,25 @@ export function ringCellSide(index: number): RingSide {
 export function hueBarLayout(side: RingSide): HueBarLayout {
   switch (side) {
     case 'south':
-      return { containerClass: 'flex-col', barClass: 'h-2 w-full shrink-0' };
+      return { containerClass: 'flex-col', barClass: 'h-2.5 w-full shrink-0' };
     case 'north':
-      return { containerClass: 'flex-col-reverse', barClass: 'h-2 w-full shrink-0' };
+      return { containerClass: 'flex-col-reverse', barClass: 'h-2.5 w-full shrink-0' };
     case 'west':
-      return { containerClass: 'flex-row-reverse', barClass: 'h-full w-2 shrink-0' };
+      return { containerClass: 'flex-row-reverse', barClass: 'h-full w-2.5 shrink-0' };
     case 'east':
-      return { containerClass: 'flex-row', barClass: 'h-full w-2 shrink-0' };
+      return { containerClass: 'flex-row', barClass: 'h-full w-2.5 shrink-0' };
+  }
+}
+
+export function carTravelRotate(side: RingSide): string {
+  switch (side) {
+    case 'south':
+      return 'rotate-180';
+    case 'west':
+      return '-rotate-90';
+    case 'north':
+      return 'rotate-0';
+    case 'east':
+      return 'rotate-90';
   }
 }

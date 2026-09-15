@@ -48,31 +48,36 @@ export function BoardRing({
 }: BoardRingProps): ReactElement {
   return (
     <div
-      className="grid aspect-square w-full grid-cols-7 grid-rows-7 gap-px rounded-md p-1"
-      style={{ backgroundColor: BOARD_COLOR.felt }}
+      className="aspect-square w-full rounded-xl p-[5px] shadow-[0_10px_24px_rgba(28,25,23,0.35)]"
+      style={{ backgroundColor: 'var(--group-brown)' }}
     >
-      {BOARD.map((cell: BoardCell) => {
-        const pos = ringCellPosition(cell.index);
-        return (
-          <div
-            key={cell.index}
-            className="min-h-0 min-w-0"
-            data-cell-index={cell.index}
-            data-cell-kind={cell.kind}
-            style={{ gridColumn: pos.column, gridRow: pos.row }}
-          >
-            {renderRingTile({
-              cell,
-              occupants: occupantsOnCell(players, cell.index),
-              ownerID: owners[cell.index] ?? null,
-              isPending: pendingCell === cell.index,
-              side: ringCellSide(cell.index),
-            })}
-          </div>
-        );
-      })}
-      <div className="col-start-2 col-end-7 row-start-2 row-end-7 flex items-center justify-center p-2 text-board-track">
-        {center}
+      <div
+        className="grid h-full w-full grid-cols-[minmax(0,1.4fr)_repeat(5,minmax(0,1fr))_minmax(0,1.4fr)] grid-rows-[minmax(0,1.4fr)_repeat(5,minmax(0,1fr))_minmax(0,1.4fr)] gap-px rounded-[4px] p-0.5"
+        style={{ backgroundColor: BOARD_COLOR.felt }}
+      >
+        {BOARD.map((cell: BoardCell) => {
+          const pos = ringCellPosition(cell.index);
+          return (
+            <div
+              key={cell.index}
+              className="min-h-0 min-w-0"
+              data-cell-index={cell.index}
+              data-cell-kind={cell.kind}
+              style={{ gridColumn: pos.column, gridRow: pos.row }}
+            >
+              {renderRingTile({
+                cell,
+                occupants: occupantsOnCell(players, cell.index),
+                ownerID: owners[cell.index] ?? null,
+                isPending: pendingCell === cell.index,
+                side: ringCellSide(cell.index),
+              })}
+            </div>
+          );
+        })}
+        <div className="col-start-2 col-end-7 row-start-2 row-end-7 flex items-center justify-center p-2 text-board-track">
+          {center}
+        </div>
       </div>
     </div>
   );
