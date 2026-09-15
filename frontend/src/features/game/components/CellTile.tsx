@@ -1,5 +1,6 @@
 import type { BoardCell, ColorGroup } from '@imobiliario/shared';
 import type { ReactElement } from 'react';
+import { CarToken } from '@/features/game/components/CarToken.tsx';
 import { tokenClass } from '@/features/game/player-tokens.ts';
 import { cn } from '@/lib/utils.ts';
 
@@ -44,9 +45,9 @@ export function CellTile({
       {ownerID !== null ? (
         <span className={cn('absolute right-0.5 top-1.5 size-1.5 rounded-full', tokenClass(ownerID))} />
       ) : null}
-      <div className="mt-auto flex flex-wrap gap-0.5 p-0.5">
+      <div className="mt-auto flex flex-wrap items-end gap-0.5 p-0.5">
         {occupants.map((id) => (
-          <span key={id} className={cn('size-2 rounded-full border border-white', tokenClass(id))} />
+          <CarToken key={id} playerID={id} />
         ))}
       </div>
     </div>
