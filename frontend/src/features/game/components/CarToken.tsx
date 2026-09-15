@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react';
+import type { RingSide } from '@/features/game/board/ring-geometry.ts';
 import { tokenTextClass } from '@/features/game/player-tokens.ts';
 import { cn } from '@/lib/utils.ts';
 
@@ -48,6 +49,7 @@ export function CarToken({
 
 type CarTokenStackProps = {
   playerIDs: string[];
+  side?: RingSide;
 };
 
 export function CarTokenStack({
