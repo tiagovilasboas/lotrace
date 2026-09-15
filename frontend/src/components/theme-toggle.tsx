@@ -3,7 +3,7 @@ import { useEffect, useState, type ReactElement } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { t } from '@/lib/i18n.ts';
 
-const KEY = 'imobiliario.theme';
+const KEY = 'lotrace.theme';
 
 function readTheme(): 'light' | 'dark' {
   const stored = localStorage.getItem(KEY);
