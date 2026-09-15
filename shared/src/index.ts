@@ -5,6 +5,7 @@ export {
   GAME_NAME,
   GO_SALARY,
   GO_TO_JAIL_INDEX,
+  HOTEL_LEVEL,
   JAIL_FEE,
   JAIL_INDEX,
   JAIL_MAX_TURNS,
@@ -13,8 +14,14 @@ export {
   MAX_PLAYERS,
   MIN_PLAYERS,
   STARTING_CASH,
+  STATION_RENTS,
 } from './types.ts';
-export { canBuyHouse, houseCost } from './rules/houses.ts';
+export {
+  canBuyHouse,
+  houseCost,
+  isHotel,
+  rentOnProperty,
+} from './rules/houses.ts';
 export type {
   BoardCell,
   CellKind,
@@ -24,6 +31,7 @@ export type {
   ImobiliarioSetupData,
   ImobiliarioState,
   PlayerState,
+  RentLadder,
   RoomPlayerView,
   RoomStatus,
   RoomView,

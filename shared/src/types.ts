@@ -17,6 +17,16 @@ export type ColorGroup =
   | 'green'
   | 'navy';
 
+/** Unimproved, 1–4 houses, hotel. */
+export type RentLadder = readonly [
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+];
+
 export type BoardCell = {
   index: number;
   name: string;
@@ -24,6 +34,7 @@ export type BoardCell = {
   colorGroup?: ColorGroup;
   price?: number;
   rent?: number;
+  rentLevels?: RentLadder;
   tax?: number;
 };
 
@@ -53,7 +64,7 @@ export type GameLogEvent =
       passedGo: boolean;
     }
   | { type: 'buy'; playerID: string; cell: number }
-  | { type: 'buy-house'; playerID: string; cell: number }
+  | { type: 'buy-house'; playerID: string; cell: number; hotel?: boolean }
   | { type: 'skip-buy'; playerID: string; cell: number }
   | {
       type: 'rent';
@@ -119,11 +130,13 @@ export const MIN_PLAYERS = 2;
 export const MAX_PLAYERS = 6;
 export const BOARD_SIZE = 24;
 export const GO_SALARY = 200;
-export const STARTING_CASH = 1500;
+export const STARTING_CASH = 2500;
 export const JAIL_FEE = 50;
 export const JAIL_MAX_TURNS = 3;
 export const JAIL_INDEX = 6;
 export const GO_TO_JAIL_INDEX = 18;
 export const MAX_CONSECUTIVE_DOUBLES = 3;
 export const MAX_HOUSES = 4;
-export const MAX_LOG = 12;
+export const HOTEL_LEVEL = 5;
+export const MAX_LOG = 20;
+export const STATION_RENTS = [25, 50, 100, 200] as const;
