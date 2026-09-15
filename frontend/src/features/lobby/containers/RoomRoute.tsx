@@ -4,6 +4,7 @@ import { ThemeToggle } from '@/components/theme-toggle.tsx';
 import { MatchScreen } from '@/features/game/containers/MatchScreen.tsx';
 import { LobbyScreen } from '@/features/lobby/components/LobbyScreen.tsx';
 import { useRoom } from '@/features/lobby/hooks/use-room.ts';
+import { t } from '@/lib/i18n.ts';
 
 export function RoomRoute(): ReactElement {
   const { code = '' } = useParams();
@@ -13,7 +14,7 @@ export function RoomRoute(): ReactElement {
   if (!session || !room) {
     return (
       <div className="flex min-h-dvh items-center justify-center px-4 text-sm text-muted-foreground">
-        {error ?? 'Carregando sala…'}
+        {error ?? t('connecting')}
       </div>
     );
   }
