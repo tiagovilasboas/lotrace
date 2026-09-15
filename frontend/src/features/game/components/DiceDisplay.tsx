@@ -14,7 +14,7 @@ const PIP_SLOTS: Record<DieValue, ReadonlySet<number>> = {
   6: new Set([1, 3, 4, 6, 7, 9]),
 };
 
-const ROLL_ANIMATION_MS = 450;
+const ROLL_ANIMATION_MS = 560;
 
 type DiceDisplayProps = {
   dice: DiceRoll | null;
@@ -41,25 +41,14 @@ function DieFace({ value, rolling, delayMs }: DieFaceProps): ReactElement {
 
   return (
     <span
-      className={cn(
-        'grid size-11 grid-cols-3 grid-rows-3 gap-[3px] rounded-lg border p-1.5 shadow-sm',
-        value === null
-          ? 'border-dashed border-muted-foreground/45 bg-muted/55'
-          : 'border-slate-300 bg-white',
-        rolling && 'dice-face-roll',
-      )}
+      className={cn('die-face', value === null && 'die-face-empty', rolling && 'dice-face-roll')}
       style={style}
       aria-hidden
     >
       {Array.from({ length: 9 }, (_, index) => {
         const slot = index + 1;
         const on = pips?.has(slot) ?? false;
-        return (
-          <span
-            key={slot}
-            className={cn('block size-full rounded-full', on ? 'bg-slate-900' : 'bg-transparent')}
-          />
-        );
+        return <span key={slot} className={cn(on ? 'die-pip' : 'die-pip-slot')} />;
       })}
     </span>
   );
@@ -100,18 +89,18 @@ export function DiceDisplay({ dice }: DiceDisplayProps): ReactElement {
     : t('diceAriaEmpty');
 
   return (
-    <div className="mt-1.5 flex flex-col items-center gap-1" role="img" aria-label={label}>
-      <div className="flex items-center justify-center gap-2">
-        <DieFace value={die1} rolling={rolling} delayMs={0} />
-        <DieFace value={die2} rolling={rolling} delayMs={70} />
+    <div className="flex flex-col items-center gap-1.5" role="img" aria-label={label}>
+      <div className="flex items-center justify-center gap-3">
+        <span className="-rotate-[9deg]">
+          <DieFace value={die1} rolling={rolling} delayMs={0} />
+        </span>
+        <span className="rotate-[8deg]">
+          <DieFace value={die2} rolling={rolling} delayMs={80} />
+        </span>
       </div>
       {hasFaces && dice !== null ? (
-        <p className="text-sm font-bold tabular-nums leading-none">{dice.total}</p>
-      ) : (
-        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          {t('dice')}
-        </p>
-      )}
+        <p className="text-2xl font-black tabular-nums leading-none tracking-tight">{dice.total}</p>
+      ) : null}
     </div>
   );
 }

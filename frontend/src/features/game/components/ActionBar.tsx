@@ -41,11 +41,8 @@ export function ActionBar({
 
   if (!isActive) {
     return (
-      <div
-        role="status"
-        className="rounded-xl border border-border bg-muted/80 px-3 py-2.5 text-center"
-      >
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+      <div role="status" className="flex justify-center py-1">
+        <p className="rounded-full bg-muted px-4 py-2 text-sm font-medium text-muted-foreground">
           {t('waitTurn', { name: currentName })}
         </p>
       </div>
@@ -60,11 +57,10 @@ export function ActionBar({
 
   return (
     <div className="flex flex-col gap-2">
-      <div
-        role="status"
-        className="rounded-xl bg-primary px-3 py-2.5 text-center text-primary-foreground shadow-sm"
-      >
-        <p className="text-sm font-bold tracking-wide">{t('yourTurn')}</p>
+      <div role="status" className="flex justify-center">
+        <p className="your-turn-pulse rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground">
+          {t('yourTurn')}
+        </p>
       </div>
       {stage === 'roll' || rollBusy ? (
         <Button

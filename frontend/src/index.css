@@ -138,16 +138,64 @@
 
 @keyframes dice-face-roll {
   0% {
-    transform: rotate(-16deg) scale(0.88);
+    transform: rotate(-32deg) scale(0.72) translateY(-8px);
   }
-  35% {
-    transform: rotate(10deg) scale(1.08);
+  28% {
+    transform: rotate(20deg) scale(1.14) translateY(3px);
   }
-  65% {
-    transform: rotate(-5deg) scale(0.98);
+  52% {
+    transform: rotate(-14deg) scale(0.94) translateY(-2px);
+  }
+  76% {
+    transform: rotate(7deg) scale(1.05);
   }
   100% {
-    transform: rotate(0deg) scale(1);
+    transform: rotate(0deg) scale(1) translateY(0);
+  }
+}
+
+@keyframes player-turn-pulse {
+  0% {
+    box-shadow:
+      0 0 0 2px var(--primary),
+      0 0 0 0 color-mix(in srgb, var(--primary) 45%, transparent);
+  }
+  70% {
+    box-shadow:
+      0 0 0 2px var(--primary),
+      0 0 0 8px color-mix(in srgb, var(--primary) 0%, transparent);
+  }
+  100% {
+    box-shadow:
+      0 0 0 2px var(--primary),
+      0 0 0 0 color-mix(in srgb, var(--primary) 0%, transparent);
+  }
+}
+
+@keyframes your-turn-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow:
+      0 2px 0 color-mix(in srgb, var(--primary-strong) 85%, transparent),
+      0 0 0 0 color-mix(in srgb, var(--primary) 42%, transparent);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow:
+      0 2px 0 color-mix(in srgb, var(--primary-strong) 85%, transparent),
+      0 0 14px 5px color-mix(in srgb, var(--primary) 32%, transparent);
+  }
+}
+
+@keyframes car-token-arrive {
+  0% {
+    opacity: 0;
+    transform: translateX(-5px) scale(0.72);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
   }
 }
 
@@ -161,11 +209,70 @@
   }
 
   .dice-face-roll {
-    animation: dice-face-roll 0.45s ease-out both;
+    animation: dice-face-roll 0.56s ease-out both;
+  }
+
+  .die-face {
+    display: grid;
+    width: 3.5rem;
+    height: 3.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 0.18rem;
+    padding: 0.42rem;
+    border-radius: 0.7rem;
+    background: linear-gradient(145deg, #fffef8 0%, #e4dfd0 100%);
+    border: 1px solid rgb(15 23 42 / 0.14);
+    box-shadow:
+      2px 3px 0 rgb(15 23 42 / 0.3),
+      inset 1px 1px 0 rgb(255 255 255 / 0.9);
+  }
+
+  .die-face-empty {
+    opacity: 0.42;
+  }
+
+  .die-pip {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 999px;
+    background: #1c1917;
+    box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.28);
+  }
+
+  .die-pip-slot {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .board-center-felt {
+    background: radial-gradient(
+      circle at 50% 42%,
+      color-mix(in srgb, var(--board-track) 26%, transparent) 0%,
+      transparent 72%
+    );
+  }
+
+  .player-turn-pulse {
+    box-shadow: 0 0 0 2px var(--primary);
+    animation: player-turn-pulse 1.8s ease-out infinite;
+  }
+
+  .car-token-arrive {
+    animation: car-token-arrive 0.32s ease-out;
+  }
+
+  .your-turn-pulse {
+    animation: your-turn-pulse 1.5s ease-in-out infinite;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .dice-face-roll {
+    .dice-face-roll,
+    .player-turn-pulse,
+    .car-token-arrive,
+    .your-turn-pulse {
       animation: none;
     }
   }
