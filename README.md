@@ -24,7 +24,7 @@ npm test
 npm run build
 ```
 
-Deploy: Vercel → repo root (or `frontend/`). Railway → this repo, Dockerfile at `backend/Dockerfile`. Set `VITE_API_URL` (Vercel) to the Railway origin and `CORS_ORIGIN` (Railway) to the Vercel origin. In-memory rooms vanish on Railway restart.
+Deploy: Vercel → repo root (or `frontend/`). Railway → this repo, Dockerfile at `backend/Dockerfile`. Set `VITE_API_URL` (Vercel) to the Railway origin and `CORS_ORIGIN` (Railway) to the Vercel origin. Set `DATABASE_URL` on the Railway **api** service (already wired) so rooms and matches survive restarts. Local `npm run dev` without `DATABASE_URL` stays in-memory.
 
 ## Layout
 

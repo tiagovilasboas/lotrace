@@ -52,9 +52,9 @@ export function registerRoomRoutes(
     ctx.body = { ok: true };
   });
 
-  router.post('/api/rooms', parse, (ctx) => {
+  router.post('/api/rooms', parse, async (ctx) => {
     try {
-      const { room, player } = store.create(readNickname(ctx.request.body));
+      const { room, player } = await store.create(readNickname(ctx.request.body));
       ctx.status = 201;
       ctx.body = { room: toRoomView(room), session: toSession(room, player) };
     } catch (error) {
@@ -62,9 +62,9 @@ export function registerRoomRoutes(
     }
   });
 
-  router.post('/api/rooms/:code/join', parse, (ctx) => {
+  router.post('/api/rooms/:code/join', parse, async (ctx) => {
     try {
-      const { room, player } = store.join(
+      const { room, player } = await store.join(
         ctx.params.code ?? '',
         readNickname(ctx.request.body),
       );
@@ -74,15 +74,15 @@ export function registerRoomRoutes(
     }
   });
 
-  router.get('/api/rooms/:code', (ctx) => {
+  router.get('/api/rooms/:code', async (ctx) => {
     try {
       const code = ctx.params.code ?? '';
-      const room = store.get(code);
+      const room = await store.get(code);
       if (!room) {
         throw new RoomError('Sala não encontrada.', 404);
       }
       const token = readToken(ctx.get('authorization'), undefined);
-      const player = token ? store.getByToken(code, token) : undefined;
+      const player = token ? await store.getByToken(code, token) : undefined;
       ctx.body = {
         room: toRoomView(room),
         session: player ? toSession(room, player) : null,
@@ -95,7 +95,7 @@ export function registerRoomRoutes(
   router.post('/api/rooms/:code/start', parse, async (ctx) => {
     try {
       const code = ctx.params.code ?? '';
-      const room = store.get(code);
+      const room = await store.get(code);
       if (!room) {
         throw new RoomError('Sala não encontrada.', 404);
       }
@@ -103,7 +103,8 @@ export function registerRoomRoutes(
       assertHost(room, token);
       assertMinPlayers(room);
       await startRoomMatch(room, game, db);
-      const player = store.getByToken(code, token);
+      await store.save(room);
+      const player = await store.getByToken(code, token);
       ctx.body = {
         room: toRoomView(room),
         session: player ? toSession(room, player) : null,

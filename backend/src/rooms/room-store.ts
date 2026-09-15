@@ -21,13 +21,12 @@ export type Room = {
 };
 
 export type RoomStore = {
-  create: (nickname: string) => { room: Room; player: RoomPlayer };
-  join: (code: string, nickname: string) => { room: Room; player: RoomPlayer };
-  get: (code: string) => Room | undefined;
-  getByToken: (code: string, token: string) => RoomPlayer | undefined;
+  create: (nickname: string) => Promise<{ room: Room; player: RoomPlayer }>;
+  join: (code: string, nickname: string) => Promise<{ room: Room; player: RoomPlayer }>;
+  get: (code: string) => Promise<Room | undefined>;
+  getByToken: (code: string, token: string) => Promise<RoomPlayer | undefined>;
+  save: (room: Room) => Promise<void>;
 };
-
-const rooms = new Map<string, Room>();
 
 function normalizeNickname(nickname: string): string {
   const trimmed = nickname.trim();
@@ -46,63 +45,89 @@ export class RoomError extends Error {
   }
 }
 
+export function normalizeRoomCode(code: string): string {
+  return code.trim().toUpperCase();
+}
+
+export function createHostRoom(nickname: string): { room: Room; player: RoomPlayer } {
+  const name = normalizeNickname(nickname);
+  const player: RoomPlayer = {
+    seat: 0,
+    nickname: name,
+    token: randomToken(),
+    credentials: null,
+  };
+  const room: Room = {
+    code: randomInviteCode(),
+    status: 'lobby',
+    players: [player],
+    matchID: null,
+    createdAt: Date.now(),
+  };
+  return { room, player };
+}
+
+export function addGuest(room: Room, nickname: string): RoomPlayer {
+  if (room.status !== 'lobby') {
+    throw new RoomError('Esta partida já começou.', 409);
+  }
+  if (room.players.length >= MAX_PLAYERS) {
+    throw new RoomError('Sala cheia (máximo 6).', 409);
+  }
+  const name = normalizeNickname(nickname);
+  const player: RoomPlayer = {
+    seat: room.players.length,
+    nickname: name,
+    token: randomToken(),
+    credentials: null,
+  };
+  room.players.push(player);
+  return player;
+}
+
 export function createRoomStore(): RoomStore {
+  const rooms = new Map<string, Room>();
+
   return {
-    create(nickname: string): { room: Room; player: RoomPlayer } {
-      const name = normalizeNickname(nickname);
-      let code = '';
+    async create(nickname: string): Promise<{ room: Room; player: RoomPlayer }> {
+      let created: { room: Room; player: RoomPlayer } | undefined;
       for (let attempt = 0; attempt < 8; attempt += 1) {
-        code = randomInviteCode();
-        if (!rooms.has(code)) {
-          break;
+        created = createHostRoom(nickname);
+        if (!rooms.has(created.room.code)) {
+          rooms.set(created.room.code, created.room);
+          return created;
         }
       }
-      const player: RoomPlayer = {
-        seat: 0,
-        nickname: name,
-        token: randomToken(),
-        credentials: null,
-      };
-      const room: Room = {
-        code,
-        status: 'lobby',
-        players: [player],
-        matchID: null,
-        createdAt: Date.now(),
-      };
-      rooms.set(code, room);
-      return { room, player };
+      if (!created) {
+        throw new RoomError('Não foi possível criar a sala.', 500);
+      }
+      rooms.set(created.room.code, created.room);
+      return created;
     },
 
-    join(code: string, nickname: string): { room: Room; player: RoomPlayer } {
-      const room = rooms.get(code.trim().toUpperCase());
+    async join(
+      code: string,
+      nickname: string,
+    ): Promise<{ room: Room; player: RoomPlayer }> {
+      const room = rooms.get(normalizeRoomCode(code));
       if (!room) {
         throw new RoomError('Sala não encontrada.', 404);
       }
-      if (room.status !== 'lobby') {
-        throw new RoomError('Esta partida já começou.', 409);
-      }
-      if (room.players.length >= MAX_PLAYERS) {
-        throw new RoomError('Sala cheia (máximo 6).', 409);
-      }
-      const name = normalizeNickname(nickname);
-      const player: RoomPlayer = {
-        seat: room.players.length,
-        nickname: name,
-        token: randomToken(),
-        credentials: null,
-      };
-      room.players.push(player);
+      const player = addGuest(room, nickname);
       return { room, player };
     },
 
-    get(code: string): Room | undefined {
-      return rooms.get(code.trim().toUpperCase());
+    async get(code: string): Promise<Room | undefined> {
+      return rooms.get(normalizeRoomCode(code));
     },
 
-    getByToken(code: string, token: string): RoomPlayer | undefined {
-      const room = rooms.get(code.trim().toUpperCase());
+    async getByToken(code: string, token: string): Promise<RoomPlayer | undefined> {
+      const room = rooms.get(normalizeRoomCode(code));
       return room?.players.find((player) => player.token === token);
+    },
+
+    async save(room: Room): Promise<void> {
+      rooms.set(room.code, room);
     },
   };
 }
