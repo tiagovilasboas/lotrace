@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button.tsx';
+import { HotelIso, HouseIso } from '@/features/game/board/IsoIcons.tsx';
 import type { BuildableLot } from '@/features/game/lib/buildable-lots.ts';
 import { t } from '@/lib/i18n.ts';
 import { cn } from '@/lib/utils.ts';
@@ -54,12 +55,20 @@ export function BuyHouseActions({
       <Button
         size="lg"
         onClick={() => onBuy(selected.index)}
-        aria-label={t('buyHouseOn', {
+        aria-label={t(selected.hotel ? 'buyHotelOn' : 'buyHouseOn', {
           name: selected.name,
           cost: String(selected.cost),
         })}
       >
-        {t('buyHouseOn', { name: selected.name, cost: String(selected.cost) })}
+        {selected.hotel ? (
+          <HotelIso className="h-6 w-6" />
+        ) : (
+          <HouseIso className="h-6 w-6" />
+        )}
+        {t(selected.hotel ? 'buyHotelOn' : 'buyHouseOn', {
+          name: selected.name,
+          cost: String(selected.cost),
+        })}
       </Button>
     </>
   );
