@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LotRace">
+  <rect width="64" height="64" rx="14" fill="#1b4d3e"/>
+  <rect x="10" y="10" width="44" height="44" rx="6" fill="#F5F2E8" opacity="0.95"/>
+  <circle cx="24" cy="28" r="3.5" fill="#1c1917"/>
+  <circle cx="40" cy="36" r="3.5" fill="#1c1917"/>
+  <path fill="#1fb25a" d="M32 18 42 24 32 30 22 24Z"/>
+</svg>
