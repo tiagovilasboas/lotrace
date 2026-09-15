@@ -3,6 +3,7 @@ import type { BoardProps } from 'boardgame.io/react';
 import type { ReactElement } from 'react';
 import { ActionBar } from '@/features/game/components/ActionBar.tsx';
 import { BoardGrid } from '@/features/game/components/BoardGrid.tsx';
+import { DiceDisplay } from '@/features/game/components/DiceDisplay.tsx';
 import { EventLog } from '@/features/game/components/EventLog.tsx';
 import { PlayerList } from '@/features/game/components/PlayerList.tsx';
 import { t } from '@/lib/i18n.ts';
@@ -51,14 +52,8 @@ export function GameBoard({
             <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
               {t('appName')}
             </p>
-            {dice ? (
-              <p className="mt-1 font-mono text-3xl font-bold tabular-nums">
-                {dice.die1} + {dice.die2}
-              </p>
-            ) : (
-              <p className="mt-1 text-sm text-muted-foreground">2d6</p>
-            )}
-            <p className="mt-1 text-sm font-semibold">
+            <DiceDisplay dice={dice} />
+            <p className="mt-1.5 text-sm font-semibold">
               {t('cash')}: R$ {G.players[viewerID]?.cash ?? 0}
             </p>
           </div>
