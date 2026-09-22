@@ -1,13 +1,48 @@
 ---
 name: board-design-critique
-description: Master UI/UX critique for the LotRace board. Activate whenever reviewing a LAYOUT E2E screenshot (frontend/e2e/__screenshots__/layout-board.png) or judging board proportion, pieces, tiles, fonts, header/footer or spacing. Use it every iteration of the screenshot loop, and score the board before deciding it is done.
+description: Master UI/UX critique for the whole LotRace project — board AND every other screen/surface (lobby, header, player cards, footer/turn panel, dialogs, transitions). Activate whenever reviewing any LotRace UI screenshot or judging proportion, pieces, tiles, fonts, chrome, colour or spacing. The design premise is SimCity BuildIt 3D (see "Design premise"). Use it every iteration of the screenshot loop, and score the surface before deciding it is done.
 ---
 
-# Board Design Critique — LotRace
+# Design Critique — LotRace
 
-You are a **master UI/UX designer** reviewing the LotRace match board. Judge every
-LAYOUT screenshot against this rubric before proposing changes. Think like a **player
-looking at a physical board**, not like an engineer checking if things fit.
+You are a **master UI/UX designer** reviewing LotRace. Judge every screenshot —
+the match board and every other surface (lobby, header, player cards, footer/turn
+panel, dialogs) — against this rubric before proposing changes. Think like a
+**player looking at a premium mobile game**, not like an engineer checking if
+things fit.
+
+## Design premise — SimCity BuildIt 3D (the north star)
+
+The whole project targets the look and feel of **SimCity BuildIt**: a warm,
+vibrant, chunky **isometric 3D** world, not a flat Monopoly scan and not a
+spreadsheet. This premise applies to EVERY surface, not only the board.
+
+What "BuildIt 3D" means, concretely, and how to score it:
+
+- **Isometric volume, not flat.** Objects have a top face + shaded side faces +
+  a ground/contact shadow. A single base hue reads as a 3D solid through
+  light (lit top) and shadow (darker sides). Anything that looks flat/pasted is off-premise.
+- **Exaggerated height, controlled footprint.** Buildings rise well above their
+  base (house < tower < hotel). Wealth reads through HEIGHT; the footprint stays
+  contained so a tall asset never swamps its neighbour.
+- **Depth ordering.** Nearer objects overlap the ones behind (painter's order).
+  A front building may partly cover the one behind it (accepted) but never a
+  neighbour's name/price (control via seating the asset back + z-order).
+- **Vibrant, saturated palette with warm light.** Rich neighbourhood colours,
+  glowing windows, felt/ground that reads as a living surface — never washed-out.
+- **Variety, not wallpaper.** Districts feel distinct (colour per neighbourhood;
+  ideally silhouette variety too). Repeating one identical asset around the whole
+  board is off-premise.
+- **Density / living city.** BuildIt fills the frame with a city. Large empty
+  ground is a smell; fill it with decoration (skyline, blocks, trees) so the
+  playable ring stays the hero without floating in a void.
+- **Chunky, rounded, friendly forms.** Soft corners, tactile buttons, big
+  readable type. Chrome (header, cards, footer) should feel like the same toy
+  world as the board, not a separate flat admin UI.
+
+Score the premise as its own lens (**L**, below) on every screenshot, alongside
+A-K. If a surface scores high on A-G but looks flat/washed-out/repetitive, it is
+NOT done — it fails the premise.
 
 ## References (source of truth for proportion)
 - `new-design/lotrace-match-concept.png` — the target match screen. Golden proportion.
@@ -108,11 +143,11 @@ Go through every item on each screenshot. Name the offending element and the fix
 - Board centred; ring symmetric; no element bleeding past the tile border.
 
 ## Output format (use this every iteration)
-1. **Verdict**: one line — does it feel like a real board yet? (yes / not yet)
-2. **Scores**: A-G with the 1-5 number.
+1. **Verdict**: one line — does it feel like a premium BuildIt-style surface yet? (yes / not yet)
+2. **Scores**: A-G (+ H-K for interaction states) with the 1-5 number, then the **L (BuildIt premise)** score.
 3. **Issues**: ranked list — element, what's wrong, concrete fix (with the CSS var / component).
-4. **Diff from concept**: 1-3 biggest gaps vs `lotrace-match-concept.png`.
-5. **Stop or continue**: continue the loop unless every category is >=4 and no material issue remains.
+4. **Diff from concept/premise**: 1-3 biggest gaps vs `lotrace-match-concept.png` and vs the BuildIt 3D premise.
+5. **Stop or continue**: continue the loop unless every category (A-G, relevant H-K, and L) is >=4 and no material issue remains.
 
 ## Interaction states (Phase 2 — clicking buttons)
 When reviewing a screenshot of a STATE reached by clicking (roll, buy, jail, build,
@@ -127,9 +162,23 @@ end turn, winner), also judge:
   automatic pass). The player is never stuck with no affordance.
 Score H-K 1-5 alongside A-G; target >=4. Capture one screenshot per state.
 
+## L. SimCity BuildIt 3D premise (score on EVERY screenshot)
+Judge how close the surface is to the BuildIt 3D north star (see "Design premise").
+Score each sub-item 1-5; the lens score is the lowest sub-item (a flat or washed-out
+surface can't pass on average alone):
+- **L1. 3D volume**: top + shaded sides + contact shadow; nothing looks flat/pasted.
+- **L2. Height vs footprint**: exaggerated height, contained footprint; wealth reads through height.
+- **L3. Depth order**: nearer overlaps farther; assets never cover a neighbour's name.
+- **L4. Vibrant warm palette**: saturated district colours, glowing windows, living ground; not washed-out.
+- **L5. Variety**: districts distinct (colour, ideally silhouette); no single repeated wallpaper asset.
+- **L6. Density**: frame reads as a living city; no large dead empty ground.
+- **L7. Chunky friendly chrome**: header/cards/footer feel like the same toy world, rounded and tactile.
+Target L >=4. If L < 4, the surface fails the premise even when A-K pass — say so in the verdict.
+
 ## Loop discipline
 - One coherent set of fixes per iteration, then re-run `npm run e2e:layout` and re-critique.
 - Each iteration ends green: `tsc + lint + vitest (56) + build`.
 - Keep SRP/clean: CSS in semantic classes, pieces in components, no new inline styles
   except per-player colour and piece scale.
-- Stop only when the player-first lens passes and A-G are all >=4.
+- Stop only when the player-first lens passes, A-G (and relevant H-K) are all >=4,
+  and the SimCity BuildIt 3D premise (L) is >=4. A flat or washed-out surface is not done.
