@@ -25,7 +25,7 @@ export function CarToken({
       <svg
         viewBox="0 0 56 32"
         className={cn(
-          'car-token-arrive h-11 w-[4.6rem] shrink-0 overflow-visible drop-shadow-md',
+          'car-token-arrive h-9 w-[3.8rem] shrink-0 overflow-visible drop-shadow-md',
           colorClass,
         )}
         aria-hidden="true"
@@ -93,6 +93,10 @@ export function CarTokenStack({
   }
 
   const stacked = side === 'west' || side === 'east';
+  const count = playerIDs.length;
+
+  // Scale down when multiple tokens share a tile so they fit side by side
+  const scale = count === 1 ? 1 : count === 2 ? 0.82 : count <= 4 ? 0.68 : 0.58;
 
   return (
     <div
@@ -107,11 +111,14 @@ export function CarTokenStack({
         <span
           key={id}
           className="relative"
-          style={
-            stacked && dock !== 'center'
-              ? { marginTop: index === 0 ? 0 : -14, zIndex: index + 1 }
-              : { marginLeft: index === 0 ? 0 : -10, zIndex: index + 1 }
-          }
+          style={{
+            transform: `scale(${scale})`,
+            transformOrigin: 'center center',
+            // Tight packing: negative margin proportional to scale
+            ...(stacked && dock !== 'center'
+              ? { marginTop: index === 0 ? 0 : `${-2.1 * (1 - scale) * 16 - 2}px`, zIndex: index + 1 }
+              : { marginLeft: index === 0 ? 0 : `${-1.35 * (1 - scale) * 16 - 2}px`, zIndex: index + 1 }),
+          }}
         >
           <CarToken playerID={id} size="board" side={side} />
         </span>

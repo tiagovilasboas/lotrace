@@ -29,10 +29,10 @@ type ActionBarProps = {
 };
 
 /**
- * Prompt card — player avatar + name + hint text.
- * Visually separate from the CTA button below it (matches mockup).
+ * Compact prompt row — single line: car + title + hint truncated.
+ * Height: ~36px. No card, no padding bloat.
  */
-function PromptCard({
+function PromptRow({
   viewerID,
   title,
   hint,
@@ -42,25 +42,20 @@ function PromptCard({
   hint: string;
 }): ReactElement {
   return (
-    <div
-      className="flex items-center gap-3 rounded-2xl px-3 py-2.5"
-      style={{
-        backgroundColor: 'var(--surface-hud)',
-        border: '1px solid var(--border-hud)',
-        boxShadow: 'var(--shadow-card)',
-      }}
-    >
-      <CarToken playerID={viewerID} size="hud" />
+    <div className="flex items-center gap-2 px-0.5 py-0.5">
+      <span className="shrink-0 scale-75 origin-left">
+        <CarToken playerID={viewerID} size="hud" />
+      </span>
       <div className="min-w-0 flex-1">
         <p
-          className="truncate text-sm font-bold leading-tight"
+          className="truncate text-xs font-bold leading-none"
           style={{ color: 'var(--text-on-table)' }}
         >
           {title}
         </p>
         <p
-          className="text-xs leading-snug"
-          style={{ color: 'var(--text-on-table-dim)' }}
+          className="truncate text-[10px] leading-none"
+          style={{ color: 'var(--text-on-table-dim)', marginTop: '2px' }}
         >
           {hint}
         </p>
@@ -69,7 +64,7 @@ function PromptCard({
   );
 }
 
-/** Tall fullwidth pill CTA — mirrors mockup "LANÇAR DADOS" */
+/** Primary CTA — tall fullwidth pill */
 function PrimaryCTA({
   children,
   onClick,
@@ -86,7 +81,7 @@ function PrimaryCTA({
   return (
     <Button
       size="lg"
-      className="match-cta h-14 w-full rounded-full text-base font-black tracking-wide"
+      className="match-cta h-11 w-full rounded-full text-sm font-black tracking-wide"
       onClick={onClick}
       disabled={disabled}
       loading={loading}
@@ -135,14 +130,13 @@ export function ActionBar({
     : t('yourTurnNamed', { name: viewerName });
 
   return (
-    <div className="flex flex-col gap-2">
-      {/* Prompt card — always visible */}
-      <PromptCard viewerID={viewerID} title={title} hint={hint} />
+    <div className="flex flex-col gap-1.5">
+      {/* Compact prompt row */}
+      <PromptRow viewerID={viewerID} title={title} hint={hint} />
 
-      {/* CTA area — only when active */}
+      {/* CTA — only when active */}
       {isActive ? (
         <>
-          {/* Roll / rolling */}
           {rollBusy ? (
             <PrimaryCTA loading ariaLabel={t('rolling')}>
               {t('rolling')}
@@ -151,20 +145,19 @@ export function ActionBar({
 
           {!rollBusy && stage === 'roll' ? (
             <PrimaryCTA onClick={handleRoll} ariaLabel={t('roll')}>
-              <Dices className="size-5" aria-hidden />
+              <Dices className="size-4" aria-hidden />
               {t('roll')}
             </PrimaryCTA>
           ) : null}
 
-          {/* Buy property */}
           {!rollBusy && stage === 'buy' && pending ? (
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-1.5">
               <PrimaryCTA disabled={!canAfford} onClick={() => moves.buyProperty?.()}>
                 {t('buy')}
               </PrimaryCTA>
               <Button
                 size="lg"
-                className="match-secondary h-14 w-full rounded-full text-base font-bold"
+                className="match-secondary h-11 w-full rounded-full text-sm font-bold"
                 onClick={() => moves.skipBuy?.()}
               >
                 {t('skip')}
@@ -172,15 +165,14 @@ export function ActionBar({
             </div>
           ) : null}
 
-          {/* Jail */}
           {!rollBusy && stage === 'jail' ? (
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-1.5">
               <PrimaryCTA disabled={!canPayJail} onClick={() => moves.payJail?.()}>
                 {t('payJail')}
               </PrimaryCTA>
               <Button
                 size="lg"
-                className="match-secondary h-14 w-full rounded-full text-base font-bold"
+                className="match-secondary h-11 w-full rounded-full text-sm font-bold"
                 onClick={() => moves.waitJail?.()}
               >
                 {t('waitJail')}
@@ -188,32 +180,22 @@ export function ActionBar({
             </div>
           ) : null}
 
-          {/* Build houses */}
-          {!rollBusy && stage === 'end' && buildableLots.length > 0 ? (
+          {!rollBusy && stage === 'end' ? (
             <>
-              <BuyHouseActions
-                lots={buildableLots}
-                onBuy={(cellIndex) => moves.buyHouse?.(cellIndex)}
-              />
+              {buildableLots.length > 0 ? (
+                <BuyHouseActions
+                  lots={buildableLots}
+                  onBuy={(cellIndex) => moves.buyHouse?.(cellIndex)}
+                />
+              ) : null}
               <Button
                 size="lg"
-                className="match-secondary h-12 w-full rounded-full font-bold"
+                className="match-secondary h-10 w-full rounded-full text-sm font-bold"
                 onClick={() => moves.endTurn?.()}
               >
                 {t('endTurn')}
               </Button>
             </>
-          ) : null}
-
-          {/* End turn — no houses to buy */}
-          {!rollBusy && stage === 'end' && buildableLots.length === 0 ? (
-            <Button
-              size="lg"
-              className="match-secondary h-12 w-full rounded-full font-bold"
-              onClick={() => moves.endTurn?.()}
-            >
-              {t('endTurn')}
-            </Button>
           ) : null}
         </>
       ) : null}
