@@ -3,6 +3,7 @@ import { ringCellPosition } from '@/features/game/board/ring-geometry.ts';
 import { colorGroupCanvas } from '@/features/game/board/iso/board-palette.ts';
 import type { BoardPalette } from '@/features/game/board/iso/board-palette.ts';
 import type { BoardAssetKey } from '@/features/game/board/iso/asset-images.ts';
+import { drawSkyline } from '@/features/game/board/iso/draw-skyline.ts';
 import {
   drawBuilding,
   drawCar,
@@ -156,6 +157,9 @@ export function drawBoard(
   // Felt background.
   ctx.fillStyle = palette.felt;
   ctx.fillRect(0, 0, boxW, boxH);
+
+  // Decorative skyline behind the ring, filling the empty portrait felt.
+  drawSkyline(ctx, boxW, boxH);
 
   // Cars grouped by cell index for the painter pass.
   const carsByCell = new Map<number, string[]>();
