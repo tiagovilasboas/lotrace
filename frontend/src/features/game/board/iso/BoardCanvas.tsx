@@ -1,15 +1,20 @@
+import type { ImobiliarioState } from '@lotrace/shared';
 import { useEffect, useRef, type ReactElement } from 'react';
 import { readBoardPalette } from '@/features/game/board/iso/board-palette.ts';
 import { drawBoard, RING_SPAN } from '@/features/game/board/iso/draw-board.ts';
 import { fitIso } from '@/features/game/board/iso/iso-projection.ts';
 
+type BoardCanvasProps = {
+  G: ImobiliarioState;
+};
+
 /**
- * BoardCanvas — isometric board ground (Phase 3.2).
- * Draws felt + ring tiles + colour accents on a <canvas>, sized to its box
- * (ResizeObserver) and scaled for devicePixelRatio so it stays crisp on mobile.
- * Pieces (3.3) and the text overlay (3.4) come next.
+ * BoardCanvas — isometric board (Phase 3.2/3.3).
+ * Draws felt + ring tiles + colour accents + buildings + cars on a <canvas>,
+ * sized to its box (ResizeObserver) and scaled for devicePixelRatio so it stays
+ * crisp on mobile. Re-renders when the game state changes. Text overlay is 3.4.
  */
-export function BoardCanvas(): ReactElement {
+export function BoardCanvas({ G }: BoardCanvasProps): ReactElement {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
 
@@ -34,22 +39,22 @@ export function BoardCanvas(): ReactElement {
       canvas.style.height = `${boxH}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Taller ratio fills a portrait box better; headroom leaves the top
-      // for buildings to rise into (SimCity BuildIt city feel, Phase 3.3).
+      // Taller ratio fills a portrait box better; a little headroom lets the
+      // (now moderate-height) buildings rise without huge empty felt on top.
       const cfg = fitIso(RING_SPAN, RING_SPAN, boxW, boxH, {
         fill: 0.98,
-        ratio: 0.62,
-        headroom: 0.14,
+        ratio: 0.66,
+        headroom: 0.08,
       });
       const palette = readBoardPalette();
-      drawBoard(ctx, cfg, palette, boxW, boxH);
+      drawBoard(ctx, cfg, palette, boxW, boxH, G);
     };
 
     render();
     const ro = new ResizeObserver(render);
     ro.observe(wrap);
     return () => ro.disconnect();
-  }, []);
+  }, [G]);
 
   return (
     <div ref={wrapRef} className="board-canvas-wrap" data-testid="board-canvas">

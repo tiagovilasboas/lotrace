@@ -1,12 +1,14 @@
-import { BOARD, type BoardCell } from '@lotrace/shared';
+import { BOARD, isHotel, type BoardCell, type ImobiliarioState } from '@lotrace/shared';
 import { ringCellPosition } from '@/features/game/board/ring-geometry.ts';
 import { colorGroupCanvas } from '@/features/game/board/iso/board-palette.ts';
 import type { BoardPalette } from '@/features/game/board/iso/board-palette.ts';
+import { drawBuilding, drawCar, type BuildingKind } from '@/features/game/board/iso/draw-pieces.ts';
 import {
   depthKey,
   tileDiamond,
   tileToScreen,
   type IsoConfig,
+  type ScreenPoint,
 } from '@/features/game/board/iso/iso-projection.ts';
 
 /** RING grid is 7x7; ring cells sit on the outer frame. */
@@ -65,9 +67,45 @@ function cellFill(cell: BoardCell, palette: BoardPalette): string {
   }
 }
 
+function drawAccent(
+  ctx: CanvasRenderingContext2D,
+  col: number,
+  row: number,
+  cfg: IsoConfig,
+  hue: string,
+): void {
+  const centre = tileToScreen(col, row, cfg);
+  const inset = 0.34;
+  const [t, r, b, l] = tileDiamond(col, row, cfg);
+  ctx.beginPath();
+  ctx.moveTo(centre.x, centre.y + (t.y - centre.y) * inset);
+  ctx.lineTo(centre.x + (r.x - centre.x) * inset, centre.y);
+  ctx.lineTo(centre.x, centre.y + (b.y - centre.y) * inset);
+  ctx.lineTo(centre.x + (l.x - centre.x) * inset, centre.y);
+  ctx.closePath();
+  ctx.fillStyle = hue;
+  ctx.fill();
+}
+
+/** House count → building kind (0 = none). */
+function buildingFor(houseCount: number): BuildingKind | null {
+  if (houseCount <= 0) return null;
+  if (isHotel(houseCount)) return 'hotel';
+  return houseCount >= 3 ? 'tower' : 'house';
+}
+
+/** Small per-car offsets so multiple cars on a tile don't fully overlap. */
+function carOffset(i: number, cfg: IsoConfig): ScreenPoint {
+  const spread = cfg.tileW * 0.14;
+  const dx = (i % 2 === 0 ? -1 : 1) * spread;
+  const dy = (i < 2 ? -1 : 1) * (cfg.tileH * 0.12);
+  return { x: dx, y: dy };
+}
+
 /**
- * Draw the ground: felt background + each ring tile as an iso diamond, with a
- * colour accent for property groups. Buildings/pieces are drawn later (3.3).
+ * Draw the whole board: felt + tiles + colour accents + buildings + cars, all
+ * in a single back-to-front pass so nearer objects overlap the ones behind
+ * (SimCity BuildIt city depth). G is optional (ground only when omitted).
  * Coordinates are in the ctx's own pixel space (caller sets the dpr transform).
  */
 export function drawBoard(
@@ -76,6 +114,7 @@ export function drawBoard(
   palette: BoardPalette,
   boxW: number,
   boxH: number,
+  G?: ImobiliarioState,
 ): void {
   ctx.clearRect(0, 0, boxW, boxH);
 
@@ -83,24 +122,33 @@ export function drawBoard(
   ctx.fillStyle = palette.felt;
   ctx.fillRect(0, 0, boxW, boxH);
 
-  // Tiles back-to-front.
+  // Cars grouped by cell index for the painter pass.
+  const carsByCell = new Map<number, string[]>();
+  if (G) {
+    for (const p of Object.values(G.players)) {
+      if (p.bankrupt) continue;
+      const list = carsByCell.get(p.position) ?? [];
+      list.push(p.id);
+      carsByCell.set(p.position, list);
+    }
+  }
+
+  // One back-to-front pass: tile ground, then its building, then its cars.
   for (const { cell, col, row } of placedCells()) {
     fillDiamond(ctx, col, row, cfg, cellFill(cell, palette), 'rgba(0,0,0,0.28)');
 
-    // Property colour accent: a smaller inner diamond in the group hue.
     if (cell.kind === 'property' && cell.colorGroup) {
-      const centre = tileToScreen(col, row, cfg);
-      const hue = colorGroupCanvas(cell.colorGroup, palette);
-      const inset = 0.34;
-      const [t, r, b, l] = tileDiamond(col, row, cfg);
-      ctx.beginPath();
-      ctx.moveTo(centre.x, centre.y + (t.y - centre.y) * inset);
-      ctx.lineTo(centre.x + (r.x - centre.x) * inset, centre.y);
-      ctx.lineTo(centre.x, centre.y + (b.y - centre.y) * inset);
-      ctx.lineTo(centre.x + (l.x - centre.x) * inset, centre.y);
-      ctx.closePath();
-      ctx.fillStyle = hue;
-      ctx.fill();
+      drawAccent(ctx, col, row, cfg, colorGroupCanvas(cell.colorGroup, palette));
+    }
+
+    if (G) {
+      const kind = buildingFor(G.houses[cell.index] ?? 0);
+      if (kind) drawBuilding(ctx, col, row, cfg, kind);
+
+      const cars = carsByCell.get(cell.index);
+      if (cars) {
+        cars.forEach((id, i) => drawCar(ctx, col, row, cfg, id, carOffset(i, cfg)));
+      }
     }
   }
 }

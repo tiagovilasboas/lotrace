@@ -85,7 +85,7 @@ export function GameBoard({
        * 2D SVGs living inside the tiles (cars, houses/hotels, icons). */}
       <div className="board-area">
         {useCanvas ? (
-          <BoardCanvas />
+          <BoardCanvas G={G} />
         ) : (
           <div className="board-square">
             <BoardRing
