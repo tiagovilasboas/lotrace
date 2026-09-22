@@ -41,8 +41,11 @@ export function GameBoard({
 
   return (
     <div
-      className="flex min-h-dvh w-full flex-col gap-2"
-      style={{ backgroundColor: 'var(--surface-table)', paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+      className="grid h-dvh w-full overflow-hidden"
+      style={{
+        backgroundColor: 'var(--surface-table)',
+        gridTemplateRows: 'auto auto minmax(0,1fr) auto',
+      }}
     >
       {/* ── Header — floating card ──────────────────────────────── */}
       <header
@@ -93,7 +96,7 @@ export function GameBoard({
       </header>
 
       {/* ── Player cards ────────────────────────────────────────── */}
-      <div className="px-3">
+      <div className="px-3 pt-2">
         <PlayerList
           players={Object.values(G.players)}
           currentPlayer={ctx.currentPlayer}
@@ -101,10 +104,18 @@ export function GameBoard({
         />
       </div>
 
-      {/* ── Board hero — fills remaining space ──────────────────── */}
-      <div className="min-h-0 flex-1 px-3">
-        <div className="flex h-full items-center justify-center">
-          <div className="aspect-square h-full max-h-full max-w-full" style={{ width: 'auto' }}>
+      {/* ── Board hero — takes all remaining height ─────────────── */}
+      <div className="relative min-h-0 px-2 py-1">
+        <div className="absolute inset-x-2 inset-y-1 flex items-center justify-center">
+          {/*
+           * aspect-square with h-full + max-h-full + max-w-full:
+           * portrait → height is the constraint → board is as tall as it can be
+           * landscape / desktop → width is the constraint → never overflows
+           */}
+          <div
+            className="aspect-square h-full max-h-full max-w-full"
+            style={{ width: 'auto' }}
+          >
             <BoardRing
               players={G.players}
               owners={G.owners}
@@ -119,7 +130,9 @@ export function GameBoard({
       </div>
 
       {/* ── Action bar ──────────────────────────────────────────── */}
-      <div className="px-3">
+      <div
+        className="px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2"
+      >
         {winner ? (
           <p
             className="rounded-2xl px-4 py-4 text-center text-lg font-bold"
