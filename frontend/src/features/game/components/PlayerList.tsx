@@ -11,76 +11,40 @@ type PlayerListProps = {
   viewerID: string;
 };
 
-/**
- * Horizontal carousel — spec: mobile card 148×66px, active card 168px wide.
- * Snap-scrolls to centre the active player.
- * Desktop: 4-column grid (no scroll).
- */
-export function PlayerList({
-  players,
-  currentPlayer,
-  viewerID,
-}: PlayerListProps): ReactElement {
+export function PlayerList({ players, currentPlayer, viewerID }: PlayerListProps): ReactElement {
   return (
+    /* Horizontal snap-scroll carousel. Tailwind: layout + scroll behaviour only. */
     <ul
-      className="flex gap-2 overflow-x-auto pb-0.5 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      className="flex gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       style={{ scrollSnapType: 'x mandatory' }}
     >
       {players.map((player) => {
-        const isTurn = player.id === currentPlayer;
-        const isViewer = player.id === viewerID;
+        const isTurn    = player.id === currentPlayer;
+        const isViewer  = player.id === viewerID;
 
         return (
           <li
             key={player.id}
             className={cn(
-              'flex shrink-0 flex-col justify-between overflow-hidden p-3',
+              'player-card',
+              isTurn  && 'player-card--active',
               player.bankrupt && 'opacity-40',
             )}
-            style={{
-              /* Spec: card width 148px default / 168px active, height 66px, radius 16px */
-              width: isTurn ? '168px' : '148px',
-              height: '66px',
-              borderRadius: '16px',
-              scrollSnapAlign: 'start',
-              backgroundColor: isTurn
-                ? 'var(--surface-hud-active)'
-                : 'var(--surface-hud)',
-              border: isTurn
-                ? '2px solid var(--turn-highlight)'
-                : '1px solid var(--border-hud)',
-              boxShadow: isTurn ? 'var(--glow-turn)' : undefined,
-              transition: 'width 200ms ease',
-            }}
           >
-            {/* Top row: car + badge */}
+            {/* Top: car + badge */}
             <div className="flex items-center justify-between gap-1">
               <CarToken playerID={player.id} size="hud" />
               {isTurn ? (
-                <span
-                  className="shrink-0 rounded-full px-1.5 py-0.5 text-[8px] font-black uppercase leading-none tracking-wide"
-                  style={{
-                    backgroundColor: 'var(--turn-badge-bg)',
-                    color: 'var(--turn-badge-text)',
-                  }}
-                >
-                  {t('yourTurnBadge')}
-                </span>
+                <span className="player-badge-vez">{t('yourTurnBadge')}</span>
               ) : null}
             </div>
 
-            {/* Bottom row: name + balance */}
+            {/* Bottom: name + balance */}
             <div className="min-w-0">
-              <p
-                className="truncate text-[11px] font-extrabold uppercase leading-none tracking-wide"
-                style={{ color: isViewer ? 'var(--text-on-table)' : 'var(--text-on-table-dim)' }}
-              >
+              <p className={cn('player-name', isViewer ? 'player-name--viewer' : 'player-name--other')}>
                 {isViewer ? t('you') : player.nickname}
               </p>
-              <p
-                className="truncate text-sm font-bold tabular-nums leading-none"
-                style={{ color: 'var(--text-on-table)', marginTop: '2px' }}
-              >
+              <p className="player-balance">
                 {player.bankrupt ? t('bankrupt') : formatCash(player.cash)}
               </p>
             </div>

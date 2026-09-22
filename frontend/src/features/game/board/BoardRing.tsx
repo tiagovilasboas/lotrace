@@ -17,10 +17,7 @@ type BoardRingProps = {
   className?: string;
 };
 
-function occupantsOnCell(
-  players: Record<string, PlayerState>,
-  cellIndex: number,
-): string[] {
+function occupantsOnCell(players: Record<string, PlayerState>, cellIndex: number): string[] {
   return Object.values(players)
     .filter((p) => !p.bankrupt && p.position === cellIndex)
     .map((p) => p.id);
@@ -38,54 +35,12 @@ function renderRingTile(props: BoardTileProps): ReactElement {
   }
 }
 
-export function BoardRing({
-  players,
-  owners,
-  houses,
-  pendingCell,
-  center,
-  className,
-}: BoardRingProps): ReactElement {
+export function BoardRing({ players, owners, houses, pendingCell, center, className }: BoardRingProps): ReactElement {
   return (
-    /*
-     * Spec: outerBorder 7px brass r=24px, innerBorder 8px felt r=18px
-     * Outer shell = brass colour, 7px padding, r=24px
-     * Inner felt shell = 8px padding, r=18px
-     */
-    <div
-      className={cn('aspect-square h-full w-full', className)}
-      style={{
-        backgroundColor: 'var(--lr-brass)',
-        padding: '7px',
-        borderRadius: 'var(--radius-board-outer)',
-        boxShadow:
-          '0 0 0 1px var(--lr-brass-dim), ' +
-          '0 20px 50px rgba(3,10,24,0.65), ' +
-          'inset 0 1px 0 rgba(255,249,236,0.18)',
-      }}
-    >
-      {/* Felt inner border — 8px padding */}
-      <div
-        style={{
-          backgroundColor: 'var(--surface-board)',
-          padding: '8px',
-          borderRadius: 'var(--radius-board-inner)',
-          height: '100%',
-        }}
-      >
-        {/* Tile grid */}
-        <div
-          className="grid h-full w-full gap-px"
-          style={{
-            gridTemplateColumns:
-              'minmax(0,1.28fr) repeat(5,minmax(0,1fr)) minmax(0,1.28fr)',
-            gridTemplateRows:
-              'minmax(0,1.28fr) repeat(5,minmax(0,1fr)) minmax(0,1.28fr)',
-            backgroundColor: 'var(--surface-board)',
-            borderRadius: 'calc(var(--radius-board-inner) - 8px)',
-            overflow: 'hidden',
-          }}
-        >
+    /* board-outer: brass frame 7px r=24px — board-inner: felt 8px r=18px */
+    <div className={cn('board-outer aspect-square h-full w-full', className)}>
+      <div className="board-inner">
+        <div className="board-grid">
           {BOARD.map((cell: BoardCell) => {
             const pos = ringCellPosition(cell.index);
             return (
@@ -93,7 +48,6 @@ export function BoardRing({
                 key={cell.index}
                 className="min-h-0 min-w-0"
                 data-cell-index={cell.index}
-                data-cell-kind={cell.kind}
                 style={{ gridColumn: pos.column, gridRow: pos.row }}
               >
                 {renderRingTile({
@@ -107,12 +61,8 @@ export function BoardRing({
               </div>
             );
           })}
-
-          {/* Center panel */}
-          <div
-            className="col-start-2 col-end-7 row-start-2 row-end-7 overflow-hidden"
-            style={{ backgroundColor: 'var(--surface-board)' }}
-          >
+          {/* Center */}
+          <div className="col-start-2 col-end-7 row-start-2 row-end-7 overflow-hidden" style={{ backgroundColor: 'var(--surface-board)' }}>
             {center}
           </div>
         </div>

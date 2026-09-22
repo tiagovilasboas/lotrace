@@ -36,122 +36,58 @@ export function GameBoard({
   const playerCount = Object.keys(G.players).length;
 
   return (
+    /* game-screen: dot-grid bg. Tailwind: layout grid h-dvh */
     <div
-      className="relative grid h-dvh w-full overflow-hidden"
+      className="game-screen grid h-dvh w-full overflow-hidden"
       style={{
-        backgroundColor: 'var(--surface-table)',
-        backgroundImage:
-          'radial-gradient(circle, rgba(255,249,236,0.08) 1px, transparent 1px)',
-        backgroundSize: '18px 18px',
-        /* Spec: sectionGap=16 desktop / gap=12 mobile */
         gridTemplateRows: 'auto auto minmax(0,1fr) auto',
         gap: '12px',
         padding: '12px 12px 0 12px',
       }}
     >
-      {/* ── Header ──────────────────────────────────────────────── */}
-      <header
-        className="flex items-center gap-2 rounded-[18px] px-4"
-        style={{
-          /* Spec: height=64, borderRadius=18, bg=backgroundSecondary, border=chromeBorder */
-          height: '64px',
-          backgroundColor: 'var(--surface-hud-raised)',
-          border: '1px solid var(--border-hud)',
-          marginTop: 'env(safe-area-inset-top, 0px)',
-        }}
-      >
-        {/* Logo icon — felt bg, brass border, ivory dice */}
-        <span
-          className="flex shrink-0 items-center justify-center rounded-xl"
-          style={{
-            width: '42px',
-            height: '42px',
-            backgroundColor: 'var(--surface-board)',
-            border: '1px solid var(--lr-brass)',
-          }}
-        >
-          <Dices className="size-5" aria-hidden style={{ color: 'var(--lr-ivory-light)' }} />
+      {/* Header */}
+      <header className="game-header flex items-center gap-2">
+        <span className="game-logo-icon">
+          <Dices className="size-5" aria-hidden />
         </span>
-
         <div className="min-w-0 flex-1">
-          <p
-            className="font-black leading-none"
-            style={{
-              fontFamily: 'var(--font-brand)',
-              fontSize: '18px',
-              color: 'var(--text-on-table)',
-              letterSpacing: '1.1px',
-            }}
-          >
-            {t('appName')}
-          </p>
-          <p
-            className="font-bold uppercase leading-none"
-            style={{
-              fontSize: '7px',
-              letterSpacing: '1.5px',
-              color: 'var(--text-on-table-dim)',
-              marginTop: '3px',
-            }}
-          >
-            {t('brandSub')}
-          </p>
+          <p className="game-logo-title">{t('appName')}</p>
+          <p className="game-logo-sub">{t('brandSub')}</p>
         </div>
-
         {chrome ? (
           <div className="flex shrink-0 items-center gap-1 [&_button]:h-7 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color:var(--border-hud)] [&_button]:bg-[color:var(--surface-hud)] [&_button]:px-2 [&_button]:text-[10px] [&_button]:text-[color:var(--text-on-table)]">
             {chrome}
           </div>
         ) : null}
-
         <ThemeToggle className="size-8 shrink-0 text-[color:var(--text-on-table-dim)]" />
       </header>
 
-      {/* ── Player carousel ─────────────────────────────────────── */}
-      <div>
-        <PlayerList
-          players={Object.values(G.players)}
-          currentPlayer={ctx.currentPlayer}
-          viewerID={viewerID}
-        />
-      </div>
+      {/* Player carousel */}
+      <PlayerList
+        players={Object.values(G.players)}
+        currentPlayer={ctx.currentPlayer}
+        viewerID={viewerID}
+      />
 
-      {/* ── Board hero ──────────────────────────────────────────── */}
+      {/* Board hero */}
       <div className="relative min-h-0">
         <div className="absolute inset-0 flex items-center justify-center">
-          <div
-            className="aspect-square h-full max-h-full max-w-full"
-            style={{ width: 'auto' }}
-          >
+          <div className="aspect-square h-full max-h-full max-w-full" style={{ width: 'auto' }}>
             <BoardRing
               players={G.players}
               owners={G.owners}
               houses={G.houses}
               pendingCell={G.pendingCell}
-              center={
-                <BoardCenter dice={G.lastDice} events={G.log} players={G.players} />
-              }
+              center={<BoardCenter dice={G.lastDice} events={G.log} players={G.players} />}
             />
           </div>
         </div>
       </div>
 
-      {/* ── Turn panel ──────────────────────────────────────────── */}
-      <div
-        style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}
-      >
+      {/* Turn panel */}
+      <div style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
         {winner ? (
-          <p
-            className="px-4 py-3 text-center text-base font-bold"
-            style={{
-              backgroundColor: 'var(--turn-highlight)',
-              color: 'var(--turn-badge-text)',
-              fontFamily: 'var(--font-brand)',
-              borderRadius: '26px',
-            }}
-          >
-            {t('winner', { name: winner })}
-          </p>
+          <p className="winner-banner">{t('winner', { name: winner })}</p>
         ) : (
           <ActionBar
             G={G}
@@ -162,12 +98,7 @@ export function GameBoard({
             moves={moves}
           />
         )}
-        <p
-          className="mt-1.5 text-center"
-          style={{ fontSize: '10px', color: 'var(--text-on-table-dim)' }}
-        >
-          {t('playerCount', { count: String(playerCount) })}
-        </p>
+        <p className="game-player-count">{t('playerCount', { count: String(playerCount) })}</p>
         <div className="sr-only">
           <EventLog events={G.log} players={G.players} />
         </div>
