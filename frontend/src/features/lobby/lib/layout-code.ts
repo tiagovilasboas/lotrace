@@ -21,8 +21,11 @@ export function readLayoutNickname(): string {
   return sessionStorage.getItem(NICKNAME_KEY) ?? '';
 }
 
-export function layoutNicknames(nickname: string): [string, string] {
+/** Number of seats in the LAYOUT preview (4-player mock). */
+export const LAYOUT_PLAYERS = 4;
+
+export function layoutNicknames(nickname: string): [string, string, string, string] {
   const trimmed = nickname.trim();
   const you = trimmed.length >= 2 ? trimmed : 'Você';
-  return [you, LAYOUT_GUEST_NAME];
+  return [you, LAYOUT_GUEST_NAME, 'Jogador 3', 'Jogador 4'];
 }
