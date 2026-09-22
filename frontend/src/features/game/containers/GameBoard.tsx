@@ -53,23 +53,18 @@ export function GameBoard({
         chrome={chrome}
       />
 
-      {/* ── Board fills everything ── */}
-      <div className="board-3d-scene relative min-h-0 flex-1">
-        <div className="absolute inset-0 flex items-end justify-center">
-          <div
-            className="board-3d-tilt relative aspect-square max-w-full"
-            style={{ height: '96%', width: 'auto' }}
-          >
-            <BoardRing
-              players={G.players}
-              owners={G.owners}
-              houses={G.houses}
-              pendingCell={G.pendingCell}
-              center={
-                <BoardCenter dice={G.lastDice} events={G.log} players={G.players} />
-              }
-            />
-          </div>
+      {/* ── Board fills everything, stays square, max width & height ── */}
+      <div className="board-3d-scene board-area">
+        <div className="board-square">
+          <BoardRing
+            players={G.players}
+            owners={G.owners}
+            houses={G.houses}
+            pendingCell={G.pendingCell}
+            center={
+              <BoardCenter dice={G.lastDice} events={G.log} players={G.players} />
+            }
+          />
         </div>
       </div>
 
