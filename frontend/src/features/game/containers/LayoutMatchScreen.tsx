@@ -1,11 +1,12 @@
 import { Imobiliario } from '@lotrace/shared';
 import { Local } from 'boardgame.io/multiplayer';
 import { Client } from 'boardgame.io/react';
-import { useMemo, useState, type ReactElement } from 'react';
+import { useCallback, useMemo, useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button.tsx';
 import { GameBoard } from '@/features/game/containers/GameBoard.tsx';
 import { MatchChromeProvider } from '@/features/game/lib/match-chrome.tsx';
+import { SeatFollowContext } from '@/features/game/lib/seat-follow.ts';
 import {
   LAYOUT_GUEST_NAME,
   LAYOUT_MATCH_ID,
@@ -42,6 +43,13 @@ export function LayoutMatchScreen({
   const otherSeat = seat === '0' ? '1' : '0';
   const otherName = names[Number(otherSeat)] ?? LAYOUT_GUEST_NAME;
 
+  /* Follow the active player automatically. Only seats 0/1 exist in hotseat. */
+  const followActivePlayer = useCallback((currentPlayer: string): void => {
+    if (currentPlayer === '0' || currentPlayer === '1') {
+      setSeat(currentPlayer);
+    }
+  }, []);
+
   return (
     <MatchChromeProvider
       chrome={
@@ -63,10 +71,14 @@ export function LayoutMatchScreen({
       }
     >
       <div className={seat === '0' ? 'contents' : 'hidden'}>
-        <LayoutClient matchID={LAYOUT_MATCH_ID} playerID="0" />
+        <SeatFollowContext.Provider value={{ onActivePlayerChange: followActivePlayer }}>
+          <LayoutClient matchID={LAYOUT_MATCH_ID} playerID="0" />
+        </SeatFollowContext.Provider>
       </div>
       <div className={seat === '1' ? 'contents' : 'hidden'}>
-        <LayoutClient matchID={LAYOUT_MATCH_ID} playerID="1" />
+        <SeatFollowContext.Provider value={{ onActivePlayerChange: followActivePlayer }}>
+          <LayoutClient matchID={LAYOUT_MATCH_ID} playerID="1" />
+        </SeatFollowContext.Provider>
       </div>
     </MatchChromeProvider>
   );

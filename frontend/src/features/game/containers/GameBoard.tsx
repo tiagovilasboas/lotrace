@@ -1,11 +1,13 @@
 import type { ImobiliarioState, TurnStage } from '@lotrace/shared';
 import type { BoardProps } from 'boardgame.io/react';
-import type { ReactElement } from 'react';
+import { useEffect, type ReactElement } from 'react';
+import { useSeatFollow } from '@/features/game/lib/seat-follow.ts';
 import { TopBar } from '@/features/game/board/TopBar.tsx';
 import { BoardCenter } from '@/features/game/board/BoardCenter.tsx';
 import { BoardRing } from '@/features/game/board/BoardRing.tsx';
 import { ActionBar } from '@/features/game/components/ActionBar.tsx';
 import { EventLog } from '@/features/game/components/EventLog.tsx';
+import { PiecesCanvas } from '@/features/game/pieces3d/PiecesCanvas.tsx';
 import { useMatchChrome } from '@/features/game/lib/match-chrome.ts';
 import { t } from '@/lib/i18n.ts';
 
@@ -34,6 +36,17 @@ export function GameBoard({
   const playerCount = Object.keys(G.players).length;
   const playerList  = Object.values(G.players);
 
+  /* Hotseat only: follow the active player automatically. No-op online
+   * (SeatFollow is null there). Reports on every turn change; the handler
+   * is idempotent so it only switches the seat when it actually changes. */
+  const seatFollow  = useSeatFollow();
+  const followChange = seatFollow?.onActivePlayerChange;
+  const currentPlayer = ctx.currentPlayer;
+  useEffect(() => {
+    if (!followChange || ctx.gameover) return;
+    followChange(currentPlayer);
+  }, [followChange, currentPlayer, ctx.gameover]);
+
   return (
     /**
      * 3 rows:
@@ -53,18 +66,24 @@ export function GameBoard({
         chrome={chrome}
       />
 
-      {/* ── Board fills everything, stays square, max width & height ── */}
+      {/* ── Board fills everything, stays square, max width & height ──
+       * The CSS board (tiles, names, prices) is the flat felt.
+       * PiecesCanvas is an overlay of real 3D pieces (cars, houses, hotels,
+       * stations, corner landmarks) sized to the same board square. */}
       <div className="board-3d-scene board-area">
-        <div className="board-square">
-          <BoardRing
-            players={G.players}
-            owners={G.owners}
-            houses={G.houses}
-            pendingCell={G.pendingCell}
-            center={
-              <BoardCenter dice={G.lastDice} events={G.log} players={G.players} />
-            }
-          />
+        <div className="board-stage">
+          <div className="board-square">
+            <BoardRing
+              players={G.players}
+              owners={G.owners}
+              houses={G.houses}
+              pendingCell={G.pendingCell}
+              center={
+                <BoardCenter dice={G.lastDice} events={G.log} players={G.players} />
+              }
+            />
+          </div>
+          <PiecesCanvas G={G} />
         </div>
       </div>
 

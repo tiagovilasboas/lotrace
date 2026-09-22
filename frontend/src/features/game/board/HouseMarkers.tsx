@@ -37,10 +37,17 @@ export function HouseMarkers({ count, side }: HouseMarkersProps): ReactElement |
       }
     >
       {isHotel(level) ? (
-        <HotelIso className="h-5 w-5 drop-shadow-md" />
+        <HotelIso
+          className="drop-shadow-md"
+          style={{ width: 'max(1.75rem, 30cqmin)', height: 'max(1.75rem, 30cqmin)' }}
+        />
       ) : (
         Array.from({ length: houses }, (_, index) => (
-          <HouseIso key={index} className="h-3.5 w-3.5 drop-shadow-sm" />
+          <HouseIso
+            key={index}
+            className="drop-shadow-sm"
+            style={{ width: 'max(1.15rem, 20cqmin)', height: 'max(1.15rem, 20cqmin)' }}
+          />
         ))
       )}
     </span>

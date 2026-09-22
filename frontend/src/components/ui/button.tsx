@@ -47,11 +47,17 @@ const buttonVariants = cva(
           'bg-destructive text-destructive-foreground',
           'hover:bg-destructive/90',
         ].join(' '),
+        /* No visual chrome — the caller's utility class controls colour,
+         * radius and shadow (e.g. .footer-btn--primary / --secondary). */
+        bare: '',
       },
       size: {
         default: 'h-11 px-4 text-sm',
         lg: 'touch-cta px-5',
         sm: 'h-9 px-3 text-sm',
+        /* No sizing — the caller's utility class (e.g. .footer-btn) fully
+         * controls height, padding, radius and typography. */
+        none: '',
       },
     },
     defaultVariants: {

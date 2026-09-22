@@ -15,7 +15,7 @@ export function TileName({
   return (
     <span
       className={cn(
-        'flex min-w-0 max-w-full flex-col px-0.5',
+        'flex min-w-0 max-w-full flex-col',
         align === 'center' && 'items-center text-center',
         strong && 'uppercase tracking-wide',
       )}

@@ -11,13 +11,24 @@
 import type { ReactElement, ReactNode } from 'react';
 import { cn } from '@/lib/utils.ts';
 
-type IsoIconProps = { className?: string };
+import type { CSSProperties } from 'react';
 
-function IsoSvg({ className, children }: { className?: string; children: ReactNode }): ReactElement {
+type IsoIconProps = { className?: string; style?: CSSProperties };
+
+function IsoSvg({
+  className,
+  style,
+  children,
+}: {
+  className?: string;
+  style?: CSSProperties;
+  children: ReactNode;
+}): ReactElement {
   return (
     <svg
       viewBox="0 0 32 32"
       className={cn('shrink-0 overflow-visible drop-shadow-sm', className)}
+      style={style}
       aria-hidden
       focusable="false"
     >
@@ -35,9 +46,9 @@ function Shadow(): ReactElement {
    Isometric cottage: ivory walls, terracotta roof, door + window.
    Left face = shadow, right face = lit, roof = top plane.
 ─────────────────────────────────────────────────────────────────*/
-export function HouseIso({ className }: IsoIconProps): ReactElement {
+export function HouseIso({ className, style }: IsoIconProps): ReactElement {
   return (
-    <IsoSvg className={className}>
+    <IsoSvg className={className} style={style}>
       <Shadow />
       <path d="M7 18 16 13.4 16 25.2 7 29Z"          fill="#c0ae90" />  {/* left wall  */}
       <path d="M16 13.4 25 18 25 29 16 25.2Z"         fill="#f0e6cc" />  {/* right wall */}
@@ -54,9 +65,9 @@ export function HouseIso({ className }: IsoIconProps): ReactElement {
 /* ─── Hotel ──────────────────────────────────────────────────────
    Tall building, dark-navy left + lit right, grid of windows, brass canopy.
 ─────────────────────────────────────────────────────────────────*/
-export function HotelIso({ className }: IsoIconProps): ReactElement {
+export function HotelIso({ className, style }: IsoIconProps): ReactElement {
   return (
-    <IsoSvg className={className}>
+    <IsoSvg className={className} style={style}>
       <Shadow />
       <path d="M8 13.6 16 9.4 16 27.6 8 31Z"          fill="#1a3356" />  {/* left  */}
       <path d="M16 9.4 24 13.6 24 31 16 27.6Z"         fill="#2460a8" />  {/* right */}

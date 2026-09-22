@@ -81,7 +81,7 @@ export function CarToken({ playerID, size = 'board', side }: CarTokenProps): Rea
   const isLobby = size === 'lobby';
   const boardStyle = isLobby
     ? undefined
-    : { width: 'max(1.35rem, 34cqmin)', height: 'max(2.1rem, 53cqmin)' };
+    : { width: 'max(2rem, 50cqmin)', height: 'max(3.15rem, 78cqmin)' };
   return (
     <svg
       viewBox="0 0 28 44"
@@ -141,6 +141,13 @@ export function CarTokenStack({
   const count   = playerIDs.length;
   const scale   = count === 1 ? 1 : count === 2 ? 0.84 : count <= 4 ? 0.70 : 0.60;
 
+  /* Overlap proportional to the board car size (height ~78cqmin, width ~50cqmin).
+   * When scaled down for stacks, tuck the pieces closer so they share the dock. */
+  const overlap = (1 - scale) * 0.9;
+  const overlapMain = stacked
+    ? `calc(max(3.15rem, 78cqmin) * ${-overlap})`
+    : `calc(max(2rem, 50cqmin) * ${-overlap})`;
+
   return (
     <div
       className={cn(
@@ -158,8 +165,8 @@ export function CarTokenStack({
             transform: `scale(${scale})`,
             transformOrigin: 'center center',
             ...(stacked && dock !== 'center'
-              ? { marginTop: index === 0 ? 0 : `${-2.1 * (1 - scale) * 16 - 2}px`, zIndex: index + 1 }
-              : { marginLeft: index === 0 ? 0 : `${-1.35 * (1 - scale) * 16 - 2}px`, zIndex: index + 1 }),
+              ? { marginTop: index === 0 ? 0 : overlapMain, zIndex: index + 1 }
+              : { marginLeft: index === 0 ? 0 : overlapMain, zIndex: index + 1 }),
           }}
         >
           <CarToken playerID={id} size="board" side={side} />

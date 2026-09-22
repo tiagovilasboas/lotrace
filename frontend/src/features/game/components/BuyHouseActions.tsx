@@ -39,10 +39,8 @@ export function BuyHouseActions({
                 type="button"
                 onClick={() => setPickedIndex(lot.index)}
                 className={cn(
-                  'min-h-9 rounded-full px-3 text-xs font-semibold',
-                  isSelected
-                    ? 'bg-sky-400 text-slate-950'
-                    : 'bg-white/10 text-white',
+                  'footer-btn',
+                  isSelected ? 'footer-btn--primary' : 'footer-btn--secondary',
                 )}
                 aria-pressed={isSelected}
               >
@@ -53,8 +51,9 @@ export function BuyHouseActions({
         </div>
       ) : null}
       <Button
-        size="lg"
-        className="match-cta"
+        variant="bare"
+        size="none"
+        className="footer-btn footer-btn--primary"
         onClick={() => onBuy(selected.index)}
         aria-label={t(selected.hotel ? 'buyHotelOn' : 'buyHouseOn', {
           name: selected.name,
@@ -62,9 +61,9 @@ export function BuyHouseActions({
         })}
       >
         {selected.hotel ? (
-          <HotelIso className="h-6 w-6" />
+          <HotelIso className="size-4 shrink-0" />
         ) : (
-          <HouseIso className="h-6 w-6" />
+          <HouseIso className="size-4 shrink-0" />
         )}
         {t(selected.hotel ? 'buyHotelOn' : 'buyHouseOn', {
           name: selected.name,

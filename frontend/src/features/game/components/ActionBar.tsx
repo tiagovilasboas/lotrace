@@ -59,11 +59,11 @@ export function ActionBar({ G, stage, isActive, currentName, viewerID, moves }: 
       {(!isActive || stage === 'roll' || rollBusy) ? (
         <FooterBar playerID={viewerID} title={title}>
           {rollBusy ? (
-            <Button className="footer-btn footer-btn--primary" loading aria-label={t('rolling')}>
+            <Button variant="bare" size="none" className="footer-btn footer-btn--primary" loading aria-label={t('rolling')}>
               {t('rolling')}
             </Button>
           ) : stage === 'roll' ? (
-            <Button className="footer-btn footer-btn--primary" onClick={handleRoll} aria-label={t('roll')}>
+            <Button variant="bare" size="none" className="footer-btn footer-btn--primary" onClick={handleRoll} aria-label={t('roll')}>
               <Dices className="size-3 shrink-0" aria-hidden /> {t('roll')}
             </Button>
           ) : (
@@ -74,19 +74,19 @@ export function ActionBar({ G, stage, isActive, currentName, viewerID, moves }: 
       ) : stage === 'buy' && pending ? (
         /* ── Buy: two buttons in the footer ── */
         <FooterBar playerID={viewerID} title={hint}>
-          <Button className="footer-btn footer-btn--primary" disabled={!canAfford} onClick={() => moves.buyProperty?.()}>
+          <Button variant="bare" size="none" className="footer-btn footer-btn--primary" disabled={!canAfford} onClick={() => moves.buyProperty?.()}>
             {t('buy')}
           </Button>
-          <Button className="footer-btn footer-btn--secondary" onClick={() => moves.skipBuy?.()}>
+          <Button variant="bare" size="none" className="footer-btn footer-btn--secondary" onClick={() => moves.skipBuy?.()}>
             {t('skip')}
           </Button>
         </FooterBar>
       ) : stage === 'jail' ? (
         <FooterBar playerID={viewerID} title={hint}>
-          <Button className="footer-btn footer-btn--primary" disabled={!canJail} onClick={() => moves.payJail?.()}>
+          <Button variant="bare" size="none" className="footer-btn footer-btn--primary" disabled={!canJail} onClick={() => moves.payJail?.()}>
             {t('payJail')}
           </Button>
-          <Button className="footer-btn footer-btn--secondary" onClick={() => moves.waitJail?.()}>
+          <Button variant="bare" size="none" className="footer-btn footer-btn--secondary" onClick={() => moves.waitJail?.()}>
             {t('waitJail')}
           </Button>
         </FooterBar>
@@ -97,7 +97,7 @@ export function ActionBar({ G, stage, isActive, currentName, viewerID, moves }: 
             <BuyHouseActions lots={buildable} onBuy={(i) => moves.buyHouse?.(i)} />
           ) : null}
           <FooterBar playerID={viewerID} title={title}>
-            <Button className="footer-btn footer-btn--secondary" onClick={() => moves.endTurn?.()}>
+            <Button variant="bare" size="none" className="footer-btn footer-btn--secondary" onClick={() => moves.endTurn?.()}>
               {t('endTurn')}
             </Button>
           </FooterBar>

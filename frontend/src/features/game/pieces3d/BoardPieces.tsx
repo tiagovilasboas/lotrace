@@ -1,5 +1,6 @@
 import { BOARD, isHotel, MAX_HOUSES, type ImobiliarioState } from '@lotrace/shared';
 import { type ReactElement } from 'react';
+import { ringCellSide, type RingSide } from '@/features/game/board/ring-geometry.ts';
 import { tileWorldPosition } from '@/features/game/pieces3d/lib/tile-positions.ts';
 import { Car } from '@/features/game/pieces3d/pieces/Car.tsx';
 import { GoArch } from '@/features/game/pieces3d/pieces/GoArch.tsx';
@@ -13,14 +14,33 @@ type BoardPiecesProps = {
   G: ImobiliarioState;
 };
 
+/** Uniform up-scale of every 3D piece (+50% vs the base geometry). */
+const PIECE_SCALE = 1.5;
+
+/** Car Y rotation (radians) so it faces along its ring side,
+ *  mirroring the 2D tokenRotateClass. */
+function carRotationForSide(side: RingSide): number {
+  switch (side) {
+    case 'south':
+      return 0;
+    case 'west':
+      return Math.PI / 2;
+    case 'north':
+      return Math.PI;
+    case 'east':
+      return -Math.PI / 2;
+  }
+}
+
 /**
  * BoardPieces — positions all 3D pieces based on game state.
  * Piece geometries are in world units (1 unit ≈ 1 inner tile width).
  * Camera zoom (in PiecesCanvas) maps world units to screen pixels.
+ * Everything is wrapped in a single scaled group so pieces grow together.
  */
 export function BoardPieces({ G }: BoardPiecesProps): ReactElement {
   return (
-    <>
+    <group scale={PIECE_SCALE}>
       {/* ── Corner static pieces ──────────────────────────────── */}
       <GoArch   position={tileWorldPosition(0)} />
       <JailBlock position={tileWorldPosition(6)} />
@@ -67,9 +87,10 @@ export function BoardPieces({ G }: BoardPiecesProps): ReactElement {
               key={player.id}
               playerID={player.id}
               position={[base[0] + ox, base[1], base[2] + oz]}
+              rotation={carRotationForSide(ringCellSide(player.position))}
             />
           );
         })}
-    </>
+    </group>
   );
 }

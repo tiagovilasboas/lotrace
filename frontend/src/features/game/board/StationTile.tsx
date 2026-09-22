@@ -16,7 +16,7 @@ export function StationTile({ cell, occupants, ownerID, isPending, side }: Board
     <div className={cn(tileSurfaceClass(isPending), bar.containerClass)}>
       <HueStripe hue={BOARD_COLOR.station} side={side} ownerID={ownerID} />
       <CarTokenStack playerIDs={occupants} side={side} />
-      <div className={cn('flex min-h-0 min-w-0 flex-1 flex-col gap-0.5', tileBodyClass(side))}>
+      <div className={cn('tile-body', tileBodyClass(side))}>
         <TileName lines={tileCaptionLines(cell)} align="center" />
         {cell.price !== undefined ? (
           <span className="tile-price">{formatCash(cell.price)}</span>
