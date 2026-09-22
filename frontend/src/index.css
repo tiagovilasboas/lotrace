@@ -101,25 +101,25 @@
     background-size: 18px 18px;
   }
 
-  /* ── Header — floating card, compact ── */
+  /* ── Header — floating card (JSON: h=79 r=23 p=16/17) ── */
   .game-header {
     background-color: var(--surface-hud-raised);
     border: 1px solid var(--border-hud);
-    border-radius: 16px;
-    padding: 0 14px;
+    border-radius: clamp(14px, 2.56vw, 23px);
+    padding: 0 clamp(12px, 1.9vw, 17px);
     display: flex;
     align-items: center;
-    gap: 10px;
-    /* Height driven by content + padding — not fixed */
-    min-height: 52px;
+    gap: clamp(8px, 1.1vw, 12px);
+    /* h=79 at 1200px → 6.6dvh */
+    min-height: clamp(52px, 6.6dvh, 79px);
     margin-top: env(safe-area-inset-top, 0px);
   }
 
-  /* Logo icon — felt bg + brass border */
+  /* Logo icon — JSON: 49×49 r=14 */
   .game-logo-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    width:  clamp(32px, 5.4vw, 49px);
+    height: clamp(32px, 5.4vw, 49px);
+    border-radius: clamp(9px, 1.6vw, 14px);
     background-color: var(--surface-board);
     border: 1.5px solid var(--lr-brass);
     color: var(--lr-ivory-light);
@@ -129,58 +129,60 @@
     flex-shrink: 0;
   }
 
+  /* JSON: title 24px 700 ls=1.1 */
   .game-logo-title {
     font-family: var(--font-brand);
-    font-size: 18px;
-    font-weight: 800;
+    font-size: clamp(16px, 2.7vw, 24px);
+    font-weight: 700;
     line-height: 1;
-    letter-spacing: 1px;
+    letter-spacing: clamp(0.6px, 0.12vw, 1.1px);
     color: var(--text-on-table);
   }
 
+  /* JSON: subtitle 10px 600 ls=1.1 */
   .game-logo-sub {
-    font-size: 8px;
-    font-weight: 700;
+    font-size: clamp(7px, 1.1vw, 10px);
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1.4px;
+    letter-spacing: 1.1px;
     line-height: 1;
     color: var(--lr-signal);
     margin-top: 3px;
   }
 
-  /* ── Board outer frame (spec: 7px brass, r=24px) ── */
+  /* ── Board outer (JSON: outerBorderRadius=37 border≈7px) ── */
   .board-outer {
     background-color: var(--lr-brass);
-    padding: 7px;
-    border-radius: 24px;
+    padding: clamp(4px, 0.9%, 8px);
+    border-radius: clamp(20px, 4.7vw, 37px);
     box-shadow:
       0 0 0 1px var(--lr-brass-dim),
-      0 20px 50px rgba(3,10,24,0.65),
+      0 16px 40px rgba(3,10,24,0.65),
       inset 0 1px 0 rgba(255,249,236,0.18);
   }
 
-  /* Board inner felt (spec: 8px felt, r=18px) */
+  /* Board inner (JSON: innerBorderRadius=15) */
   .board-inner {
     background-color: var(--surface-board);
-    padding: 8px;
-    border-radius: 18px;
+    padding: clamp(4px, 0.9%, 8px);
+    border-radius: clamp(8px, 1.7vw, 15px);
     height: 100%;
   }
 
-  /* Tile grid */
+  /* Tile grid (JSON: 7×7, corner≈1.28fr) */
   .board-grid {
     display: grid;
     height: 100%;
     width: 100%;
     gap: 1px;
     grid-template-columns: minmax(0,1.28fr) repeat(5,minmax(0,1fr)) minmax(0,1.28fr);
-    grid-template-rows: minmax(0,1.28fr) repeat(5,minmax(0,1fr)) minmax(0,1.28fr);
+    grid-template-rows:    minmax(0,1.28fr) repeat(5,minmax(0,1fr)) minmax(0,1.28fr);
     background-color: var(--surface-board);
-    border-radius: 10px;
+    border-radius: clamp(4px, 1vw, 8px);
     overflow: hidden;
   }
 
-  /* ── Tile base ── */
+  /* ── Tile base (JSON: r=8 band=17px≈16cqh) ── */
   .board-tile {
     container-type: size;
     position: relative;
@@ -193,7 +195,7 @@
     color: var(--board-ink);
     box-shadow: var(--shadow-tile);
     border: 1px solid var(--border-tile);
-    border-radius: var(--radius-tile);
+    border-radius: clamp(4px, 8%, 8px);
   }
 
   .board-tile--pending {
@@ -202,6 +204,7 @@
     z-index: 10;
   }
 
+  /* Colour accent band (JSON: propertyBandHeight=17px → ~16cqh) */
   .tile-accent {
     flex-shrink: 0;
     display: flex;
@@ -210,40 +213,42 @@
     padding: 0 2px;
   }
 
-  .tile-accent--h { height: var(--tile-accent-height); width: 100%; }
-  .tile-accent--v { width: var(--tile-accent-height); height: 100%; }
+  .tile-accent--h { height: clamp(6px, 16cqh, 17px); width: 100%; }
+  .tile-accent--v { width: clamp(6px, 16cqw, 17px); height: 100%; }
 
+  /* Tile name (JSON: 10px 700 lh=12) */
   .tile-name-line {
     display: block;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: var(--text-tile-size);
-    font-weight: var(--text-tile-weight);
-    line-height: var(--text-tile-leading);
-    letter-spacing: var(--text-tile-tracking);
+    font-size: clamp(0.44rem, 15cqmin, 0.625rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
     color: var(--board-ink);
   }
 
+  /* Tile price (JSON: 8px 600) */
   .tile-price {
     display: block;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: var(--text-price-size);
-    font-weight: var(--text-price-weight);
+    font-size: clamp(0.36rem, 11cqmin, 0.5rem);
+    font-weight: 600;
     font-variant-numeric: tabular-nums;
     line-height: 1;
     color: var(--text-on-tile-price);
   }
 
-  /* ── Corner marker circles (spec: 36px diameter, accent colour) ── */
+  /* ── Corner circles (JSON: diameter=35 → 33cqmin of corner tile) ── */
   .corner-circle {
     border-radius: 50%;
-    width: clamp(1.5rem, 12cqmin, 2.25rem);
-    height: clamp(1.5rem, 12cqmin, 2.25rem);
+    width:  clamp(1.4rem, 33cqmin, 2.4rem);
+    height: clamp(1.4rem, 33cqmin, 2.4rem);
     flex-shrink: 0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.25);
   }
@@ -253,10 +258,10 @@
   .corner-circle--return { background-color: var(--corner-return); }
   .corner-circle--park   { background-color: var(--corner-park); }
 
-  /* ── Player list container ── */
+  /* ── Player list (JSON: gap=11px) ── */
   .player-list {
     display: flex;
-    gap: 8px;
+    gap: clamp(6px, 1.2vw, 11px);
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
@@ -265,28 +270,28 @@
 
   .player-list::-webkit-scrollbar { display: none; }
 
-  /* ── Player cards (spec: 148×66 default / 168×66 active, r=16) ── */
+  /* Player card (JSON: 200×80 active / 199×80, r=21/18, p=13/17) */
   .player-card {
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
-    padding: 8px 10px;
-    width: 148px;
-    height: 66px;
-    border-radius: 16px;
+    padding: clamp(8px, 1.1dvh, 13px) clamp(10px, 1.9vw, 17px);
+    width: clamp(130px, 22vw, 200px);
+    height: clamp(60px, 6.7dvh, 80px);
+    border-radius: clamp(12px, 2vw, 18px);
     background-color: var(--surface-hud);
     border: 1px solid var(--border-hud);
     scroll-snap-align: start;
-    transition: width 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+    transition: border-color 200ms ease, box-shadow 200ms ease;
   }
 
   .player-card--active {
-    width: 168px;
+    border-radius: clamp(14px, 2.3vw, 21px);
     background-color: var(--surface-hud-active);
     border: 2px solid var(--turn-highlight);
-    box-shadow: 0 0 0 0 var(--lr-signal), 0 0 16px rgba(85,216,255,0.22);
+    box-shadow: 0 0 16px rgba(85,216,255,0.22);
   }
 
   .player-badge-vez {
@@ -301,8 +306,9 @@
     color: var(--turn-badge-text);
   }
 
+  /* JSON: nameFontSize=14 amountFontSize=14 */
   .player-name {
-    font-size: 11px;
+    font-size: clamp(10px, 1.6vw, 14px);
     font-weight: 800;
     letter-spacing: 0.02em;
     line-height: 1;
@@ -315,7 +321,7 @@
   .player-name--other  { color: var(--text-on-table-dim); }
 
   .player-balance {
-    font-size: 14px;
+    font-size: clamp(10px, 1.6vw, 14px);
     font-weight: 700;
     font-variant-numeric: tabular-nums;
     line-height: 1;
@@ -326,35 +332,35 @@
     margin-top: 2px;
   }
 
-  /* ── Turn panel — card arredondado, compacto ── */
+  /* ── Turn panel (JSON: h=115 r=27 p=20/18/12/19 icon=41×41 r=21) ── */
   .turn-panel {
-    border-radius: 20px;
-    padding: 12px 14px;
+    border-radius: clamp(18px, 3vw, 27px);
+    padding: clamp(12px, 1.7dvh, 20px) clamp(12px, 2vw, 19px) clamp(8px, 1dvh, 12px);
     background-color: var(--surface-hud);
     border: 1px solid var(--border-hud);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: clamp(8px, 1dvh, 12px);
   }
 
-  /* Prompt row: avatar + text */
   .turn-prompt-row {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: clamp(10px, 1.4vw, 14px);
   }
 
-  /* Player avatar circle */
+  /* JSON: statusIcon 41×41 r=21 */
   .turn-avatar {
-    width: 32px;
-    height: 32px;
+    width:  clamp(28px, 4.6vw, 41px);
+    height: clamp(28px, 4.6vw, 41px);
     border-radius: 50%;
     flex-shrink: 0;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 2px 6px rgba(0,0,0,0.35);
   }
 
+  /* JSON: title 16px 700 lh=19 */
   .turn-title {
-    font-size: 14px;
+    font-size: clamp(13px, 1.8vw, 16px);
     font-weight: 700;
     line-height: 1.2;
     color: var(--text-on-table);
@@ -363,11 +369,13 @@
     white-space: nowrap;
   }
 
+  /* JSON: subtitle 10px 500 lh=13 */
   .turn-hint {
-    font-size: 11px;
+    font-size: clamp(9px, 1.1vw, 10px);
+    font-weight: 500;
     line-height: 1.3;
     color: var(--text-on-table-dim);
-    margin-top: 1px;
+    margin-top: clamp(3px, 0.5dvh, 6px);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -384,28 +392,28 @@
     color: var(--turn-badge-text);
   }
 
-  /* ── CTA buttons ── */
+  /* ── CTA (JSON: button h=33 r=18 11px 700 ls=1.5) ── */
   .match-cta {
-    border-radius: 999px;
-    height: 48px;
+    border-radius: clamp(14px, 2vw, 18px);
+    height: clamp(28px, 2.75dvh, 40px);
     background-color: var(--action-primary);
     color: var(--action-primary-text);
-    box-shadow: 0 6px 16px rgba(59,130,246,0.40);
-    font-weight: 800;
-    font-size: 13px;
-    letter-spacing: 1.8px;
+    box-shadow: 0 4px 14px rgba(59,130,246,0.40);
+    font-weight: 700;
+    font-size: clamp(10px, 1.2vw, 11px);
+    letter-spacing: 1.5px;
     text-transform: uppercase;
   }
 
   .match-cta:hover:not(:disabled) { background-color: var(--action-primary-hover); }
 
   .match-secondary {
-    border-radius: 999px;
-    height: 48px;
+    border-radius: clamp(14px, 2vw, 18px);
+    height: clamp(28px, 2.75dvh, 40px);
     background-color: var(--lr-midnight);
     border: 1px solid rgba(255,255,255,0.14);
     color: var(--text-on-table);
-    font-size: 13px;
+    font-size: clamp(10px, 1.2vw, 11px);
     font-weight: 700;
     letter-spacing: 0.04em;
   }

@@ -41,9 +41,12 @@ export function GameBoard({
      * Board row: flex-1 min-h-0 — pega tudo que sobrar.
      * Sem px fixos em altura — proporcional ao viewport.
      */
+    /* JSON: page gaps → headerToPlayers=17 playersToBoard=27 boardToTurnPanel=27
+     * At 1200px: 17/1200=1.4dvh, 27/1200=2.25dvh
+     * clamp ensures minimum usable spacing on small phones */
     <div
       className="game-screen flex h-dvh w-full flex-col overflow-hidden"
-      style={{ padding: '10px 10px 0 10px', gap: '8px' }}
+      style={{ padding: 'clamp(8px,2.8dvh,34px) clamp(8px,3.9vw,35px) 0', gap: 'clamp(8px,1.4dvh,17px)' }}
     >
       {/* ── Header — card arredondado com logo, subtítulo e toggle ── */}
       <header className="game-header shrink-0">
@@ -68,8 +71,8 @@ export function GameBoard({
         <ThemeToggle className="size-8 shrink-0 text-[color:var(--text-on-table-dim)]" />
       </header>
 
-      {/* ── Player carousel ── */}
-      <div className="shrink-0">
+      {/* Player carousel — gap to board = 27px (JSON playersToBoard) */}
+      <div className="shrink-0" style={{ marginBottom: 'clamp(0px, 0.83dvh, 10px)' }}>
         <PlayerList
           players={Object.values(G.players)}
           currentPlayer={ctx.currentPlayer}
