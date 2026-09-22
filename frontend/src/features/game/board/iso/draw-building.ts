@@ -22,6 +22,15 @@ import {
 
 export type BuildingShape = 'house' | 'tower' | 'hotel';
 
+/** Silhouette variants so districts don't all share one shape (BuildIt variety). */
+export type BuildingVariant = 'flat' | 'setback' | 'pitched';
+
+/** Pick a stable variant from the tile index (deterministic for E2E). */
+export function variantForIndex(index: number): BuildingVariant {
+  const variants: BuildingVariant[] = ['flat', 'setback', 'pitched'];
+  return variants[index % variants.length] ?? 'flat';
+}
+
 /** Drawn height per kind, in multiples of the iso tile height. */
 const HEIGHT: Record<BuildingShape, number> = {
   house: 0.85,
@@ -111,9 +120,60 @@ function drawWindows(
   }
 }
 
+/** Scale a ground diamond [t,r,b,l] toward its centre by `k` (0..1). */
+function scaleDiamond(g: ScreenPoint[], k: number): ScreenPoint[] {
+  const cx = (g[1].x + g[3].x) / 2;
+  const cy = (g[0].y + g[2].y) / 2;
+  return g.map((p) => ({ x: cx + (p.x - cx) * k, y: cy + (p.y - cy) * k }));
+}
+
 /**
- * Draw one coloured iso building on a cell. `baseHex` is the group colour.
- * Ground point is the tile centre unless `ground` is provided (already offset).
+ * Draw one iso box: ground diamond `g` [t,r,b,l] raised by `height`, with two
+ * shaded side faces, lit windows and a lit roof. Returns the raised (roof)
+ * diamond so callers can stack another box or a roof on top.
+ */
+function isoBox(
+  ctx: CanvasRenderingContext2D,
+  g: ScreenPoint[],
+  height: number,
+  baseHex: string,
+  windowRows: number,
+): ScreenPoint[] {
+  const [gt, gr, gb, gl] = g;
+  const rt = withHeight(gt, height);
+  const rr = withHeight(gr, height);
+  const rb = withHeight(gb, height);
+  const rl = withHeight(gl, height);
+
+  poly(ctx, [gr, gb, rb, rr], shadeRgba(baseHex, -0.12)); // right face
+  poly(ctx, [gb, gl, rl, rb], shadeRgba(baseHex, -0.32)); // left face
+
+  const glow = 'rgba(255, 249, 224, 0.85)';
+  drawWindows(ctx, gr, gb, rr, rb, windowRows, glow);
+  drawWindows(ctx, gb, gl, rb, rl, windowRows, glow);
+
+  poly(ctx, [rt, rr, rb, rl], shadeRgba(baseHex, 0.28)); // lit roof
+  return [rt, rr, rb, rl];
+}
+
+/** A pitched (pyramid) roof on the raised diamond `r`, rising by `peak`. */
+function pitchedRoof(
+  ctx: CanvasRenderingContext2D,
+  r: ScreenPoint[],
+  peak: number,
+  baseHex: string,
+): void {
+  const [rt, rr, rb, rl] = r;
+  const apex: ScreenPoint = { x: (rr.x + rl.x) / 2, y: (rt.y + rb.y) / 2 - peak };
+  poly(ctx, [rr, rb, apex], shadeRgba(baseHex, -0.05)); // front-right slope
+  poly(ctx, [rb, rl, apex], shadeRgba(baseHex, -0.24)); // front-left slope (shade)
+  poly(ctx, [rt, rr, apex], shadeRgba(baseHex, 0.34)); // lit back-right slope
+  poly(ctx, [rl, rt, apex], shadeRgba(baseHex, 0.2)); // lit back-left slope
+}
+
+/**
+ * Draw one coloured iso building on a cell, tinted by its group `baseHex` and
+ * shaped by `variant` so districts don't all share one silhouette.
  */
 export function drawColouredBuilding(
   ctx: CanvasRenderingContext2D,
@@ -122,30 +182,33 @@ export function drawColouredBuilding(
   cfg: IsoConfig,
   shape: BuildingShape,
   baseHex: string,
+  variant: BuildingVariant = 'flat',
 ): void {
   const height = HEIGHT[shape] * cfg.tileH;
-  const [gt, gr, gb, gl] = footprint(col, row, cfg, FOOTPRINT[shape], cfg.tileH * 0.18);
-  const rt = withHeight(gt, height);
-  const rr = withHeight(gr, height);
-  const rb = withHeight(gb, height);
-  const rl = withHeight(gl, height);
+  const ground = footprint(col, row, cfg, FOOTPRINT[shape], cfg.tileH * 0.18);
 
   // Ground contact shadow (soft).
-  poly(ctx, [gt, gr, gb, gl], 'rgba(0,0,0,0.22)');
+  poly(ctx, ground, 'rgba(0,0,0,0.22)');
 
-  // Two visible side faces (front-right lit a touch more than front-left).
-  poly(ctx, [gr, gb, rb, rr], shadeRgba(baseHex, -0.12)); // right face
-  poly(ctx, [gb, gl, rl, rb], shadeRgba(baseHex, -0.32)); // left face (deeper shadow)
+  if (variant === 'setback') {
+    // Stepped tower: a tall base + a narrower upper section (skyscraper).
+    const baseH = height * 0.62;
+    const roof = isoBox(ctx, ground, baseH, baseHex, WINDOW_ROWS[shape]);
+    const upper = scaleDiamond(roof, 0.66);
+    isoBox(ctx, upper, height - baseH, baseHex, Math.max(1, WINDOW_ROWS[shape] - 1));
+    return;
+  }
 
-  // Windows on both front faces.
-  const glow = 'rgba(255, 249, 224, 0.85)';
-  drawWindows(ctx, gr, gb, rr, rb, WINDOW_ROWS[shape], glow);
-  drawWindows(ctx, gb, gl, rb, rl, WINDOW_ROWS[shape], glow);
+  const roof = isoBox(ctx, ground, height, baseHex, WINDOW_ROWS[shape]);
 
-  // Lit roof (top diamond).
-  poly(ctx, [rt, rr, rb, rl], shadeRgba(baseHex, 0.28));
+  if (variant === 'pitched') {
+    // Residential: a pitched roof crowning the box.
+    pitchedRoof(ctx, roof, cfg.tileH * 0.55, baseHex);
+    return;
+  }
 
-  // Roof edge highlight for a crisp top.
+  // 'flat': crisp roof edge highlight.
+  const [rt, rr, rb, rl] = roof;
   ctx.strokeStyle = shadeRgba(baseHex, 0.5, 0.9);
   ctx.lineWidth = Math.max(1, cfg.tileW * 0.015);
   ctx.beginPath();
