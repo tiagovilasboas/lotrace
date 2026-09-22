@@ -8,6 +8,7 @@ import { BoardRing } from '@/features/game/board/BoardRing.tsx';
 import { ActionBar } from '@/features/game/components/ActionBar.tsx';
 import { EventLog } from '@/features/game/components/EventLog.tsx';
 import { PlayerList } from '@/features/game/components/PlayerList.tsx';
+import { PiecesCanvas } from '@/features/game/pieces3d/PiecesCanvas.tsx';
 import { useMatchChrome } from '@/features/game/lib/match-chrome.ts';
 import { t } from '@/lib/i18n.ts';
 
@@ -66,13 +67,15 @@ export function GameBoard({
         viewerID={viewerID}
       />
 
-      {/* Board hero — CSS 3D perspective */}
+      {/* Board hero — CSS 3D perspective + Three.js pieces overlay */}
       <div className="board-3d-scene relative min-h-0">
         <div className="absolute inset-0 flex items-end justify-center pb-2">
+          {/* Tilt wrapper — CSS perspective */}
           <div
-            className="board-3d-tilt aspect-square max-h-full max-w-full"
+            className="board-3d-tilt relative aspect-square max-h-full max-w-full"
             style={{ height: '88%', width: 'auto' }}
           >
+            {/* DOM board — tiles, names, prices */}
             <BoardRing
               players={G.players}
               owners={G.owners}
@@ -80,6 +83,8 @@ export function GameBoard({
               pendingCell={G.pendingCell}
               center={<BoardCenter dice={G.lastDice} events={G.log} players={G.players} />}
             />
+            {/* Three.js pieces — cars, houses, hotels, trees (pointer-events:none) */}
+            <PiecesCanvas G={G} />
           </div>
         </div>
       </div>
