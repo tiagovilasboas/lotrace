@@ -95,21 +95,24 @@
     background-size: 18px 18px;
   }
 
-  /* ── Header bar (spec: height=64, radius=18, bg=backgroundSecondary) ── */
+  /* ── Header bar — 32px height, single line ── */
   .game-header {
-    height: 64px;
+    height: 32px;
     background-color: var(--surface-hud-raised);
     border: 1px solid var(--border-hud);
-    border-radius: 18px;
-    padding: 0 16px;
+    border-radius: 10px;
+    padding: 0 10px;
     margin-top: env(safe-area-inset-top, 0px);
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
 
-  /* Logo icon — felt bg, brass border, 42×42 */
+  /* Logo icon — 22×22 felt+brass */
   .game-logo-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
     background-color: var(--surface-board);
     border: 1px solid var(--lr-brass);
     color: var(--lr-ivory-light);
@@ -121,21 +124,11 @@
 
   .game-logo-title {
     font-family: var(--font-brand);
-    font-size: 18px;
+    font-size: 12px;
     font-weight: 800;
     line-height: 1;
-    letter-spacing: 1.1px;
+    letter-spacing: 0.6px;
     color: var(--text-on-table);
-  }
-
-  .game-logo-sub {
-    font-size: 7px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    line-height: 1;
-    color: var(--text-on-table-dim);
-    margin-top: 3px;
   }
 
   /* ── Board outer frame (spec: 7px brass, r=24px) ── */
@@ -317,28 +310,36 @@
     margin-top: 2px;
   }
 
-  /* ── Turn panel (spec: bg=chromeLight, r=26px, p=12px mobile) ── */
+  /* ── Turn panel — 32px prompt row + 32px CTA ── */
   .turn-panel {
-    border-radius: 26px;
-    padding: 12px;
+    border-radius: 12px;
+    padding: 4px 8px;
     background-color: var(--surface-hud);
     border: 1px solid var(--border-hud);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
   }
 
-  /* Player avatar circle (spec: shape=circle, color=token) */
+  /* Prompt row: avatar + text in 32px height */
+  .turn-prompt-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 32px;
+  }
+
+  /* Player avatar — 22px compact */
   .turn-avatar {
-    width: 36px;
-    height: 36px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     flex-shrink: 0;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 2px 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 1px 3px rgba(0,0,0,0.28);
   }
 
   .turn-title {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     line-height: 1;
     color: var(--text-on-table);
@@ -348,35 +349,35 @@
   }
 
   .turn-hint {
-    font-size: 12px;
+    font-size: 10px;
     line-height: 1;
     color: var(--text-on-table-dim);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    margin-top: 2px;
   }
 
   .winner-banner {
-    border-radius: 26px;
-    padding: 12px 16px;
+    border-radius: 16px;
+    padding: 10px 16px;
     text-align: center;
     font-family: var(--font-brand);
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     background-color: var(--turn-highlight);
     color: var(--turn-badge-text);
   }
 
-  /* ── CTA buttons ── */
+  /* ── CTA buttons — 32px height ── */
   .match-cta {
     border-radius: 999px;
+    height: 32px;
     background-color: var(--action-primary);
     color: var(--action-primary-text);
-    box-shadow: 0 8px 18px rgba(59,130,246,0.40);
+    box-shadow: 0 4px 12px rgba(59,130,246,0.35);
     font-weight: 800;
-    font-size: 12px;
-    letter-spacing: 2px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
   }
 
@@ -384,10 +385,11 @@
 
   .match-secondary {
     border-radius: 999px;
+    height: 32px;
     background-color: var(--lr-midnight);
     border: 1px solid rgba(255,255,255,0.12);
     color: var(--text-on-table);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.04em;
   }

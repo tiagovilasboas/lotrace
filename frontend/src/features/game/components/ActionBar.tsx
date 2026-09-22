@@ -41,7 +41,7 @@ function TurnAvatar({ playerID }: { playerID: string }): ReactElement {
 
 function TurnPrompt({ playerID, title, hint }: { playerID: string; title: string; hint: string }): ReactElement {
   return (
-    <div className="flex items-center gap-3">
+    <div className="turn-prompt-row">
       <TurnAvatar playerID={playerID} />
       <div className="min-w-0 flex-1">
         <p className="turn-title">{title}</p>
@@ -57,7 +57,7 @@ function PrimaryCTA({ children, onClick, disabled, loading, ariaLabel }: {
   return (
     <Button
       size="lg"
-      className="match-cta h-12 w-full"
+      className="match-cta w-full"
       onClick={onClick}
       disabled={disabled}
       loading={loading}
@@ -112,14 +112,14 @@ export function ActionBar({ G, stage, isActive, currentName, viewerID, moves }: 
           {!rollBusy && stage === 'buy' && pending ? (
             <div className="grid grid-cols-2 gap-2">
               <PrimaryCTA disabled={!canAfford} onClick={() => moves.buyProperty?.()}>{t('buy')}</PrimaryCTA>
-              <Button size="lg" className="match-secondary h-12 w-full" onClick={() => moves.skipBuy?.()}>{t('skip')}</Button>
+              <Button size="lg" className="match-secondary h-8 w-full" onClick={() => moves.skipBuy?.()}>{t('skip')}</Button>
             </div>
           ) : null}
 
           {!rollBusy && stage === 'jail' ? (
             <div className="grid grid-cols-2 gap-2">
               <PrimaryCTA disabled={!canJail} onClick={() => moves.payJail?.()}>{t('payJail')}</PrimaryCTA>
-              <Button size="lg" className="match-secondary h-12 w-full" onClick={() => moves.waitJail?.()}>{t('waitJail')}</Button>
+              <Button size="lg" className="match-secondary h-8 w-full" onClick={() => moves.waitJail?.()}>{t('waitJail')}</Button>
             </div>
           ) : null}
 
@@ -128,7 +128,7 @@ export function ActionBar({ G, stage, isActive, currentName, viewerID, moves }: 
               {buildable.length > 0 ? (
                 <BuyHouseActions lots={buildable} onBuy={(i) => moves.buyHouse?.(i)} />
               ) : null}
-              <Button size="lg" className="match-secondary h-11 w-full" onClick={() => moves.endTurn?.()}>{t('endTurn')}</Button>
+              <Button size="lg" className="match-secondary h-8 w-full" onClick={() => moves.endTurn?.()}>{t('endTurn')}</Button>
             </>
           ) : null}
         </>

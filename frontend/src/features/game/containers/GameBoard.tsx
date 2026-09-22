@@ -45,21 +45,18 @@ export function GameBoard({
         padding: '12px 12px 0 12px',
       }}
     >
-      {/* Header */}
-      <header className="game-header flex items-center gap-2">
+      {/* Header — 32px, single line */}
+      <header className="game-header">
         <span className="game-logo-icon">
-          <Dices className="size-5" aria-hidden />
+          <Dices className="size-3" aria-hidden />
         </span>
-        <div className="min-w-0 flex-1">
-          <p className="game-logo-title">{t('appName')}</p>
-          <p className="game-logo-sub">{t('brandSub')}</p>
-        </div>
+        <p className="game-logo-title min-w-0 flex-1 truncate">{t('appName')}</p>
         {chrome ? (
-          <div className="flex shrink-0 items-center gap-1 [&_button]:h-7 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color:var(--border-hud)] [&_button]:bg-[color:var(--surface-hud)] [&_button]:px-2 [&_button]:text-[10px] [&_button]:text-[color:var(--text-on-table)]">
+          <div className="flex shrink-0 items-center gap-1 [&_button]:h-6 [&_button]:rounded-md [&_button]:border [&_button]:border-[color:var(--border-hud)] [&_button]:bg-[color:var(--surface-hud)] [&_button]:px-1.5 [&_button]:text-[9px] [&_button]:text-[color:var(--text-on-table)]">
             {chrome}
           </div>
         ) : null}
-        <ThemeToggle className="size-8 shrink-0 text-[color:var(--text-on-table-dim)]" />
+        <ThemeToggle className="size-6 shrink-0 text-[color:var(--text-on-table-dim)]" />
       </header>
 
       {/* Player carousel */}
