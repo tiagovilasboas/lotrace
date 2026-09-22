@@ -4,18 +4,18 @@ import { HOTEL_LEVEL, MAX_HOUSES, STATION_RENTS } from '../types.ts';
 import { getPlayer, pushLog } from './players.ts';
 
 /**
- * House / hotel cost per color group.
- * Rule: cost ≈ 50 % of the cheaper lot in the group (same as Monopoly).
+ * House / hotel upgrade cost per color group — R$50k to R$300k band.
+ * Cheaper groups upgrade cheaply; premium groups cost more per level.
  */
 const HOUSE_COST_BY_GROUP: Record<ColorGroup, number> = {
-  brown:  200,
-  sky:    200,
-  pink:   400,
-  orange: 400,
-  red:    600,
-  yellow: 600,
-  green:  800,
-  navy:   800,
+  brown:   50_000,
+  sky:     50_000,
+  pink:   100_000,
+  orange: 100_000,
+  red:    150_000,
+  yellow: 150_000,
+  green:  250_000,
+  navy:   300_000,
 };
 
 export function houseCost(cell: BoardCell): number {

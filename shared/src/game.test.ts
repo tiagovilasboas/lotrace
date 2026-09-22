@@ -127,8 +127,8 @@ describe('rent', () => {
     G.players['0']!.position = 3;
     G.owners[3] = '1';
     expect(resolveLanding(G, '0')).toBe('end');
-    expect(G.players['0']?.cash).toBe(STARTING_CASH - 40);
-    expect(G.players['1']?.cash).toBe(STARTING_CASH + 40);
+    expect(G.players['0']?.cash).toBe(STARTING_CASH - 12_000);
+    expect(G.players['1']?.cash).toBe(STARTING_CASH + 12_000);
   });
 
   it('doubles unimproved rent on a color-group monopoly', () => {
@@ -137,17 +137,17 @@ describe('rent', () => {
     G.owners[1] = '1';
     G.owners[3] = '1';
     expect(resolveLanding(G, '0')).toBe('end');
-    expect(G.players['0']?.cash).toBe(STARTING_CASH - 80);
+    expect(G.players['0']?.cash).toBe(STARTING_CASH - 24_000);
   });
 
   it('scales station rent with how many stations the owner holds', () => {
     const G = emptyState();
     G.owners[4] = '1';
     G.owners[9] = '1';
-    expect(stationRent(G, '1')).toBe(200);
+    expect(stationRent(G, '1')).toBe(200_000);
     G.players['0']!.position = 4;
     expect(resolveLanding(G, '0')).toBe('end');
-    expect(G.players['0']?.cash).toBe(STARTING_CASH - 200);
+    expect(G.players['0']?.cash).toBe(STARTING_CASH - 200_000);
   });
 });
 
@@ -283,18 +283,18 @@ describe('jail', () => {
 
 describe('houses', () => {
   it('charges house cost by color-group band', () => {
-    expect(houseCost(getCell(1))).toBe(200);   // Leblon — brown
-    expect(houseCost(getCell(3))).toBe(200);   // Ipanema — brown
-    expect(houseCost(getCell(21))).toBe(800);  // Floripa — green
+    expect(houseCost(getCell(1))).toBe(50_000);    // Leblon — brown
+    expect(houseCost(getCell(3))).toBe(50_000);    // Ipanema — brown
+    expect(houseCost(getCell(21))).toBe(250_000);  // Floripa — green
   });
 
   it('uses a steep rent ladder and hotel', () => {
-    const ipanema = getCell(3); // brown: [40, 200, 600, 1800, 3200, 4500]
-    expect(rentOnProperty(ipanema, 0, false)).toBe(40);
-    expect(rentOnProperty(ipanema, 1, false)).toBe(200);
-    expect(rentOnProperty(ipanema, 2, false)).toBe(600);
-    expect(rentOnProperty(ipanema, 4, false)).toBe(3_200);
-    expect(rentOnProperty(ipanema, 5, false)).toBe(4_500);
+    const ipanema = getCell(3); // brown: [12k, 40k, 120k, 260k, 380k, 520k]
+    expect(rentOnProperty(ipanema, 0, false)).toBe(12_000);
+    expect(rentOnProperty(ipanema, 1, false)).toBe(40_000);
+    expect(rentOnProperty(ipanema, 2, false)).toBe(120_000);
+    expect(rentOnProperty(ipanema, 4, false)).toBe(380_000);
+    expect(rentOnProperty(ipanema, 5, false)).toBe(520_000);
   });
 
   it('buys a house when the player owns the color-group monopoly', () => {
@@ -328,8 +328,8 @@ describe('houses', () => {
     G.owners[3] = '1';
     G.houses[3] = 2;
     expect(resolveLanding(G, '0')).toBe('end');
-    expect(G.players['0']?.cash).toBe(STARTING_CASH - 600);   // Ipanema 2 houses = 600
-    expect(G.players['1']?.cash).toBe(STARTING_CASH + 600);
+    expect(G.players['0']?.cash).toBe(STARTING_CASH - 120_000);   // Ipanema 2 houses = 120k
+    expect(G.players['1']?.cash).toBe(STARTING_CASH + 120_000);
   });
 
   it('requires even build across the color group', () => {

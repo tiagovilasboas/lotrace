@@ -20,69 +20,69 @@ function lot(
 }
 
 /**
- * LotRace board — 24 cells.
+ * LotRace board — 24 cells. "Millionaire" scale.
  *
- * Economy rationale (rebalanced):
- *   STARTING_CASH = R$3 000
- *   GO_SALARY     = R$300
- *   Cheapest lot  = R$240  (~8 % of start)
- *   Most expensive= R$1 600 (~53 % of start)
- *   Ratio mirrors Monopoly Classic so players feel pressure
- *   after 3–4 turns instead of 10+.
+ * Prices (accessible on purpose, per design brief):
+ *   Cheap    R$80k – R$150k   (brown, sky)
+ *   Mid      R$180k – R$350k  (pink, orange, red)
+ *   Premium  R$400k – R$700k  (yellow, green, navy)
  *
  * Rent ladder: [bare, 1 house, 2 houses, 3 houses, 4 houses, hotel]
+ *   bare/1h  R$10k – R$40k    (weak early income)
+ *   2h/3h    R$80k – R$250k   (strong income)
+ *   4h/hotel R$300k+          (extreme income)
  * Bare monopoly doubles [0] automatically in rentOnProperty().
  */
 export const BOARD: BoardCell[] = [
   { index: 0, name: 'Partida', kind: 'go' },
 
   // ── Brown (cheapest) ─────────────────────────────────────────
-  lot(1,  'Leblon',        'brown',   240, [    20,   100,   300,   900, 1_600, 2_500]),
-  { index: 2, name: 'IPTU',        kind: 'tax', tax: 400 },
-  lot(3,  'Ipanema',       'brown',   320, [    40,   200,   600, 1_800, 3_200, 4_500]),
+  lot(1,  'Leblon',        'brown',    80_000, [ 10_000,  30_000,  90_000, 200_000, 320_000, 450_000]),
+  { index: 2, name: 'IPTU',        kind: 'tax', tax: 100_000 },
+  lot(3,  'Ipanema',       'brown',   120_000, [ 12_000,  40_000, 120_000, 260_000, 380_000, 520_000]),
 
-  { index: 4, name: 'Estação Rio', kind: 'station', price: 800, rent: 100 },
+  { index: 4, name: 'Estação Rio', kind: 'station', price: 200_000, rent: 100_000 },
 
   // ── Sky ──────────────────────────────────────────────────────
-  lot(5,  'Copacabana',    'sky',     400, [    60,   300,   900, 2_700, 4_000, 5_500]),
+  lot(5,  'Copacabana',    'sky',     150_000, [ 15_000,  50_000, 140_000, 300_000, 420_000, 560_000]),
 
   { index: 6, name: 'Visita', kind: 'jail' },
 
   // ── Pink ─────────────────────────────────────────────────────
-  lot(7,  'Jardins',       'pink',    560, [   100,   500, 1_500, 4_500, 6_250, 7_500]),
-  lot(8,  'Vila Madalena', 'pink',    640, [   120,   600, 1_800, 5_000, 7_000, 9_000]),
+  lot(7,  'Jardins',       'pink',    180_000, [ 20_000,  80_000, 180_000, 340_000, 480_000, 620_000]),
+  lot(8,  'Vila Madalena', 'pink',    220_000, [ 24_000,  90_000, 200_000, 360_000, 520_000, 680_000]),
 
-  { index: 9, name: 'Estação SP', kind: 'station', price: 800, rent: 100 },
+  { index: 9, name: 'Estação SP', kind: 'station', price: 200_000, rent: 100_000 },
 
   // ── Orange ───────────────────────────────────────────────────
-  lot(10, 'Paulista',      'orange',  720, [   140,   700, 2_000, 5_500, 7_500, 9_500]),
-  lot(11, 'Pinheiros',     'orange',  800, [   160,   800, 2_200, 6_000, 8_000, 10_000]),
+  lot(10, 'Paulista',      'orange',  260_000, [ 28_000, 100_000, 220_000, 400_000, 560_000, 720_000]),
+  lot(11, 'Pinheiros',     'orange',  300_000, [ 32_000, 110_000, 240_000, 440_000, 600_000, 780_000]),
 
   { index: 12, name: 'Parque', kind: 'park' },
 
   // ── Red ──────────────────────────────────────────────────────
-  lot(13, 'Recife',        'red',     880, [   180,   900, 2_500, 7_000, 8_750, 10_500]),
-  lot(14, 'Salvador',      'red',     960, [   200, 1_000, 3_000, 7_500, 9_250, 11_000]),
+  lot(13, 'Recife',        'red',     340_000, [ 36_000, 120_000, 250_000, 480_000, 640_000, 820_000]),
+  lot(14, 'Salvador',      'red',     380_000, [ 40_000, 130_000, 260_000, 520_000, 680_000, 880_000]),
 
-  { index: 15, name: 'Estação NE', kind: 'station', price: 800, rent: 100 },
+  { index: 15, name: 'Estação NE', kind: 'station', price: 200_000, rent: 100_000 },
 
   // ── Yellow ───────────────────────────────────────────────────
-  lot(16, 'Brasília',      'yellow', 1_040, [  220, 1_100, 3_300, 8_000, 9_750, 11_500]),
-  lot(17, 'Savassi',       'yellow', 1_120, [  240, 1_200, 3_600, 8_500, 10_250, 12_000]),
+  lot(16, 'Brasília',      'yellow',  420_000, [ 44_000, 150_000, 300_000, 560_000, 720_000, 920_000]),
+  lot(17, 'Savassi',       'yellow',  470_000, [ 48_000, 160_000, 320_000, 600_000, 760_000, 980_000]),
 
   { index: 18, name: 'Vá preso', kind: 'goto-jail' },
 
   // ── Green ────────────────────────────────────────────────────
-  lot(19, 'Batel',         'green',  1_200, [  260, 1_300, 3_900, 9_000, 11_000, 12_750]),
+  lot(19, 'Batel',         'green',   550_000, [ 52_000, 180_000, 360_000, 640_000, 820_000, 1_050_000]),
 
-  { index: 20, name: 'Estação Sul', kind: 'station', price: 800, rent: 100 },
+  { index: 20, name: 'Estação Sul', kind: 'station', price: 200_000, rent: 100_000 },
 
-  lot(21, 'Floripa',       'green',  1_280, [  280, 1_500, 4_500, 10_000, 12_000, 14_000]),
+  lot(21, 'Floripa',       'green',   620_000, [ 56_000, 200_000, 400_000, 700_000, 900_000, 1_150_000]),
 
-  { index: 22, name: 'IR', kind: 'tax', tax: 300 },
+  { index: 22, name: 'IR', kind: 'tax', tax: 200_000 },
 
   // ── Navy (premium) ───────────────────────────────────────────
-  lot(23, 'Moinhos',       'navy',   1_600, [  200, 1_000, 3_000, 7_500, 9_250, 11_000]),
+  lot(23, 'Moinhos',       'navy',    700_000, [ 60_000, 250_000, 480_000, 800_000, 1_000_000, 1_300_000]),
 ];
 
 if (BOARD.length !== BOARD_SIZE) {

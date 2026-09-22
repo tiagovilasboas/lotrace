@@ -131,15 +131,16 @@ export const MAX_PLAYERS = 6;
 export const BOARD_SIZE = 24;
 
 /**
- * Economy constants — rebalanced to create real tension on a 24-cell board.
+ * Economy constants — "millionaire" scale.
  *
- * Ratio STARTING_CASH / cheapest lot ≈ 12.5x  (same as Monopoly classic ~25x / 2 lots)
- * Ratio STARTING_CASH / most expensive ≈ 1.9x  (players feel risk after 2–3 turns)
- * GO_SALARY = 10 % of STARTING_CASH (Monopoly: 200/1500 ≈ 13%)
+ * STARTING_CASH = R$3.000.000 so the early game feels liquid and aggressive:
+ * a player can buy several assets without hitting a cash crunch right away.
+ * Property prices stay accessible (R$80k–R$700k) so the vibe is
+ * "race to build a portfolio", not "survive and manage cash".
  */
-export const GO_SALARY = 300;
-export const STARTING_CASH = 3_000;
-export const JAIL_FEE = 100;
+export const GO_SALARY = 120_000;
+export const STARTING_CASH = 3_000_000;
+export const JAIL_FEE = 100_000;
 export const JAIL_WAIT_TURNS = 2;
 export const JAIL_INDEX = 6;
 export const GO_TO_JAIL_INDEX = 18;
@@ -150,6 +151,6 @@ export const MAX_LOG = 20;
 
 /**
  * Station rents scale with number of stations owned by the same player.
- * 1 station = R$100, 4 stations = R$800 (8x multiplier, same as Monopoly).
+ * 1 station = R$100k, 4 stations = R$800k (8x multiplier, same as Monopoly).
  */
-export const STATION_RENTS = [100, 200, 400, 800] as const;
+export const STATION_RENTS = [100_000, 200_000, 400_000, 800_000] as const;
