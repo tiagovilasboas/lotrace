@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint src",
+    "test": "vitest run",
     "e2e:layout": "playwright test"
   },
   "dependencies": {
@@ -38,6 +39,7 @@
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0",
-    "vite-plugin-pwa": "^0.21.1"
+    "vite-plugin-pwa": "^0.21.1",
+    "vitest": "^3.2.7"
   }
 }
