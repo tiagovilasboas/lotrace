@@ -41,6 +41,7 @@ const messages = {
   buyHint: 'Comprar {name} por {price}?',
   buildHint: 'Pode construir ou encerrar o turno.',
   luck: 'Boa sorte!',
+  lastMove: 'Último movimento',
   brandSub: 'Brasil em jogo',
   playerCount: '{count} jogadores',
   cash: 'Caixa',

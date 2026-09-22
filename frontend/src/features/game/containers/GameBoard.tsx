@@ -40,75 +40,71 @@ export function GameBoard({
   const playerCount = Object.keys(G.players).length;
 
   return (
-    <div className="match-table grid min-h-dvh w-full grid-rows-[auto_auto_minmax(0,1fr)_auto]">
-
-      {/* ── Header bar ─────────────────────────────────────────── */}
+    <div
+      className="flex min-h-dvh w-full flex-col gap-2"
+      style={{ backgroundColor: 'var(--surface-table)', paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+    >
+      {/* ── Header — floating card ──────────────────────────────── */}
       <header
-        className="flex items-center gap-2 px-3 pb-1 pt-[max(0.4rem,env(safe-area-inset-top))]"
-        style={{ backgroundColor: 'var(--surface-hud-raised)' }}
+        className="mx-3 mt-[max(0.5rem,env(safe-area-inset-top))] flex items-center gap-2 rounded-2xl px-3 py-2.5"
+        style={{
+          backgroundColor: 'var(--surface-hud)',
+          border: '1px solid var(--border-hud)',
+          boxShadow: 'var(--shadow-card)',
+        }}
       >
-        {/* Logo */}
-        <div className="flex min-w-0 flex-1 items-center gap-2">
-          <span
-            className="flex size-8 shrink-0 items-center justify-center rounded-lg"
-            style={{
-              backgroundColor: 'color-mix(in srgb, var(--turn-highlight) 15%, transparent)',
-              color: 'var(--turn-highlight)',
-            }}
+        {/* Logo icon */}
+        <span
+          className="flex size-9 shrink-0 items-center justify-center rounded-xl"
+          style={{
+            backgroundColor: 'var(--surface-board)',
+            color: 'var(--lr-brass)',
+          }}
+        >
+          <Dices className="size-5" aria-hidden />
+        </span>
+
+        {/* Wordmark */}
+        <div className="min-w-0 flex-1">
+          <p
+            className="text-base font-black leading-none tracking-tight"
+            style={{ fontFamily: 'var(--font-brand)', color: 'var(--text-on-table)' }}
           >
-            <Dices className="size-4" aria-hidden />
-          </span>
-          <div className="min-w-0">
-            <p
-              className="text-lg font-black tracking-tight"
-              style={{ fontFamily: 'var(--font-brand)', color: 'var(--text-on-table)' }}
-            >
-              {t('appName')}
-            </p>
-            <p
-              className="text-[10px] font-semibold uppercase"
-              style={{
-                letterSpacing: '0.22em',
-                color: 'color-mix(in srgb, var(--turn-highlight) 80%, transparent)',
-              }}
-            >
-              {t('brandSub')}
-            </p>
-          </div>
+            {t('appName')}
+          </p>
+          <p
+            className="text-[9px] font-semibold uppercase leading-none"
+            style={{ letterSpacing: '0.18em', color: 'var(--turn-highlight)', marginTop: '2px' }}
+          >
+            {t('brandSub')}
+          </p>
         </div>
 
-        {/* Layout chrome (switch seat / leave) */}
+        {/* Layout chrome buttons */}
         {chrome ? (
-          <div
-            className="flex shrink-0 items-center gap-1"
-            style={{
-              ['--btn-border' as string]: 'var(--border-hud)',
-              ['--btn-bg' as string]: 'var(--action-secondary)',
-              ['--btn-text' as string]: 'var(--text-on-table)',
-            }}
-          >
-            <div className="flex items-center gap-1 [&_button]:h-8 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color:var(--border-hud)] [&_button]:bg-[color:var(--action-secondary)] [&_button]:px-2.5 [&_button]:text-xs [&_button]:text-[color:var(--text-on-table)]">
-              {chrome}
-            </div>
+          <div className="flex shrink-0 items-center gap-1 [&_button]:h-8 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color:var(--border-hud)] [&_button]:bg-[color:var(--surface-hud-raised)] [&_button]:px-2.5 [&_button]:text-xs [&_button]:text-[color:var(--text-on-table)]">
+            {chrome}
           </div>
         ) : null}
 
         <ThemeToggle
-          className="text-[color:var(--text-on-table-dim)] hover:bg-[color:var(--action-secondary)]"
+          className="shrink-0 text-[color:var(--text-on-table-dim)] hover:bg-[color:var(--action-secondary)]"
         />
       </header>
 
-      {/* ── Player cards ───────────────────────────────────────── */}
-      <PlayerList
-        players={Object.values(G.players)}
-        currentPlayer={ctx.currentPlayer}
-        viewerID={viewerID}
-      />
+      {/* ── Player cards ────────────────────────────────────────── */}
+      <div className="px-3">
+        <PlayerList
+          players={Object.values(G.players)}
+          currentPlayer={ctx.currentPlayer}
+          viewerID={viewerID}
+        />
+      </div>
 
-      {/* ── Board hero ─────────────────────────────────────────── */}
-      <div className="relative min-h-0">
-        <div className="absolute inset-0 flex items-center justify-center px-2">
-          <div className="aspect-square h-full max-h-full w-auto max-w-full">
+      {/* ── Board hero — fills remaining space ──────────────────── */}
+      <div className="min-h-0 flex-1 px-3">
+        <div className="flex h-full items-center justify-center">
+          <div className="aspect-square h-full max-h-full max-w-full" style={{ width: 'auto' }}>
             <BoardRing
               players={G.players}
               owners={G.owners}
@@ -122,14 +118,15 @@ export function GameBoard({
         </div>
       </div>
 
-      {/* ── Action bar ─────────────────────────────────────────── */}
-      <div className="px-3 pb-[max(0.85rem,env(safe-area-inset-bottom))] pt-2">
+      {/* ── Action bar ──────────────────────────────────────────── */}
+      <div className="px-3">
         {winner ? (
           <p
-            className="rounded-2xl px-4 py-3 text-center text-lg font-bold"
+            className="rounded-2xl px-4 py-4 text-center text-lg font-bold"
             style={{
               backgroundColor: 'var(--turn-highlight)',
               color: 'var(--turn-badge-text)',
+              fontFamily: 'var(--font-brand)',
             }}
           >
             {t('winner', { name: winner })}
@@ -145,7 +142,7 @@ export function GameBoard({
           />
         )}
         <p
-          className="mt-2 text-center text-[11px] font-medium"
+          className="mt-1.5 text-center text-[10px] font-medium"
           style={{ color: 'var(--text-on-table-dim)' }}
         >
           {t('playerCount', { count: String(playerCount) })}
@@ -154,7 +151,6 @@ export function GameBoard({
           <EventLog events={G.log} players={G.players} />
         </div>
       </div>
-
     </div>
   );
 }

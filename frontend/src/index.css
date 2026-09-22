@@ -242,16 +242,16 @@
     background-color: var(--action-primary-hover);
   }
 
-  /* ── Secondary button (Passar / skip) ── */
+  /* ── Secondary button (Passar / skip) — solid midnight ── */
   .match-secondary {
     border-radius: var(--radius-pill);
-    background-color: var(--action-secondary);
-    border: 1px solid var(--action-secondary-border);
-    color: var(--action-secondary-text);
+    background-color: var(--surface-hud-raised);
+    border: 1px solid var(--border-hud);
+    color: var(--text-on-table);
   }
 
   .match-secondary:hover:not(:disabled) {
-    background-color: color-mix(in srgb, var(--action-secondary) 120%, transparent);
+    background-color: var(--surface-hud);
   }
 
   /* ── Generic touch target ── */

@@ -1,6 +1,5 @@
 import { BOARD, type BoardCell, type PlayerState } from '@lotrace/shared';
 import type { ReactElement } from 'react';
-import { BOARD_COLOR } from '@/features/game/board/board-colors.ts';
 import { BoardCorner } from '@/features/game/board/BoardCorner.tsx';
 import { PropertyTile } from '@/features/game/board/PropertyTile.tsx';
 import { ringCellPosition, ringCellSide } from '@/features/game/board/ring-geometry.ts';
@@ -54,14 +53,19 @@ export function BoardRing({
   return (
     <div
       className={cn(
-        'aspect-square h-full w-full rounded-2xl p-[5px] shadow-[0_16px_36px_rgba(3,10,24,0.55)]',
+        'aspect-square h-full w-full rounded-[1.25rem]',
         className,
       )}
-      style={{ backgroundColor: 'var(--group-brown)' }}
+      style={{
+        /* Brass frame: outer glow + inset border */
+        backgroundColor: 'var(--lr-brass)',
+        padding: '7px',
+        boxShadow: '0 0 0 1px var(--lr-brass-dim), 0 20px 50px rgba(3,10,24,0.65), inset 0 1px 0 rgba(255,255,255,0.15)',
+      }}
     >
       <div
-        className="grid h-full w-full grid-cols-[minmax(0,1.28fr)_repeat(5,minmax(0,1fr))_minmax(0,1.28fr)] grid-rows-[minmax(0,1.28fr)_repeat(5,minmax(0,1fr))_minmax(0,1.28fr)] gap-px rounded-xl p-0.5"
-        style={{ backgroundColor: BOARD_COLOR.felt }}
+        className="grid h-full w-full grid-cols-[minmax(0,1.28fr)_repeat(5,minmax(0,1fr))_minmax(0,1.28fr)] grid-rows-[minmax(0,1.28fr)_repeat(5,minmax(0,1fr))_minmax(0,1.28fr)] gap-px rounded-[0.75rem] p-0.5"
+        style={{ backgroundColor: 'var(--surface-board)' }}
       >
         {BOARD.map((cell: BoardCell) => {
           const pos = ringCellPosition(cell.index);
