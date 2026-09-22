@@ -88,33 +88,40 @@
    Zero style={{}} in components (except player-specific colour via tokenCssVar). */
 @layer utilities {
 
-  /* ── Game screen shell ── */
+  /* ════════════════════════════════════════════════════════════
+   * GAME SCREEN LAYOUT
+   * Proportional to dvh — board is the hero, chrome is minimal.
+   * No fixed px heights. Everything scales with viewport.
+   * ════════════════════════════════════════════════════════════ */
+
+  /* ── Game screen shell — dot-grid bg ── */
   .game-screen {
     background-color: var(--surface-table);
     background-image: radial-gradient(circle, rgba(255,249,236,0.08) 1px, transparent 1px);
     background-size: 18px 18px;
   }
 
-  /* ── Header bar — 32px height, single line ── */
+  /* ── Header — floating card, compact ── */
   .game-header {
-    height: 32px;
     background-color: var(--surface-hud-raised);
     border: 1px solid var(--border-hud);
-    border-radius: 10px;
-    padding: 0 10px;
-    margin-top: env(safe-area-inset-top, 0px);
+    border-radius: 16px;
+    padding: 0 14px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
+    /* Height driven by content + padding — not fixed */
+    min-height: 52px;
+    margin-top: env(safe-area-inset-top, 0px);
   }
 
-  /* Logo icon — 22×22 felt+brass */
+  /* Logo icon — felt bg + brass border */
   .game-logo-icon {
-    width: 22px;
-    height: 22px;
-    border-radius: 5px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     background-color: var(--surface-board);
-    border: 1px solid var(--lr-brass);
+    border: 1.5px solid var(--lr-brass);
     color: var(--lr-ivory-light);
     display: flex;
     align-items: center;
@@ -124,11 +131,21 @@
 
   .game-logo-title {
     font-family: var(--font-brand);
-    font-size: 12px;
+    font-size: 18px;
     font-weight: 800;
     line-height: 1;
-    letter-spacing: 0.6px;
+    letter-spacing: 1px;
     color: var(--text-on-table);
+  }
+
+  .game-logo-sub {
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    line-height: 1;
+    color: var(--lr-signal);
+    margin-top: 3px;
   }
 
   /* ── Board outer frame (spec: 7px brass, r=24px) ── */
@@ -248,16 +265,16 @@
 
   .player-list::-webkit-scrollbar { display: none; }
 
-  /* ── Player cards carousel (spec: 148/168×66px, r=16px) ── */
+  /* ── Player cards (spec: 148×66 default / 168×66 active, r=16) ── */
   .player-card {
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
-    padding: 12px;
+    padding: 10px 12px;
     width: 148px;
-    height: 66px;
+    height: 72px;
     border-radius: 16px;
     background-color: var(--surface-hud);
     border: 1px solid var(--border-hud);
@@ -266,10 +283,10 @@
   }
 
   .player-card--active {
-    width: 168px;
+    width: 172px;
     background-color: var(--surface-hud-active);
     border: 2px solid var(--turn-highlight);
-    box-shadow: var(--glow-turn);
+    box-shadow: 0 0 0 0 var(--lr-signal), 0 0 16px rgba(85,216,255,0.22);
   }
 
   .player-badge-vez {
@@ -310,38 +327,37 @@
     margin-top: 2px;
   }
 
-  /* ── Turn panel — 32px prompt row + 32px CTA ── */
+  /* ── Turn panel — card arredondado, compacto ── */
   .turn-panel {
-    border-radius: 12px;
-    padding: 4px 8px;
+    border-radius: 20px;
+    padding: 12px 14px;
     background-color: var(--surface-hud);
     border: 1px solid var(--border-hud);
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 10px;
   }
 
-  /* Prompt row: avatar + text in 32px height */
+  /* Prompt row: avatar + text */
   .turn-prompt-row {
     display: flex;
     align-items: center;
-    gap: 8px;
-    height: 32px;
+    gap: 12px;
   }
 
-  /* Player avatar — 22px compact */
+  /* Player avatar circle */
   .turn-avatar {
-    width: 22px;
-    height: 22px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     flex-shrink: 0;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 1px 3px rgba(0,0,0,0.28);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 2px 6px rgba(0,0,0,0.35);
   }
 
   .turn-title {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
-    line-height: 1;
+    line-height: 1.2;
     color: var(--text-on-table);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -349,9 +365,10 @@
   }
 
   .turn-hint {
-    font-size: 10px;
-    line-height: 1;
+    font-size: 11px;
+    line-height: 1.3;
     color: var(--text-on-table-dim);
+    margin-top: 1px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -368,16 +385,16 @@
     color: var(--turn-badge-text);
   }
 
-  /* ── CTA buttons — 32px height ── */
+  /* ── CTA buttons ── */
   .match-cta {
     border-radius: 999px;
-    height: 32px;
+    height: 48px;
     background-color: var(--action-primary);
     color: var(--action-primary-text);
-    box-shadow: 0 4px 12px rgba(59,130,246,0.35);
+    box-shadow: 0 6px 16px rgba(59,130,246,0.40);
     font-weight: 800;
-    font-size: 11px;
-    letter-spacing: 1.5px;
+    font-size: 13px;
+    letter-spacing: 1.8px;
     text-transform: uppercase;
   }
 
@@ -385,11 +402,11 @@
 
   .match-secondary {
     border-radius: 999px;
-    height: 32px;
+    height: 48px;
     background-color: var(--lr-midnight);
-    border: 1px solid rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.14);
     color: var(--text-on-table);
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.04em;
   }
@@ -467,7 +484,6 @@
     transform: rotateX(30deg);
     transform-origin: center 60%;
     transform-style: preserve-3d;
-    /* Compensar o espaço visual perdido no topo pela inclinação */
     will-change: transform;
   }
 

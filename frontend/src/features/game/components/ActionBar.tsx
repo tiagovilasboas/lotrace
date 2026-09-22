@@ -67,7 +67,6 @@ function PrimaryCTA({ children, onClick, disabled, loading, ariaLabel }: {
     </Button>
   );
 }
-
 export function ActionBar({ G, stage, isActive, currentName, viewerID, moves }: ActionBarProps): ReactElement {
   const { rollBusy, beginRoll } = useRollBusy(stage, isActive);
   const viewer     = G.players[viewerID];

@@ -37,45 +37,59 @@ export function GameBoard({
   const playerCount = Object.keys(G.players).length;
 
   return (
-    /* game-screen: dot-grid bg. Tailwind: layout grid h-dvh */
+    /**
+     * Layout: flex-col h-dvh, padding uniforme 12px.
+     * Board row: flex-1 min-h-0 — pega tudo que sobrar.
+     * Sem px fixos em altura — proporcional ao viewport.
+     */
     <div
-      className="game-screen grid h-dvh w-full overflow-hidden"
-      style={{
-        gridTemplateRows: 'auto auto minmax(0,1fr) auto',
-        gap: '12px',
-        padding: '12px 12px 0 12px',
-      }}
+      className="game-screen flex h-dvh w-full flex-col overflow-hidden"
+      style={{ padding: '12px 12px 0 12px', gap: '10px' }}
     >
-      {/* Header — 32px, single line */}
-      <header className="game-header">
+      {/* ── Header — card arredondado com logo, subtítulo e toggle ── */}
+      <header className="game-header shrink-0">
+        {/* Logo icon: felt bg + brass border */}
         <span className="game-logo-icon">
-          <Dices className="size-3" aria-hidden />
+          <Dices className="size-4" aria-hidden />
         </span>
-        <p className="game-logo-title min-w-0 flex-1 truncate">{t('appName')}</p>
+
+        {/* Wordmark */}
+        <div className="min-w-0 flex-1">
+          <p className="game-logo-title">{t('appName')}</p>
+          <p className="game-logo-sub">{t('brandSub')}</p>
+        </div>
+
+        {/* Layout-mode chrome buttons */}
         {chrome ? (
-          <div className="flex shrink-0 items-center gap-1 [&_button]:h-6 [&_button]:rounded-md [&_button]:border [&_button]:border-[color:var(--border-hud)] [&_button]:bg-[color:var(--surface-hud)] [&_button]:px-1.5 [&_button]:text-[9px] [&_button]:text-[color:var(--text-on-table)]">
+          <div className="flex shrink-0 items-center gap-1 [&_button]:h-7 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color:var(--border-hud)] [&_button]:bg-[color:var(--surface-hud)] [&_button]:px-2 [&_button]:text-[10px] [&_button]:text-[color:var(--text-on-table)]">
             {chrome}
           </div>
         ) : null}
-        <ThemeToggle className="size-6 shrink-0 text-[color:var(--text-on-table-dim)]" />
+
+        <ThemeToggle className="size-8 shrink-0 text-[color:var(--text-on-table-dim)]" />
       </header>
 
-      {/* Player carousel */}
-      <PlayerList
-        players={Object.values(G.players)}
-        currentPlayer={ctx.currentPlayer}
-        viewerID={viewerID}
-      />
+      {/* ── Player carousel ── */}
+      <div className="shrink-0">
+        <PlayerList
+          players={Object.values(G.players)}
+          currentPlayer={ctx.currentPlayer}
+          viewerID={viewerID}
+        />
+      </div>
 
-      {/* Board hero — CSS 3D perspective + Three.js pieces overlay */}
-      <div className="board-3d-scene relative min-h-0">
-        <div className="absolute inset-0 flex items-end justify-center pb-2">
-          {/* Tilt wrapper — CSS perspective */}
+      {/* ── Board hero — fills all remaining height ── */}
+      <div className="board-3d-scene relative min-h-0 flex-1">
+        <div className="absolute inset-0 flex items-end justify-center">
+          {/*
+           * board-3d-tilt: CSS rotateX perspective.
+           * Height: 96% of the container — leaves a sliver for visual breathing.
+           * aspect-square: always square regardless of container shape.
+           */}
           <div
-            className="board-3d-tilt relative aspect-square max-h-full max-w-full"
-            style={{ height: '88%', width: 'auto' }}
+            className="board-3d-tilt relative aspect-square max-w-full"
+            style={{ height: '96%', width: 'auto' }}
           >
-            {/* DOM board — tiles, names, prices */}
             <BoardRing
               players={G.players}
               owners={G.owners}
@@ -83,14 +97,17 @@ export function GameBoard({
               pendingCell={G.pendingCell}
               center={<BoardCenter dice={G.lastDice} events={G.log} players={G.players} />}
             />
-            {/* Three.js pieces — cars, houses, hotels, trees (pointer-events:none) */}
+            {/* Three.js pieces overlay */}
             <PiecesCanvas G={G} />
           </div>
         </div>
       </div>
 
-      {/* Turn panel */}
-      <div style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
+      {/* ── Turn panel / footer ── */}
+      <div
+        className="shrink-0"
+        style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}
+      >
         {winner ? (
           <p className="winner-banner">{t('winner', { name: winner })}</p>
         ) : (
