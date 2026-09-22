@@ -4,12 +4,11 @@ import { colorGroupCanvas } from '@/features/game/board/iso/board-palette.ts';
 import type { BoardPalette } from '@/features/game/board/iso/board-palette.ts';
 import type { BoardAssetKey } from '@/features/game/board/iso/asset-images.ts';
 import { drawSkyline } from '@/features/game/board/iso/draw-skyline.ts';
+import { drawColouredBuilding, type BuildingShape } from '@/features/game/board/iso/draw-building.ts';
 import {
-  drawBuilding,
   drawCar,
   drawCornerAsset,
   drawTileIcon,
-  type BuildingKind,
 } from '@/features/game/board/iso/draw-pieces.ts';
 import {
   depthKey,
@@ -123,8 +122,8 @@ function tileIconAsset(cell: BoardCell): BoardAssetKey | null {
   }
 }
 
-/** House count → building kind (0 = none). */
-function buildingFor(houseCount: number): BuildingKind | null {
+/** House count → building shape (0 = none). */
+function buildingFor(houseCount: number): BuildingShape | null {
   if (houseCount <= 0) return null;
   if (isHotel(houseCount)) return 'hotel';
   return houseCount >= 3 ? 'tower' : 'house';
@@ -186,8 +185,9 @@ export function drawBoard(
 
     const houses = G ? (G.houses[cell.index] ?? 0) : 0;
     const kind = buildingFor(houses);
-    if (kind) {
-      drawBuilding(ctx, col, row, cfg, kind);
+    if (kind && cell.kind === 'property' && cell.colorGroup) {
+      // Coloured vector building tinted by the tile's neighbourhood group.
+      drawColouredBuilding(ctx, col, row, cfg, kind, colorGroupCanvas(cell.colorGroup, palette));
     } else {
       // No building: show the tile's own icon (station / tax) as the landmark.
       const icon = tileIconAsset(cell);

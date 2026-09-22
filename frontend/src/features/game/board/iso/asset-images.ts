@@ -3,8 +3,6 @@ import cornerGoUrl from '@lotrace/design-system/assets/pieces/corner-go.svg?url'
 import cornerJailUrl from '@lotrace/design-system/assets/pieces/corner-jail.svg?url';
 import cornerGotoJailUrl from '@lotrace/design-system/assets/pieces/corner-goto-jail.svg?url';
 import cornerParkUrl from '@lotrace/design-system/assets/pieces/corner-park.svg?url';
-import houseUrl from '@lotrace/design-system/assets/pieces/house.svg?url';
-import hotelUrl from '@lotrace/design-system/assets/pieces/hotel.svg?url';
 import stationUrl from '@lotrace/design-system/assets/pieces/station.svg?url';
 import taxUrl from '@lotrace/design-system/assets/pieces/tax.svg?url';
 import car0Url from '@lotrace/design-system/assets/tokens/car-seat-0-rose.svg?url';
@@ -30,8 +28,6 @@ export type BoardAssetKey =
   | 'corner-jail'
   | 'corner-goto-jail'
   | 'corner-park'
-  | 'house'
-  | 'hotel'
   | 'station'
   | 'tax';
 
@@ -40,8 +36,6 @@ const ASSET_URLS: Record<BoardAssetKey, string> = {
   'corner-jail': cornerJailUrl,
   'corner-goto-jail': cornerGotoJailUrl,
   'corner-park': cornerParkUrl,
-  house: houseUrl,
-  hotel: hotelUrl,
   station: stationUrl,
   tax: taxUrl,
 };

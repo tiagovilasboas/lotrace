@@ -2,42 +2,12 @@ import { assetImage, carImage, type BoardAssetKey } from '@/features/game/board/
 import { tileToScreen, type IsoConfig, type ScreenPoint } from '@/features/game/board/iso/iso-projection.ts';
 
 /**
- * Isometric building + car drawing (asset-first).
- *
- * Buildings, corner glyphs and cars are hand-drawn SVG assets from
- * `design-system/assets` (loaded via asset-images.ts). We draw each sprite with
- * `ctx.drawImage`, anchoring its baseline (the sprite's ground shadow) on the
- * tile centre and scaling it to the tile. The sprites are already isometric, so
- * no reprojection is needed — footprint is controlled by the draw width, and the
- * exaggerated visual height comes from the artwork itself (SimCity BuildIt feel).
+ * Isometric sprite drawing for the board: corner glyphs (go/jail/park),
+ * station/tax tile icons and player cars — all hand-drawn SVG assets from
+ * `design-system/assets` (loaded via asset-images.ts), drawn with `drawImage`
+ * anchored on the tile. Coloured buildings are vector-drawn in draw-building.ts
+ * so they can be tinted per neighbourhood, so they don't live here.
  */
-
-type BuildingKind = 'house' | 'tower' | 'hotel';
-
-/** Which SVG asset renders each building kind. */
-const BUILDING_ASSET: Record<BuildingKind, BoardAssetKey> = {
-  house: 'house',
-  tower: 'hotel',
-  hotel: 'hotel',
-};
-
-/**
- * Draw width as a fraction of the iso tile width. The taller assets (hotel) are
- * drawn a touch wider so wealth reads bigger, but footprint stays controlled so
- * they don't swamp the tile behind. The car stays the smallest movable marker.
- */
-const BUILDING_WIDTH: Record<BuildingKind, number> = {
-  house: 0.92,
-  tower: 1.02,
-  hotel: 1.12,
-};
-
-/** Vertical scale multiplier per kind — exaggerate height for towers/hotels. */
-const BUILDING_STRETCH: Record<BuildingKind, number> = {
-  house: 1.0,
-  tower: 1.18,
-  hotel: 1.3,
-};
 
 /** The car sprite drawn width as a fraction of the iso tile width (a marker). */
 const CAR_WIDTH = 0.4;
@@ -65,26 +35,6 @@ function drawSprite(
   const x = ground.x - drawW / 2;
   const y = ground.y - drawH * BASELINE;
   ctx.drawImage(img, x, y, drawW, drawH);
-}
-
-/**
- * Draw one iso building on a cell using its SVG asset. Skipped silently if the
- * asset is not loaded yet (picked up on the next render tick).
- */
-export function drawBuilding(
-  ctx: CanvasRenderingContext2D,
-  col: number,
-  row: number,
-  cfg: IsoConfig,
-  kind: BuildingKind,
-): void {
-  const img = assetImage(BUILDING_ASSET[kind]);
-  if (!img) return;
-  const c = tileToScreen(col, row, cfg);
-  // Seat the building toward the BACK of the tile so its body sits behind the
-  // DOM label (anchored on the tile's front edge), never covering the name.
-  const ground = { x: c.x, y: c.y - cfg.tileH * 0.16 };
-  drawSprite(ctx, img, ground, cfg.tileW * BUILDING_WIDTH[kind], BUILDING_STRETCH[kind]);
 }
 
 /**
@@ -141,5 +91,4 @@ export function drawCar(
   drawSprite(ctx, img, ground, cfg.tileW * CAR_WIDTH, 1.0);
 }
 
-export type { BuildingKind };
-export { BUILDING_WIDTH };
+export { CAR_WIDTH };
