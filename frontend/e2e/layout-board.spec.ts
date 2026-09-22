@@ -12,17 +12,18 @@ const SCREENSHOT = 'e2e/__screenshots__/layout-board.png';
 test('captures the LAYOUT board for design review', async ({ page }) => {
   await page.goto('/sala/LAYOUT');
 
-  // Board frame must mount.
-  await page.waitForSelector('.board-square', { timeout: 30_000 });
+  // The board (iso canvas by default) area must mount.
+  await page.waitForSelector('.board-area', { timeout: 30_000 });
+  await page.waitForSelector('[data-testid="board-canvas"]', { timeout: 15_000 });
 
-  // All 24 ring tiles must render (proves the ring content is there).
+  // Tile labels (DOM overlay) prove the board content rendered.
   await expect
-    .poll(async () => page.locator('.board-tile').count(), { timeout: 15_000 })
+    .poll(async () => page.locator('.board-tile-label').count(), { timeout: 15_000 })
     .toBeGreaterThanOrEqual(20);
 
-  // Wait for web fonts and let the 3D canvas paint a few frames.
+  // Wait for web fonts and let the canvas paint a few frames.
   await page.evaluate(() => document.fonts.ready);
-  await page.waitForTimeout(1_500);
+  await page.waitForTimeout(1_200);
 
   await page.screenshot({ path: SCREENSHOT, fullPage: false });
 });

@@ -14,9 +14,9 @@ const SHOTS = 'e2e/__screenshots__';
 
 async function openBoard(page: import('@playwright/test').Page): Promise<void> {
   await page.goto('/sala/LAYOUT');
-  await page.waitForSelector('.board-square', { timeout: 30_000 });
+  await page.waitForSelector('[data-testid="board-canvas"]', { timeout: 30_000 });
   await expect
-    .poll(async () => page.locator('.board-tile').count(), { timeout: 15_000 })
+    .poll(async () => page.locator('.board-tile-label').count(), { timeout: 15_000 })
     .toBeGreaterThanOrEqual(20);
   await page.evaluate(() => document.fonts.ready);
 }

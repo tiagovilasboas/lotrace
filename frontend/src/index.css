@@ -807,6 +807,51 @@
     font-variant-numeric: tabular-nums;
   }
 
+  /* Centre HUD floated over the middle of the iso city — compact, and small
+   * enough not to cover the surrounding tiles/labels. */
+  .board-canvas-center {
+    position: absolute;
+    left: 50%;
+    top: 52%;
+    transform: translate(-50%, -50%) scale(0.8);
+    transform-origin: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    pointer-events: none;
+  }
+  .board-canvas-lastmove {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    background-color: rgba(1,31,27,0.72);
+    backdrop-filter: blur(4px);
+    max-width: 60vw;
+  }
+  .board-canvas-lastmove-label {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lr-ivory-light);
+    opacity: 0.85;
+  }
+  .board-canvas-lastmove-text {
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--lr-ivory-light);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 58vw;
+  }
+
   .board-square {
     height: 100%;
     aspect-ratio: 1 / 1;

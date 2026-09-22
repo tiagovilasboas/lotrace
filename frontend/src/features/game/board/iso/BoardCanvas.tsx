@@ -1,6 +1,7 @@
 import type { ImobiliarioState } from '@lotrace/shared';
 import { useEffect, useRef, type ReactElement } from 'react';
 import { readBoardPalette } from '@/features/game/board/iso/board-palette.ts';
+import { BoardCanvasCenter } from '@/features/game/board/iso/BoardCanvasCenter.tsx';
 import { BoardTextOverlay } from '@/features/game/board/iso/BoardTextOverlay.tsx';
 import { drawBoard } from '@/features/game/board/iso/draw-board.ts';
 import { useIsoLayout } from '@/features/game/board/iso/use-iso-layout.ts';
@@ -41,6 +42,7 @@ export function BoardCanvas({ G }: BoardCanvasProps): ReactElement {
     <div ref={wrapRef} className="board-canvas-wrap" data-testid="board-canvas">
       <canvas ref={canvasRef} className="board-canvas" aria-hidden />
       {layout ? <BoardTextOverlay layout={layout} /> : null}
+      <BoardCanvasCenter dice={G.lastDice} events={G.log} players={G.players} />
     </div>
   );
 }

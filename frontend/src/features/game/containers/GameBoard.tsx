@@ -38,10 +38,10 @@ export function GameBoard({
   const playerCount = Object.keys(G.players).length;
   const playerList  = Object.values(G.players);
 
-  /* Board renderer flag: ?render=canvas opts into the WIP iso canvas board.
-   * Default stays the shipped CSS ring until the canvas phase is complete. */
+  /* Board renderer: the iso canvas city is now the default. ?render=ring keeps
+   * the legacy CSS ring available for comparison/regression. */
   const [searchParams] = useSearchParams();
-  const useCanvas = searchParams.get('render') === 'canvas';
+  const useCanvas = searchParams.get('render') !== 'ring';
 
   /* Hotseat only: follow the active player automatically. No-op online
    * (SeatFollow is null there). Reports on every turn change; the handler

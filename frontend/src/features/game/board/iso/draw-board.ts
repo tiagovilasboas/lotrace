@@ -87,6 +87,56 @@ function drawAccent(
   ctx.fill();
 }
 
+/** A simple white glyph on a corner tile so it reads at a glance. */
+function drawCornerGlyph(
+  ctx: CanvasRenderingContext2D,
+  cell: BoardCell,
+  col: number,
+  row: number,
+  cfg: IsoConfig,
+): void {
+  const c = tileToScreen(col, row, cfg);
+  const s = cfg.tileH * 0.5;
+  ctx.save();
+  ctx.strokeStyle = 'rgba(255,255,255,0.92)';
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  ctx.lineWidth = Math.max(1.5, cfg.tileH * 0.09);
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  if (cell.kind === 'go') {
+    // Arrow pointing right-down (into the track).
+    ctx.beginPath();
+    ctx.moveTo(c.x - s * 0.5, c.y);
+    ctx.lineTo(c.x + s * 0.5, c.y);
+    ctx.moveTo(c.x + s * 0.1, c.y - s * 0.35);
+    ctx.lineTo(c.x + s * 0.5, c.y);
+    ctx.lineTo(c.x + s * 0.1, c.y + s * 0.35);
+    ctx.stroke();
+  } else if (cell.kind === 'jail' || cell.kind === 'goto-jail') {
+    // Prison bars.
+    for (let i = -1; i <= 1; i += 1) {
+      ctx.beginPath();
+      ctx.moveTo(c.x + i * s * 0.3, c.y - s * 0.4);
+      ctx.lineTo(c.x + i * s * 0.3, c.y + s * 0.4);
+      ctx.stroke();
+    }
+  } else if (cell.kind === 'park') {
+    // Tree: broad canopy (two blobs) + short trunk — reads as a tree, not a pin.
+    ctx.beginPath();
+    ctx.arc(c.x - s * 0.18, c.y - s * 0.05, s * 0.3, 0, Math.PI * 2);
+    ctx.arc(c.x + s * 0.18, c.y - s * 0.05, s * 0.3, 0, Math.PI * 2);
+    ctx.arc(c.x, c.y - s * 0.28, s * 0.28, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.lineWidth = Math.max(2, cfg.tileH * 0.13);
+    ctx.beginPath();
+    ctx.moveTo(c.x, c.y + s * 0.05);
+    ctx.lineTo(c.x, c.y + s * 0.38);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
 /** House count → building kind (0 = none). */
 function buildingFor(houseCount: number): BuildingKind | null {
   if (houseCount <= 0) return null;
@@ -139,6 +189,8 @@ export function drawBoard(
 
     if (cell.kind === 'property' && cell.colorGroup) {
       drawAccent(ctx, col, row, cfg, colorGroupCanvas(cell.colorGroup, palette));
+    } else if (cell.kind === 'go' || cell.kind === 'jail' || cell.kind === 'goto-jail' || cell.kind === 'park') {
+      drawCornerGlyph(ctx, cell, col, row, cfg);
     }
 
     if (G) {
