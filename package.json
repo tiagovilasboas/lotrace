@@ -17,7 +17,8 @@
     "lint": "npm run lint -w @lotrace/shared && npm run lint -w @lotrace/backend && npm run lint -w @lotrace/frontend",
     "test": "npm run test -w @lotrace/shared && npm run test -w @lotrace/backend",
     "build": "npm run build -w @lotrace/frontend",
-    "build:backend": "npm run typecheck -w @lotrace/backend"
+    "build:backend": "npm run typecheck -w @lotrace/backend",
+    "e2e:layout": "npm run e2e:layout -w @lotrace/frontend"
   },
   "devDependencies": {
     "concurrently": "^10.0.5"

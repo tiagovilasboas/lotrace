@@ -54,7 +54,7 @@ export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactE
           className="text-center font-black leading-none tracking-tight"
           style={{
             fontFamily: 'var(--font-brand)',
-            fontSize: '12cqw',
+            fontSize: '8cqw',
             color: 'var(--lr-ivory-light)',
             letterSpacing: '1px',
             textShadow: '0 2px 14px rgba(0,0,0,0.45)',
@@ -67,7 +67,7 @@ export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactE
         <p
           className="text-center font-bold uppercase"
           style={{
-            fontSize: '2.8cqw',
+            fontSize: '2.4cqw',
             letterSpacing: '0.22em',
             color: 'var(--lr-brass)',
           }}
@@ -76,7 +76,7 @@ export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactE
         </p>
 
         {/* Dice — scale atomically with the board via .die-face cqmin */}
-        <div style={{ margin: '0.6cqw 0' }}>
+        <div style={{ margin: '0.4cqw 0' }}>
           <DiceDisplay dice={dice} />
         </div>
 
@@ -94,9 +94,10 @@ export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactE
             <span
               className="font-bold uppercase"
               style={{
-                fontSize: '1.8cqw',
+                fontSize: '1.6cqw',
                 letterSpacing: '0.2em',
-                color: 'var(--lr-brass)',
+                color: 'var(--lr-ivory-light)',
+                opacity: 0.9,
               }}
             >
               {t('lastMove')}
@@ -104,7 +105,7 @@ export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactE
             <span
               className="truncate text-center font-semibold leading-snug"
               style={{
-                fontSize: '2.6cqw',
+                fontSize: '2.2cqw',
                 color: 'var(--lr-ivory-light)',
               }}
             >
@@ -114,7 +115,7 @@ export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactE
         ) : (
           <p
             style={{
-              fontSize: '2.6cqw',
+              fontSize: '2.2cqw',
               color: 'var(--text-board-label)',
             }}
           >

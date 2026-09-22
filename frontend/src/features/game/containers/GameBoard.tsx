@@ -7,7 +7,6 @@ import { BoardCenter } from '@/features/game/board/BoardCenter.tsx';
 import { BoardRing } from '@/features/game/board/BoardRing.tsx';
 import { ActionBar } from '@/features/game/components/ActionBar.tsx';
 import { EventLog } from '@/features/game/components/EventLog.tsx';
-import { PiecesCanvas } from '@/features/game/pieces3d/PiecesCanvas.tsx';
 import { useMatchChrome } from '@/features/game/lib/match-chrome.ts';
 import { t } from '@/lib/i18n.ts';
 
@@ -67,23 +66,19 @@ export function GameBoard({
       />
 
       {/* ── Board fills everything, stays square, max width & height ──
-       * The CSS board (tiles, names, prices) is the flat felt.
-       * PiecesCanvas is an overlay of real 3D pieces (cars, houses, hotels,
-       * stations, corner landmarks) sized to the same board square. */}
-      <div className="board-3d-scene board-area">
-        <div className="board-stage">
-          <div className="board-square">
-            <BoardRing
-              players={G.players}
-              owners={G.owners}
-              houses={G.houses}
-              pendingCell={G.pendingCell}
-              center={
-                <BoardCenter dice={G.lastDice} events={G.log} players={G.players} />
-              }
-            />
-          </div>
-          <PiecesCanvas G={G} />
+       * Flat CSS felt (tiles, names, prices) tilted via rotateX. Pieces are
+       * 2D SVGs living inside the tiles (cars, houses/hotels, icons). */}
+      <div className="board-area">
+        <div className="board-square">
+          <BoardRing
+            players={G.players}
+            owners={G.owners}
+            houses={G.houses}
+            pendingCell={G.pendingCell}
+            center={
+              <BoardCenter dice={G.lastDice} events={G.log} players={G.players} />
+            }
+          />
         </div>
       </div>
 

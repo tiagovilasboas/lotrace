@@ -17,12 +17,17 @@ export function HouseMarkers({ count, side }: HouseMarkersProps): ReactElement |
   }
 
   const houses = isHotel(level) ? 0 : Math.min(MAX_HOUSES, level);
+  /* Dock the markers over the colour accent band (same side as HueStripe),
+   * never over the name/price. Accent side per ring side:
+   *   south=top · north=bottom · west=right · east=left */
   const dock =
     side === 'west'
       ? 'inset-y-0 right-0.5 flex-col'
       : side === 'east'
         ? 'inset-y-0 left-0.5 flex-col'
-        : 'inset-x-0 top-0.5 flex-row';
+        : side === 'north'
+          ? 'inset-x-0 bottom-0.5 flex-row'
+          : 'inset-x-0 top-0.5 flex-row';
 
   return (
     <span
@@ -39,14 +44,14 @@ export function HouseMarkers({ count, side }: HouseMarkersProps): ReactElement |
       {isHotel(level) ? (
         <HotelIso
           className="drop-shadow-md"
-          style={{ width: 'max(1.75rem, 30cqmin)', height: 'max(1.75rem, 30cqmin)' }}
+          style={{ width: 'max(1.6rem, 32cqmin)', height: 'max(1.6rem, 32cqmin)' }}
         />
       ) : (
         Array.from({ length: houses }, (_, index) => (
           <HouseIso
             key={index}
             className="drop-shadow-sm"
-            style={{ width: 'max(1.15rem, 20cqmin)', height: 'max(1.15rem, 20cqmin)' }}
+            style={{ width: 'max(1.05rem, 21cqmin)', height: 'max(1.05rem, 21cqmin)' }}
           />
         ))
       )}

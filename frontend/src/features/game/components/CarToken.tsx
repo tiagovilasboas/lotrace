@@ -81,7 +81,7 @@ export function CarToken({ playerID, size = 'board', side }: CarTokenProps): Rea
   const isLobby = size === 'lobby';
   const boardStyle = isLobby
     ? undefined
-    : { width: 'max(2rem, 50cqmin)', height: 'max(3.15rem, 78cqmin)' };
+    : { width: 'max(1.15rem, 28cqmin)', height: 'max(1.8rem, 44cqmin)' };
   return (
     <svg
       viewBox="0 0 28 44"

@@ -31,6 +31,8 @@ function PlayerChip({
   isTurn: boolean;
   isViewer: boolean;
 }): ReactElement {
+  /* In a 32px bar with up to 6 players, only the viewer shows a name.
+   * The others are identified by their colour dot + balance. */
   return (
     <span
       className="topbar-chip"
@@ -40,19 +42,15 @@ function PlayerChip({
         opacity: player.bankrupt ? 0.4 : 1,
       }}
     >
-      {/* Colour dot */}
+      {/* Colour dot identifies the player (viewer dot is ringed) */}
       <span
         className="topbar-chip-dot"
-        style={{ backgroundColor: tokenCssVar(player.id) }}
+        style={{
+          backgroundColor: tokenCssVar(player.id),
+          boxShadow: isViewer ? '0 0 0 2px var(--lr-signal)' : undefined,
+        }}
       />
-      {/* Name */}
-      <span
-        className="topbar-chip-name"
-        style={{ color: isViewer ? 'var(--text-on-table)' : 'var(--text-on-table-dim)' }}
-      >
-        {isViewer ? t('you') : player.nickname}
-      </span>
-      {/* Balance */}
+      {/* Balance — colour dot already says who it is */}
       <span className="topbar-chip-balance">
         {player.bankrupt ? t('bankrupt') : formatCashCompact(player.cash)}
       </span>
@@ -69,16 +67,19 @@ export function TopBar({ players, currentPlayer, viewerID, chrome }: TopBarProps
       </span>
       <span className="topbar-title">{t('appName')}</span>
 
-      {/* Player chips — flex-1 so they take remaining space */}
+      {/* Only the viewer's balance lives in the 32px bar — opponents' money
+       * belongs to a dedicated player panel, not squeezed here. */}
       <div className="topbar-chips">
-        {players.map((player) => (
-          <PlayerChip
-            key={player.id}
-            player={player}
-            isTurn={player.id === currentPlayer}
-            isViewer={player.id === viewerID}
-          />
-        ))}
+        {players
+          .filter((player) => player.id === viewerID)
+          .map((player) => (
+            <PlayerChip
+              key={player.id}
+              player={player}
+              isTurn={player.id === currentPlayer}
+              isViewer
+            />
+          ))}
       </div>
 
       {/* Layout-mode chrome */}

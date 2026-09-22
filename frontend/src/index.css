@@ -140,7 +140,11 @@
     letter-spacing: 0.5px;
     color: var(--text-on-table);
     white-space: nowrap;
-    flex-shrink: 0;
+    /* Least essential item (logo already brands) — yields space first. */
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* Player chips row — takes all space between title and toggle */
@@ -154,41 +158,30 @@
     min-width: 0;
   }
 
-  /* Individual chip — 24px tall pill */
+  /* Individual chip — 24px tall pill. Does NOT shrink below its content,
+   * so the balance ("R$ 3M") never clips. Dot + compact balance only. */
   .topbar-chip {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
     height: 24px;
-    padding: 0 6px;
+    padding: 0 7px;
     border-radius: 6px;
     background-color: var(--surface-hud);
     border-style: solid;
-    flex-shrink: 1;
-    min-width: 0;
-    overflow: hidden;
+    flex-shrink: 0;
   }
 
   .topbar-chip-dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
   }
 
-  .topbar-chip-name {
-    font-size: 10px;
-    font-weight: 700;
-    line-height: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 60px;
-  }
-
   .topbar-chip-balance {
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
     line-height: 1;
     color: var(--text-on-table);
@@ -459,9 +452,9 @@
     padding: 0 2cqmin;
   }
 
-  /* Accent band — 16% of the tile (JSON band=17px on 106px cell) */
-  .tile-accent--h { height: 16cqh; width: 100%; }
-  .tile-accent--v { width: 16cqw; height: 100%; }
+  /* Accent band — thick colour stripe like the concept (~22% of the tile) */
+  .tile-accent--h { height: 22cqh; width: 100%; }
+  .tile-accent--v { width: 22cqw; height: 100%; }
 
   /* Tile name — pure cqmin, scales with tile → board (atomic) */
   .tile-name-line {
@@ -470,8 +463,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 17cqmin;
-    font-weight: 700;
+    font-size: 18cqmin;
+    font-weight: 800;
     line-height: 1.12;
     letter-spacing: -0.01em;
     color: var(--board-ink);
@@ -484,7 +477,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 14cqmin;
+    font-size: 12cqmin;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     line-height: 1;
@@ -681,10 +674,10 @@
   /* ── Die faces ── */
   .die-face {
     display: grid;
-    width: 13cqmin;
-    height: 13cqmin;
-    min-width: 2.6rem;
-    min-height: 2.6rem;
+    width: 10cqmin;
+    height: 10cqmin;
+    min-width: 2rem;
+    min-height: 2rem;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 6%;
@@ -751,43 +744,23 @@
    * `cqmin` relative to THIS board — so when the board grows, all parts
    * grow proportionally. No viewport units inside the board.
    */
-  /* Stage: square box that fits both axes; positioning context for the
-   * 3D pieces overlay. The felt (.board-square) and the canvas share it. */
-  .board-stage {
-    position: relative;
+  .board-square {
     height: 100%;
     aspect-ratio: 1 / 1;
     max-width: 100%;
-  }
-
-  .board-square {
-    height: 100%;
-    width: 100%;
     /* Container-query context for everything inside the board */
     container-type: size;
     container-name: board;
-    /* CSS 3D tilt */
+    /* CSS 3D tilt — the only "3D" on the board */
     transform: rotateX(18deg);
     transform-origin: center 55%;
     transform-style: preserve-3d;
     will-change: transform;
   }
 
-  /* 3D pieces overlay — mirrors the board tilt so top-down pieces lean
-   * with the felt and stay aligned to the tile grid. */
-  .pieces-overlay {
-    transform: rotateX(18deg);
-    transform-origin: center 55%;
-    will-change: transform;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .pieces-overlay { transform: none; }
-  }
-
   /* Portrait / narrow: width is the limiting axis */
   @media (max-aspect-ratio: 1/1) {
-    .board-stage {
+    .board-square {
       width: 100%;
       height: auto;
     }
