@@ -10,7 +10,8 @@
 
 const CORNER = 1.28;
 const INNER  = 1.0;
-const TOTAL  = 2 * CORNER + 5 * INNER; // 7.56
+/** Board total size in world units — exported for camera zoom calculation */
+export const TOTAL = 2 * CORNER + 5 * INNER; // 7.56
 
 /** Centre offset so board is centred at world origin */
 const HALF = TOTAL / 2;
