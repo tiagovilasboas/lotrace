@@ -34,13 +34,14 @@ export function PlayerList({
           <li
             key={player.id}
             className={cn(
-              'flex shrink-0 flex-col justify-between overflow-hidden rounded-2xl p-3',
+              'flex shrink-0 flex-col justify-between overflow-hidden p-3',
               player.bankrupt && 'opacity-40',
             )}
             style={{
-              /* active card wider: 168px vs 148px */
+              /* Spec: card width 148px default / 168px active, height 66px, radius 16px */
               width: isTurn ? '168px' : '148px',
               height: '66px',
+              borderRadius: '16px',
               scrollSnapAlign: 'start',
               backgroundColor: isTurn
                 ? 'var(--surface-hud-active)'

@@ -82,7 +82,7 @@ export function BoardRing({
             gridTemplateRows:
               'minmax(0,1.28fr) repeat(5,minmax(0,1fr)) minmax(0,1.28fr)',
             backgroundColor: 'var(--surface-board)',
-            borderRadius: '0.5rem',
+            borderRadius: 'calc(var(--radius-board-inner) - 8px)',
             overflow: 'hidden',
           }}
         >

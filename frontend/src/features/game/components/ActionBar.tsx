@@ -148,10 +148,12 @@ export function ActionBar({
      * On mobile: padding=12, primaryActionHeight=48, safeArea handled by parent.
      */
     <div
-      className="flex flex-col gap-2 rounded-[1.375rem] p-3"
+      className="flex flex-col gap-2 p-3"
       style={{
+        /* Spec: turnPanel borderRadius=26px, bg=chromeLight, padding mobile=12px */
         backgroundColor: 'var(--surface-hud)',
         border: '1px solid var(--border-hud)',
+        borderRadius: '26px',
       }}
     >
       <PromptRow playerID={viewerID} title={title} hint={hint} />

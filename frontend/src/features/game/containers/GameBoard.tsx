@@ -40,41 +40,45 @@ export function GameBoard({
       className="relative grid h-dvh w-full overflow-hidden"
       style={{
         backgroundColor: 'var(--surface-table)',
-        /* dot-grid texture from spec */
         backgroundImage:
           'radial-gradient(circle, rgba(255,249,236,0.08) 1px, transparent 1px)',
         backgroundSize: '18px 18px',
+        /* Spec: sectionGap=16 desktop / gap=12 mobile */
         gridTemplateRows: 'auto auto minmax(0,1fr) auto',
+        gap: '12px',
+        padding: '12px 12px 0 12px',
       }}
     >
       {/* ── Header ──────────────────────────────────────────────── */}
       <header
-        className="mx-3 mt-[max(0.4rem,env(safe-area-inset-top))] flex h-16 items-center gap-2 rounded-[1.125rem] px-3"
+        className="flex items-center gap-2 rounded-[18px] px-4"
         style={{
+          /* Spec: height=64, borderRadius=18, bg=backgroundSecondary, border=chromeBorder */
+          height: '64px',
           backgroundColor: 'var(--surface-hud-raised)',
           border: '1px solid var(--border-hud)',
+          marginTop: 'env(safe-area-inset-top, 0px)',
         }}
       >
-        {/* Logo icon — felt square with brass dice */}
+        {/* Logo icon — felt bg, brass border, ivory dice */}
         <span
-          className="flex size-[2.625rem] shrink-0 items-center justify-center rounded-xl"
+          className="flex shrink-0 items-center justify-center rounded-xl"
           style={{
+            width: '42px',
+            height: '42px',
             backgroundColor: 'var(--surface-board)',
             border: '1px solid var(--lr-brass)',
           }}
         >
-          <Dices
-            className="size-5"
-            aria-hidden
-            style={{ color: 'var(--lr-ivory-light)' }}
-          />
+          <Dices className="size-5" aria-hidden style={{ color: 'var(--lr-ivory-light)' }} />
         </span>
 
         <div className="min-w-0 flex-1">
           <p
-            className="text-lg font-black leading-none tracking-tight"
+            className="font-black leading-none"
             style={{
               fontFamily: 'var(--font-brand)',
+              fontSize: '18px',
               color: 'var(--text-on-table)',
               letterSpacing: '1.1px',
             }}
@@ -82,11 +86,12 @@ export function GameBoard({
             {t('appName')}
           </p>
           <p
-            className="text-[7px] font-bold uppercase leading-none"
+            className="font-bold uppercase leading-none"
             style={{
+              fontSize: '7px',
               letterSpacing: '1.5px',
               color: 'var(--text-on-table-dim)',
-              marginTop: '2px',
+              marginTop: '3px',
             }}
           >
             {t('brandSub')}
@@ -103,7 +108,7 @@ export function GameBoard({
       </header>
 
       {/* ── Player carousel ─────────────────────────────────────── */}
-      <div className="px-3 pt-3">
+      <div>
         <PlayerList
           players={Object.values(G.players)}
           currentPlayer={ctx.currentPlayer}
@@ -112,8 +117,8 @@ export function GameBoard({
       </div>
 
       {/* ── Board hero ──────────────────────────────────────────── */}
-      <div className="relative min-h-0 px-3 py-2">
-        <div className="absolute inset-x-3 bottom-2 top-0 flex items-center justify-center">
+      <div className="relative min-h-0">
+        <div className="absolute inset-0 flex items-center justify-center">
           <div
             className="aspect-square h-full max-h-full max-w-full"
             style={{ width: 'auto' }}
@@ -131,17 +136,18 @@ export function GameBoard({
         </div>
       </div>
 
-      {/* ── Turn panel — sticky bottom ───────────────────────────── */}
+      {/* ── Turn panel ──────────────────────────────────────────── */}
       <div
-        className="px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2"
+        style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}
       >
         {winner ? (
           <p
-            className="rounded-[1.25rem] px-4 py-3 text-center text-base font-bold"
+            className="px-4 py-3 text-center text-base font-bold"
             style={{
               backgroundColor: 'var(--turn-highlight)',
               color: 'var(--turn-badge-text)',
               fontFamily: 'var(--font-brand)',
+              borderRadius: '26px',
             }}
           >
             {t('winner', { name: winner })}
@@ -157,8 +163,8 @@ export function GameBoard({
           />
         )}
         <p
-          className="mt-1 text-center text-[10px]"
-          style={{ color: 'var(--text-on-table-dim)' }}
+          className="mt-1.5 text-center"
+          style={{ fontSize: '10px', color: 'var(--text-on-table-dim)' }}
         >
           {t('playerCount', { count: String(playerCount) })}
         </p>
