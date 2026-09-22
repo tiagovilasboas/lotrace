@@ -772,6 +772,41 @@
     display: block;
   }
 
+  /* DOM text overlay on the iso canvas — absolutely placed at tile centres. */
+  .board-text-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .board-tile-label {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    max-width: 4.5rem;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.55);
+  }
+  .board-tile-label-name {
+    font-size: 9px;
+    font-weight: 800;
+    line-height: 1.05;
+    color: var(--lr-ivory-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 4.5rem;
+  }
+  .board-tile-label-price {
+    font-size: 8px;
+    font-weight: 600;
+    line-height: 1;
+    color: rgba(244,232,201,0.75);
+    font-variant-numeric: tabular-nums;
+  }
+
   .board-square {
     height: 100%;
     aspect-ratio: 1 / 1;
