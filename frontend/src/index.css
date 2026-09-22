@@ -63,6 +63,7 @@
   --color-board-felt:         var(--board-felt);
   --color-board-ink:          var(--board-ink);
   --color-board-frame:        var(--board-frame);
+  --tile-accent-h:            var(--tile-accent-height);
 
   /* ── Groups ── */
   --color-group-brown:  var(--group-brown);

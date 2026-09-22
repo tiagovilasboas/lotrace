@@ -1,47 +1,77 @@
 /**
  * LotRace Design Tokens — Primitives
- * Raw values. Never reference these directly in components — use semantic or game tokens.
- * Source: lotrace-design-system · Palette from new-design/lotrace-ui-system-concept
+ * Raw values only. Never reference these in components — use semantic or game tokens.
+ * Source: new-design/tabuleiro/lotrace-mobile-redesign.json
  */
 
 :root {
-  /* ─── Brand palette ─────────────────────────────────────────── */
-  --lr-midnight:     #061221;   /* darkest table surface            */
-  --lr-midnight-80:  #0d1e30;   /* slightly lighter navy layer      */
-  --lr-midnight-60:  #0d304b;   /* HUD card surface — spec #0D304B  */
-  --lr-felt:         #0e473a;   /* board felt base                  */
-  --lr-felt-dark:    #0b3a28;   /* city silhouette / deep shadow    */
-  --lr-felt-light:   #1a5c4a;   /* felt highlight                   */
-  --lr-ivory:        #f4e6c4;   /* tile background / paper — spec #F4E6C4 */
-  --lr-ivory-dim:    #e8d8b0;   /* tile border / subtle divider     */
-  --lr-brass:        #e4b44a;   /* board frame / accent gold        */
-  --lr-brass-dim:    #d4a840;   /* brass shadow                     */
-  --lr-brass-glow:   #d4b45a;   /* dashed path / city accent        */
-  --lr-action:       #3b82f6;   /* primary CTA — LANÇAR DADOS       */
-  --lr-action-hover: #2563eb;   /* CTA hover                        */
-  --lr-signal:       #57d8ff;   /* turn highlight — active player   */
-  --lr-signal-dim:   #38bdf8;   /* signal hover                     */
+  /* ─── Background layers ────────────────────────────────────── */
+  --lr-bg:           #061726;   /* screen background (spec: background)     */
+  --lr-bg-secondary: #0b2033;   /* header / board chrome bg                 */
+  --lr-chrome:       #0d2237;   /* player card active bg                    */
+  --lr-chrome-light: #123654;   /* player card default bg                   */
+  --lr-chrome-border:#18354d;   /* card borders, dividers                   */
 
-  /* ─── Neutrals ──────────────────────────────────────────────── */
-  --lr-ink:          #1c1917;   /* dark text / die pip              */
-  --lr-ink-tile:     #1a1208;   /* tile label text                  */
-  --lr-fog:          #e8d48a;   /* board center label (brass-light) */
-  --lr-shadow:       #0f0f0f;
+  /* ─── Board surfaces ───────────────────────────────────────── */
+  --lr-felt:         #08493d;   /* board felt                               */
+  --lr-felt-dark:    #063f35;   /* city silhouette / deep shadow            */
+  --lr-felt-light:   #0a5a4a;   /* felt highlight                           */
 
-  /* ─── Property group colors ─────────────────────────────────── */
-  --lr-group-brown:  #955436;
-  --lr-group-sky:    #aae0fa;
-  --lr-group-pink:   #d93a96;
-  --lr-group-orange: #f7941d;
-  --lr-group-red:    #ed1b24;
-  --lr-group-yellow: #fef200;
-  --lr-group-green:  #1fb25a;
-  --lr-group-navy:   #0072bb;
+  /* ─── Paper / ivory ────────────────────────────────────────── */
+  --lr-ivory:        #f4e8c9;   /* tile background / paper (spec: ivory)    */
+  --lr-ivory-light:  #f7f0de;   /* board center text, lighter ivory         */
+  --lr-ivory-dim:    #e8d8b0;   /* tile border / subtle divider             */
 
-  /* ─── Special cells ─────────────────────────────────────────── */
-  --lr-go:           #1fb25a;
-  --lr-jail:         #6b7280;
-  --lr-tax:          #9b0000;
+  /* ─── Brass ────────────────────────────────────────────────── */
+  --lr-brass:        #f0b83f;   /* board frame / accent gold (spec: brass)  */
+  --lr-brass-light:  #f5c64b;   /* brass highlight                          */
+  --lr-brass-dim:    #d4a028;   /* brass shadow                             */
+  --lr-brass-glow:   #d4b45a;   /* dashed path / city accent                */
+
+  /* ─── Actions ──────────────────────────────────────────────── */
+  --lr-action:       #3b82f6;   /* primary CTA — LANÇAR DADOS               */
+  --lr-action-hover: #2563eb;
+  --lr-signal:       #55d8ff;   /* turn highlight / signal cyan             */
+  --lr-signal-dim:   #38bdf8;
+
+  /* ─── Text ──────────────────────────────────────────────────── */
+  --lr-text-primary: #fff8e8;   /* main text on dark                        */
+  --lr-text-dark:    #182332;   /* text on ivory / light surfaces           */
+  --lr-text-muted:   #b3c4d5;   /* secondary / hint text                    */
+  --lr-white:        #fff9ec;   /* pure white tinted warm                   */
+
+  /* ─── Neutrals ─────────────────────────────────────────────── */
+  --lr-ink:          #1c1917;   /* die pip, dark stroke                     */
+  --lr-ink-tile:     #1a1208;   /* tile label text                          */
+  --lr-fog:          #e8d48a;   /* board center label (brass-light)         */
+  --lr-gray:         #8c99a5;   /* neutral / jail / stop corner             */
+
+  /* ─── Property group accent colors (from spec) ─────────────── */
+  --lr-group-brown:  #98653b;
+  --lr-group-sky:    #71c4f2;   /* skyBlue in spec                          */
+  --lr-group-pink:   #ea55ae;
+  --lr-group-orange: #ff9d38;
+  --lr-group-red:    #ff5964;
+  --lr-group-yellow: #f4da38;
+  --lr-group-green:  #46cf91;
+  --lr-group-navy:   #428bf3;   /* blue in spec                             */
+
+  /* ─── Car token colors (spec: car-red/green/yellow/purple) ─── */
+  --lr-car-0:        #ff5964;   /* red   — player 0                         */
+  --lr-car-1:        #53dc9e;   /* green — player 1                         */
+  --lr-car-2:        #f5c64b;   /* yellow/brass — player 2                  */
+  --lr-car-3:        #a98aff;   /* purple — player 3                        */
+  --lr-car-4:        #55d8ff;   /* cyan — player 4                          */
+  --lr-car-5:        #ff9d38;   /* orange — player 5                        */
+
+  /* ─── Corner accent colors ──────────────────────────────────── */
+  --lr-corner-go:    #46cf91;   /* start = green                            */
+  --lr-corner-jail:  #8c99a5;   /* stop = gray                              */
+  --lr-corner-return:#a26dff;   /* return = purple                          */
+  --lr-corner-park:  #55d8ff;   /* park = signal cyan                       */
+
+  /* ─── Special cells ────────────────────────────────────────── */
   --lr-station:      #111111;
-  --lr-park:         #57d8ff;   /* free parking corner              */
+  --lr-tax:          #9b0000;
+  --lr-midnight:     #061221;   /* legacy alias for midnight surface         */
 }

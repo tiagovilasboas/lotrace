@@ -1,30 +1,47 @@
-type TokenColor = {
-  bg: string;
-  fill: string;
-  text: string;
-};
+/**
+ * Player token colours — single source of truth.
+ *
+ * Colours map to CSS vars defined in design-system/tokens/game.css (--car-0…--car-5),
+ * which are set from the spec in primitives.css.
+ *
+ * Rule: nothing outside this file should hardcode a player colour.
+ * Use tokenCssVar() for SVG fill/stroke, tokenBgStyle() for DOM background.
+ */
 
-const TOKEN_COLORS: readonly TokenColor[] = [
-  { bg: 'bg-rose-500', fill: 'fill-rose-500', text: 'text-rose-500' },
-  { bg: 'bg-emerald-500', fill: 'fill-emerald-500', text: 'text-emerald-500' },
-  { bg: 'bg-amber-500', fill: 'fill-amber-500', text: 'text-amber-500' },
-  { bg: 'bg-violet-500', fill: 'fill-violet-500', text: 'text-violet-500' },
-  { bg: 'bg-cyan-500', fill: 'fill-cyan-500', text: 'text-cyan-500' },
-  { bg: 'bg-fuchsia-500', fill: 'fill-fuchsia-500', text: 'text-fuchsia-500' },
-];
+/** Number of distinct player colours */
+const PLAYER_COLOR_COUNT = 6;
 
-function tokenColor(playerID: string): TokenColor {
-  return TOKEN_COLORS[Number(playerID) % TOKEN_COLORS.length] ?? TOKEN_COLORS[0];
+/** Returns the CSS variable for a player's colour, e.g. "var(--car-0)" */
+export function tokenCssVar(playerID: string): string {
+  const index = Number(playerID) % PLAYER_COLOR_COUNT;
+  return `var(--car-${index})`;
 }
 
-export function tokenClass(playerID: string): string {
-  return tokenColor(playerID).bg;
+/**
+ * Returns an inline style object with backgroundColor set to the player's token colour.
+ * Use for DOM elements (div, span) — avoids Tailwind purge issues with dynamic class names.
+ */
+export function tokenBgStyle(playerID: string): { backgroundColor: string } {
+  return { backgroundColor: tokenCssVar(playerID) };
 }
 
-export function tokenFillClass(playerID: string): string {
-  return tokenColor(playerID).fill;
+// ---------------------------------------------------------------------------
+// Legacy shims — kept so existing callers compile without mass-refactor.
+// These should be migrated to tokenCssVar() / tokenBgStyle() over time.
+// ---------------------------------------------------------------------------
+
+/** @deprecated Use tokenBgStyle() for DOM or tokenCssVar() for SVG fill. */
+export function tokenClass(_playerID: string): string {
+  // Returns empty string — callers must migrate to tokenBgStyle().
+  return '';
 }
 
-export function tokenTextClass(playerID: string): string {
-  return tokenColor(playerID).text;
+/** @deprecated Use tokenCssVar() directly. */
+export function tokenFillClass(_playerID: string): string {
+  return '';
+}
+
+/** @deprecated Use tokenCssVar() directly on SVG fill attribute. */
+export function tokenTextClass(_playerID: string): string {
+  return '';
 }

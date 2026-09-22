@@ -10,63 +10,64 @@ type BoardCenterProps = {
   players: Record<string, PlayerState>;
 };
 
-export function BoardCenter({
-  dice,
-  events,
-  players,
-}: BoardCenterProps): ReactElement {
+export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactElement {
   const latest = latestEventText(events, players);
 
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden">
 
-      {/* City skyline SVG — decorative background */}
+      {/* City silhouette + route trail */}
       <svg
-        className="pointer-events-none absolute inset-x-[4%] bottom-[6%] h-[55%] w-[92%]"
+        className="pointer-events-none absolute inset-x-[3%] bottom-[5%] h-[52%] w-[94%]"
         viewBox="0 0 240 120"
         preserveAspectRatio="xMidYMax meet"
         aria-hidden
       >
+        {/* Hill */}
         <path
           fill="var(--surface-board-deep)"
-          opacity="0.5"
-          d="M0 120 V78 C28 52 46 70 68 44 C92 14 118 38 140 22 C162 8 178 36 198 28 C214 22 228 40 240 34 V120Z"
+          opacity="0.50"
+          d="M0 120V78C28 52 46 70 68 44C92 14 118 38 140 22C162 8 178 36 198 28C214 22 228 40 240 34V120Z"
         />
+        {/* City silhouette — spec opacity 0.16 */}
         <path
           fill="var(--surface-board-deep)"
-          opacity="0.82"
-          d="M8 120 V86 h10 v-22 h8 v22 h9 v-34 h7 v34 h11 v-16 h8 v16 h14 v-26 h8 v26 h16 v-18 h9 v18 h18 v-28 h8 v28 h14 v-12 h8 v12 h16 v-22 h9 v22 h18 V120Z"
+          opacity="0.16"
+          d="M8 120V86h10v-22h8v22h9v-34h7v34h11v-16h8v16h14v-26h8v26h16v-18h9v18h18v-28h8v28h14v-12h8v12h16v-22h9v22h18V120Z"
         />
+        {/* Route trail — spec: dashed brass opacity 0.40 */}
         <path
           fill="none"
-          stroke="var(--lr-brass-glow)"
-          strokeWidth="1.2"
-          opacity="0.3"
-          d="M12 108 C70 94 140 110 228 96"
+          stroke="var(--lr-brass)"
+          strokeWidth="1.4"
+          strokeDasharray="5,4"
+          opacity="0.40"
+          d="M14 108C72 94 142 110 226 96"
         />
       </svg>
 
-      {/* Content stack */}
-      <div className="relative z-[1] flex flex-col items-center gap-1.5 px-2">
+      {/* Content */}
+      <div className="relative z-[1] flex flex-col items-center gap-1 px-2">
 
-        {/* Wordmark */}
+        {/* Wordmark — spec boardLogo size 44 desktop, 28 mobile */}
         <p
           className="text-center font-black leading-none tracking-tight"
           style={{
             fontFamily: 'var(--font-brand)',
-            fontSize: 'clamp(1.4rem, 8cqw, 2.4rem)',
-            color: 'var(--lr-ivory)',
-            textShadow: '0 2px 12px rgba(0,0,0,0.4)',
+            fontSize: 'clamp(1.5rem, 9cqw, 2.75rem)',
+            color: 'var(--lr-ivory-light)',
+            letterSpacing: '1px',
+            textShadow: '0 2px 14px rgba(0,0,0,0.45)',
           }}
         >
           {t('appName')}
         </p>
 
-        {/* Tagline */}
+        {/* Subtitle — spec subtitle size 9, brass */}
         <p
           className="text-center font-bold uppercase"
           style={{
-            fontSize: 'clamp(0.42rem, 2.4cqw, 0.65rem)',
+            fontSize: 'clamp(0.4rem, 2.2cqw, 0.5625rem)',
             letterSpacing: '0.22em',
             color: 'var(--lr-brass)',
           }}
@@ -74,35 +75,36 @@ export function BoardCenter({
           COMPRE · CONSTRUA · ACELERE
         </p>
 
-        {/* Dice */}
-        <div className="my-1">
+        {/* Dice — spec diceScale 0.75 on mobile */}
+        <div style={{ transform: 'scale(0.82)', transformOrigin: 'center center', margin: '2px 0' }}>
           <DiceDisplay dice={dice} />
         </div>
 
-        {/* Last event pill */}
+        {/* Last move pill — spec rgba(1,31,27,0.82), borderRadius 18 */}
         {latest ? (
           <div
-            className="flex max-w-[13rem] flex-col items-center gap-0.5 rounded-xl px-3 py-1.5"
+            className="flex max-w-[76%] flex-col items-center gap-0.5 px-3 py-1.5"
             style={{
-              backgroundColor: 'rgba(6,18,33,0.72)',
+              backgroundColor: 'rgba(1,31,27,0.82)',
+              borderRadius: '18px',
               backdropFilter: 'blur(4px)',
             }}
           >
             <span
               className="font-bold uppercase"
               style={{
-                fontSize: 'clamp(0.38rem, 2cqw, 0.55rem)',
+                fontSize: 'clamp(0.36rem, 1.8cqw, 0.5rem)',
                 letterSpacing: '0.2em',
                 color: 'var(--lr-brass)',
               }}
             >
-            {t('lastMove')}
+              {t('lastMove')}
             </span>
             <span
               className="truncate text-center font-semibold leading-snug"
               style={{
-                fontSize: 'clamp(0.5rem, 2.8cqw, 0.75rem)',
-                color: 'var(--lr-ivory)',
+                fontSize: 'clamp(0.48rem, 2.6cqw, 0.6875rem)',
+                color: 'var(--lr-ivory-light)',
               }}
             >
               {latest}
@@ -110,9 +112,8 @@ export function BoardCenter({
           </div>
         ) : (
           <p
-            className="font-semibold"
             style={{
-              fontSize: 'clamp(0.5rem, 2.8cqw, 0.72rem)',
+              fontSize: 'clamp(0.48rem, 2.6cqw, 0.6875rem)',
               color: 'var(--text-board-label)',
             }}
           >

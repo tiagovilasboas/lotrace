@@ -12,19 +12,20 @@ type PlayerListProps = {
 };
 
 /**
- * Compact single-row player strip.
- * Each chip: car token + name/cash in ~44px height.
- * Active player gets a cyan ring; no text wrap; car scales down for 5-6 players.
+ * Horizontal carousel — spec: mobile card 148×66px, active card 168px wide.
+ * Snap-scrolls to centre the active player.
+ * Desktop: 4-column grid (no scroll).
  */
 export function PlayerList({
   players,
   currentPlayer,
   viewerID,
 }: PlayerListProps): ReactElement {
-  const count = players.length;
-
   return (
-    <ul className="flex gap-1.5">
+    <ul
+      className="flex gap-2 overflow-x-auto pb-0.5 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      style={{ scrollSnapType: 'x mandatory' }}
+    >
       {players.map((player) => {
         const isTurn = player.id === currentPlayer;
         const isViewer = player.id === viewerID;
@@ -33,44 +34,30 @@ export function PlayerList({
           <li
             key={player.id}
             className={cn(
-              'relative flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden rounded-xl px-1.5 py-1',
+              'flex shrink-0 flex-col justify-between overflow-hidden rounded-2xl p-3',
               player.bankrupt && 'opacity-40',
             )}
             style={{
-              backgroundColor: 'var(--surface-hud)',
+              /* active card wider: 168px vs 148px */
+              width: isTurn ? '168px' : '148px',
+              height: '66px',
+              scrollSnapAlign: 'start',
+              backgroundColor: isTurn
+                ? 'var(--surface-hud-active)'
+                : 'var(--surface-hud)',
               border: isTurn
-                ? '1.5px solid var(--turn-highlight)'
+                ? '2px solid var(--turn-highlight)'
                 : '1px solid var(--border-hud)',
-              boxShadow: isTurn
-                ? '0 0 8px rgba(87,216,255,0.20)'
-                : undefined,
+              boxShadow: isTurn ? 'var(--glow-turn)' : undefined,
+              transition: 'width 200ms ease',
             }}
           >
-            {/* Active turn indicator — top-left dot */}
-            {isTurn ? (
-              <span
-                className="absolute left-1 top-1 size-1.5 rounded-full"
-                style={{ backgroundColor: 'var(--turn-highlight)' }}
-              />
-            ) : null}
-
-            {/* Car — smaller when many players */}
-            <span
-              className="shrink-0"
-              style={{
-                transform: count >= 5 ? 'scale(0.72)' : count === 4 ? 'scale(0.85)' : 'scale(1)',
-                transformOrigin: 'left center',
-              }}
-            >
+            {/* Top row: car + badge */}
+            <div className="flex items-center justify-between gap-1">
               <CarToken playerID={player.id} size="hud" />
-            </span>
-
-            {/* Name + cash — right of car */}
-            <div className="min-w-0 flex-1">
-              {/* Badge VEZ — above name when active */}
               {isTurn ? (
                 <span
-                  className="mb-0.5 inline-block rounded-full px-1.5 py-px text-[8px] font-black uppercase leading-none tracking-wider"
+                  className="shrink-0 rounded-full px-1.5 py-0.5 text-[8px] font-black uppercase leading-none tracking-wide"
                   style={{
                     backgroundColor: 'var(--turn-badge-bg)',
                     color: 'var(--turn-badge-text)',
@@ -79,18 +66,18 @@ export function PlayerList({
                   {t('yourTurnBadge')}
                 </span>
               ) : null}
+            </div>
+
+            {/* Bottom row: name + balance */}
+            <div className="min-w-0">
               <p
-                className="truncate text-[10px] font-bold uppercase leading-none tracking-wide"
-                style={{
-                  color: isViewer
-                    ? 'var(--text-on-table)'
-                    : 'var(--text-on-table-dim)',
-                }}
+                className="truncate text-[11px] font-extrabold uppercase leading-none tracking-wide"
+                style={{ color: isViewer ? 'var(--text-on-table)' : 'var(--text-on-table-dim)' }}
               >
                 {isViewer ? t('you') : player.nickname}
               </p>
               <p
-                className="truncate text-xs font-black tabular-nums leading-none"
+                className="truncate text-sm font-bold tabular-nums leading-none"
                 style={{ color: 'var(--text-on-table)', marginTop: '2px' }}
               >
                 {player.bankrupt ? t('bankrupt') : formatCash(player.cash)}

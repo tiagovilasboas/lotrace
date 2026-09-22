@@ -41,13 +41,13 @@ export function ringCellSide(index: number): RingSide {
 export function hueBarLayout(side: RingSide): HueBarLayout {
   switch (side) {
     case 'south':
-      return { containerClass: 'flex-col', barClass: 'h-2.5 w-full shrink-0 sm:h-3' };
+      return { containerClass: 'flex-col',         barClass: 'h-[var(--tile-accent-height)] w-full shrink-0' };
     case 'north':
-      return { containerClass: 'flex-col-reverse', barClass: 'h-2.5 w-full shrink-0 sm:h-3' };
+      return { containerClass: 'flex-col-reverse', barClass: 'h-[var(--tile-accent-height)] w-full shrink-0' };
     case 'west':
-      return { containerClass: 'flex-row-reverse', barClass: 'h-full w-2.5 shrink-0 sm:w-3' };
+      return { containerClass: 'flex-row-reverse', barClass: 'h-full w-[var(--tile-accent-height)] shrink-0' };
     case 'east':
-      return { containerClass: 'flex-row', barClass: 'h-full w-2.5 shrink-0 sm:w-3' };
+      return { containerClass: 'flex-row',         barClass: 'h-full w-[var(--tile-accent-height)] shrink-0' };
   }
 }
 

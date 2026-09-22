@@ -1,67 +1,62 @@
 /**
  * LotRace Design Tokens — Semantic
  * Maps primitives to intent. Components consume only these.
- * Import order: primitives.css → semantic.css
+ * Source: new-design/tabuleiro/lotrace-mobile-redesign.json
  */
 
 :root {
-  /* ─── Surfaces ───────────────────────────────────────────────── */
-  --surface-table:       var(--lr-midnight);       /* outermost page background    */
-  --surface-hud:         var(--lr-midnight-60);    /* player cards, action area    */
-  --surface-hud-raised:  var(--lr-midnight-80);    /* header bar / navbar          */
-  --surface-board:       var(--lr-felt);           /* board felt                   */
-  --surface-board-deep:  var(--lr-felt-dark);      /* city silhouette layer        */
-  --surface-tile:        var(--lr-ivory);          /* property tile paper          */
-  --surface-tile-dim:    var(--lr-ivory-dim);      /* tile border, muted tile bg   */
+  /* ─── Surfaces ──────────────────────────────────────────────── */
+  --surface-table:        var(--lr-bg);            /* outermost page bg          */
+  --surface-hud:          var(--lr-chrome-light);  /* player cards default       */
+  --surface-hud-raised:   var(--lr-bg-secondary);  /* header bar / navbar        */
+  --surface-hud-active:   var(--lr-chrome);        /* active player card         */
+  --surface-board:        var(--lr-felt);          /* board felt                 */
+  --surface-board-deep:   var(--lr-felt-dark);     /* city silhouette            */
+  --surface-tile:         var(--lr-ivory);         /* property tile paper        */
+  --surface-tile-dim:     var(--lr-ivory-dim);     /* tile border                */
 
-  /* ─── Borders ────────────────────────────────────────────────── */
-  --border-board:        var(--lr-brass);          /* board outer frame            */
-  --border-board-dim:    var(--lr-brass-dim);      /* inner board stroke           */
-  --border-tile:         rgba(0, 0, 0, 0.18);      /* tile divider                 */
-  --border-hud:          rgba(255, 255, 255, 0.08);/* card separator               */
-  --border-hud-active:   var(--lr-signal);         /* active turn ring             */
+  /* ─── Borders ───────────────────────────────────────────────── */
+  --border-board:         var(--lr-brass);         /* board outer brass frame    */
+  --border-board-dim:     var(--lr-brass-dim);
+  --border-tile:          rgba(0, 0, 0, 0.16);
+  --border-hud:           var(--lr-chrome-border); /* #18354d                    */
+  --border-hud-active:    var(--lr-signal);
 
-  /* ─── Text ───────────────────────────────────────────────────── */
-  --text-on-table:       #e8eef8;                  /* HUD prose                    */
-  --text-on-table-dim:   rgba(232, 238, 248, 0.60);/* secondary / hint             */
-  --text-on-tile:        var(--lr-ink-tile);       /* tile label                   */
-  --text-on-tile-price:  rgba(28, 25, 23, 0.70);   /* tile price                   */
-  --text-board-label:    var(--lr-fog);            /* board center label           */
+  /* ─── Text ──────────────────────────────────────────────────── */
+  --text-on-table:        var(--lr-text-primary);  /* #fff8e8                    */
+  --text-on-table-dim:    var(--lr-text-muted);    /* #b3c4d5                    */
+  --text-on-tile:         var(--lr-ink-tile);
+  --text-on-tile-price:   rgba(24, 35, 50, 0.68);
+  --text-board-label:     var(--lr-fog);
 
-  /* ─── Actions ────────────────────────────────────────────────── */
-  --action-primary:      var(--lr-action);         /* LANÇAR DADOS                 */
-  --action-primary-hover:var(--lr-action-hover);
-  --action-primary-text: #ffffff;
-  --action-secondary:    rgba(255, 255, 255, 0.08);/* Passar / skip outline btn    */
-  --action-secondary-border: rgba(255, 255, 255, 0.22);
-  --action-secondary-text: #ffffff;
+  /* ─── Actions ───────────────────────────────────────────────── */
+  --action-primary:       var(--lr-action);
+  --action-primary-hover: var(--lr-action-hover);
+  --action-primary-text:  #ffffff;
+  --action-secondary:     var(--lr-midnight);      /* midnight solid             */
+  --action-secondary-text:#ffffff;
 
-  /* ─── Turn / Status ──────────────────────────────────────────── */
-  --turn-highlight:      var(--lr-signal);         /* active player ring + badge   */
-  --turn-badge-bg:       var(--lr-signal);
-  --turn-badge-text:     #0c1a2e;                  /* dark text on cyan badge      */
-  --turn-glow:           rgba(87, 216, 255, 0.28); /* box-shadow ambient           */
+  /* ─── Turn / Status ─────────────────────────────────────────── */
+  --turn-highlight:       var(--lr-signal);
+  --turn-badge-bg:        var(--lr-signal);
+  --turn-badge-text:      var(--lr-text-dark);     /* #182332 dark on cyan       */
+  --turn-glow:            rgba(85, 216, 255, 0.25);
 
-  /* ─── Shadows ────────────────────────────────────────────────── */
-  --shadow-board:        0 24px 60px rgba(0, 0, 0, 0.45);
-  --shadow-board-frame:  inset 0 0 0 4px var(--lr-brass),
-                         inset 0 0 0 6px var(--lr-felt-dark);
-  --shadow-card:         0 4px 16px rgba(0, 0, 0, 0.35);
-  --shadow-tile:         inset 0 1px 0 rgba(255, 255, 255, 0.45),
-                         0 1px 2px rgba(7, 20, 40, 0.35);
+  /* ─── Shadows ───────────────────────────────────────────────── */
+  --shadow-board:         0 20px 50px rgba(3, 10, 24, 0.65);
+  --shadow-card:          0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-tile:          inset 0 1px 0 rgba(255, 255, 255, 0.40),
+                          0 1px 2px rgba(6, 23, 38, 0.30);
 
   /* ─── Glows ──────────────────────────────────────────────────── */
-  --glow-turn:           0 0 0 2px var(--lr-signal),
-                         0 0 24px rgba(87, 216, 255, 0.30);
-  --glow-action:         0 8px 18px rgba(59, 130, 246, 0.40);
-  --glow-board-center:   radial-gradient(circle at 48% 30%,
-                           rgba(255, 255, 255, 0.05), transparent 42%),
-                         radial-gradient(circle at 60% 80%,
-                           rgba(0, 0, 0, 0.12), transparent 50%);
+  --glow-turn:            0 0 0 2px var(--lr-signal),
+                          0 0 20px rgba(85, 216, 255, 0.28);
+  --glow-action:          0 8px 18px rgba(59, 130, 246, 0.40);
 
-  /* ─── Radius ─────────────────────────────────────────────────── */
-  --radius-tile:  0.3125rem; /* 5px  — tile corners                */
-  --radius-card:  1rem;      /* 16px — player cards, prompt card   */
-  --radius-pill:  999px;     /* buttons, badges                    */
-  --radius-board: 1.25rem;   /* 20px — outer board container       */
+  /* ─── Radius ────────────────────────────────────────────────── */
+  --radius-tile:   0.375rem;   /* 6px  — tile corners (spec xs=6)            */
+  --radius-card:   1rem;       /* 16px — mobile player cards (spec md=16)    */
+  --radius-board-outer: 1.5rem;/* 24px — outer brass ring (spec mobile=24)  */
+  --radius-board-inner: 1.125rem;/* 18px — inner felt ring (spec mobile=18) */
+  --radius-pill:   999px;
 }
