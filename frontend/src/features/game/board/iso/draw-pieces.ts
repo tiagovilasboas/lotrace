@@ -1,70 +1,75 @@
-import { carHexForCanvas } from '@/features/game/board/iso/piece-hex.ts';
-import {
-  tileDiamond,
-  tileToScreen,
-  withHeight,
-  type IsoConfig,
-  type ScreenPoint,
-} from '@/features/game/board/iso/iso-projection.ts';
+import { assetImage, carImage, type BoardAssetKey } from '@/features/game/board/iso/asset-images.ts';
+import { tileToScreen, type IsoConfig, type ScreenPoint } from '@/features/game/board/iso/iso-projection.ts';
 
 /**
- * Isometric building + car drawing (Phase 3.3).
- * Buildings are boxes with an EXAGGERATED height: footprint controlled, but the
- * drawn height is several "tile units" so it reads like a SimCity BuildIt tower.
- * The car is a low marker (a rounded plate) ~ the road width.
- * All heights are in pixels derived from the tile size.
+ * Isometric building + car drawing (asset-first).
+ *
+ * Buildings, corner glyphs and cars are hand-drawn SVG assets from
+ * `design-system/assets` (loaded via asset-images.ts). We draw each sprite with
+ * `ctx.drawImage`, anchoring its baseline (the sprite's ground shadow) on the
+ * tile centre and scaling it to the tile. The sprites are already isometric, so
+ * no reprojection is needed — footprint is controlled by the draw width, and the
+ * exaggerated visual height comes from the artwork itself (SimCity BuildIt feel).
  */
-
-/** How tall one "level" of building is, relative to the iso tile height.
- * Kept modest so towers read as buildings on a tile, not skyscraper poles. */
-const LEVEL_H = 0.85; // multiples of tileH per visualHeight unit
 
 type BuildingKind = 'house' | 'tower' | 'hotel';
 
-/** visualHeight per kind — clear hierarchy house < tower < hotel. */
-const VISUAL_HEIGHT: Record<BuildingKind, number> = {
-  house: 0.9,
-  tower: 1.7,
-  hotel: 2.6,
+/** Which SVG asset renders each building kind. */
+const BUILDING_ASSET: Record<BuildingKind, BoardAssetKey> = {
+  house: 'house',
+  tower: 'hotel',
+  hotel: 'hotel',
 };
 
-/** Building footprint as a fraction of the tile diamond (0..1). Wider = reads
- * as a solid building, not a pole. */
-const FOOTPRINT: Record<BuildingKind, number> = {
-  house: 0.72,
-  tower: 0.74,
-  hotel: 0.8,
+/**
+ * Draw width as a fraction of the iso tile width. The taller assets (hotel) are
+ * drawn a touch wider so wealth reads bigger, but footprint stays controlled so
+ * they don't swamp the tile behind. The car stays the smallest movable marker.
+ */
+const BUILDING_WIDTH: Record<BuildingKind, number> = {
+  house: 0.92,
+  tower: 1.02,
+  hotel: 1.12,
 };
 
-const FACE_LIGHT = '#f4e8c9';
-const FACE_MID = '#d9c7a0';
-const FACE_DARK = '#b7a074';
-const WINDOW = 'rgba(85,216,255,0.55)';
+/** Vertical scale multiplier per kind — exaggerate height for towers/hotels. */
+const BUILDING_STRETCH: Record<BuildingKind, number> = {
+  house: 1.0,
+  tower: 1.18,
+  hotel: 1.3,
+};
 
-/** A scaled diamond (footprint) around a cell centre, on the ground plane. */
-function footprintDiamond(col: number, row: number, cfg: IsoConfig, scale: number): ScreenPoint[] {
-  const c = tileToScreen(col, row, cfg);
-  const [t, r, b, l] = tileDiamond(col, row, cfg);
-  return [
-    { x: c.x, y: c.y + (t.y - c.y) * scale },
-    { x: c.x + (r.x - c.x) * scale, y: c.y },
-    { x: c.x, y: c.y + (b.y - c.y) * scale },
-    { x: c.x + (l.x - c.x) * scale, y: c.y },
-  ];
-}
+/** The car sprite drawn width as a fraction of the iso tile width (a marker). */
+const CAR_WIDTH = 0.4;
 
-function poly(ctx: CanvasRenderingContext2D, pts: ScreenPoint[], fill: string): void {
-  ctx.beginPath();
-  ctx.moveTo(pts[0].x, pts[0].y);
-  for (let i = 1; i < pts.length; i += 1) ctx.lineTo(pts[i].x, pts[i].y);
-  ctx.closePath();
-  ctx.fillStyle = fill;
-  ctx.fill();
+/**
+ * Where the sprite's baseline sits vertically within its own viewBox (0..1).
+ * Both piece SVGs (32×32) and car SVGs (28×44) place their ground shadow near
+ * the bottom, so anchoring at ~0.9 lands the shadow on the tile centre.
+ */
+const BASELINE = 0.9;
+
+/**
+ * Draw a sprite so its baseline (ground shadow) lands on `ground`, scaled to
+ * `drawW` wide, keeping the SVG's aspect ratio and optional vertical stretch.
+ */
+function drawSprite(
+  ctx: CanvasRenderingContext2D,
+  img: HTMLImageElement,
+  ground: ScreenPoint,
+  drawW: number,
+  stretch: number,
+): void {
+  const aspect = img.naturalHeight / img.naturalWidth || 1;
+  const drawH = drawW * aspect * stretch;
+  const x = ground.x - drawW / 2;
+  const y = ground.y - drawH * BASELINE;
+  ctx.drawImage(img, x, y, drawW, drawH);
 }
 
 /**
- * Draw one iso building box on a cell: two visible side faces + the top face,
- * raised by `height` pixels. [top, right, bottom, left] ground corners.
+ * Draw one iso building on a cell using its SVG asset. Skipped silently if the
+ * asset is not loaded yet (picked up on the next render tick).
  */
 export function drawBuilding(
   ctx: CanvasRenderingContext2D,
@@ -73,41 +78,51 @@ export function drawBuilding(
   cfg: IsoConfig,
   kind: BuildingKind,
 ): void {
-  const height = VISUAL_HEIGHT[kind] * LEVEL_H * cfg.tileH;
-  const g = footprintDiamond(col, row, cfg, FOOTPRINT[kind]); // ground
-  const [gt, gr, gb, gl] = g;
-  const rt = withHeight(gt, height);
-  const rr = withHeight(gr, height);
-  const rb = withHeight(gb, height);
-  const rl = withHeight(gl, height);
-
-  // Right face (front-right): ground right→bottom up to roof.
-  poly(ctx, [gr, gb, rb, rr], FACE_MID);
-  // Left face (front-left): ground bottom→left up to roof.
-  poly(ctx, [gb, gl, rl, rb], FACE_DARK);
-  // Roof (top diamond).
-  poly(ctx, [rt, rr, rb, rl], FACE_LIGHT);
-
-  // A couple of window bands on the two front faces for a city feel.
-  const bands = kind === 'house' ? 1 : kind === 'tower' ? 2 : 3;
-  for (let i = 1; i <= bands; i += 1) {
-    const f = i / (bands + 1);
-    const yr1 = { x: gr.x, y: gr.y - height * f };
-    const yb = { x: gb.x, y: gb.y - height * f };
-    const yl1 = { x: gl.x, y: gl.y - height * f };
-    ctx.strokeStyle = WINDOW;
-    ctx.lineWidth = Math.max(1, cfg.tileH * 0.06);
-    ctx.beginPath();
-    ctx.moveTo(yr1.x, yr1.y);
-    ctx.lineTo(yb.x, yb.y);
-    ctx.lineTo(yl1.x, yl1.y);
-    ctx.stroke();
-  }
+  const img = assetImage(BUILDING_ASSET[kind]);
+  if (!img) return;
+  const c = tileToScreen(col, row, cfg);
+  // Seat the building toward the BACK of the tile so its body sits behind the
+  // DOM label (anchored on the tile's front edge), never covering the name.
+  const ground = { x: c.x, y: c.y - cfg.tileH * 0.16 };
+  drawSprite(ctx, img, ground, cfg.tileW * BUILDING_WIDTH[kind], BUILDING_STRETCH[kind]);
 }
 
 /**
- * Draw a car marker on a cell: a small rounded plate (~road width) at ground
- * level with the player's colour. Low profile — it marks position, not wealth.
+ * Draw the tile's icon (station / tax) when it has no building on it. Uses the
+ * SVG asset; skipped silently until loaded.
+ */
+export function drawTileIcon(
+  ctx: CanvasRenderingContext2D,
+  col: number,
+  row: number,
+  cfg: IsoConfig,
+  key: BoardAssetKey,
+): void {
+  const img = assetImage(key);
+  if (!img) return;
+  const ground = tileToScreen(col, row, cfg);
+  drawSprite(ctx, img, ground, cfg.tileW * 0.72, 1.0);
+}
+
+/**
+ * Draw a corner glyph (go / jail / goto-jail / park) from its SVG asset.
+ */
+export function drawCornerAsset(
+  ctx: CanvasRenderingContext2D,
+  col: number,
+  row: number,
+  cfg: IsoConfig,
+  key: BoardAssetKey,
+): void {
+  const img = assetImage(key);
+  if (!img) return;
+  const ground = tileToScreen(col, row, cfg);
+  drawSprite(ctx, img, ground, cfg.tileW * 0.78, 1.0);
+}
+
+/**
+ * Draw a player car marker on a cell using the per-seat SVG (colour baked in).
+ * A low marker (~half the tile wide) — it marks position, not wealth.
  */
 export function drawCar(
   ctx: CanvasRenderingContext2D,
@@ -117,34 +132,14 @@ export function drawCar(
   playerID: string,
   offset: ScreenPoint = { x: 0, y: 0 },
 ): void {
+  const img = carImage(playerID);
+  if (!img) return;
   const c = tileToScreen(col, row, cfg);
-  const cx = c.x + offset.x;
-  const cy = c.y + offset.y;
-  const rw = cfg.tileW * 0.22;
-  const rh = cfg.tileH * 0.34;
-  const lift = cfg.tileH * 0.28;
-
-  // Shadow on the ground.
-  ctx.beginPath();
-  ctx.ellipse(cx, cy, rw, rh, 0, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(0,0,0,0.22)';
-  ctx.fill();
-
-  // Body (raised a touch off the ground).
-  ctx.beginPath();
-  ctx.ellipse(cx, cy - lift, rw, rh, 0, 0, Math.PI * 2);
-  ctx.fillStyle = carHexForCanvas(playerID);
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-  ctx.lineWidth = Math.max(1, cfg.tileW * 0.015);
-  ctx.stroke();
-
-  // Roof highlight.
-  ctx.beginPath();
-  ctx.ellipse(cx, cy - lift - rh * 0.25, rw * 0.5, rh * 0.4, 0, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(255,255,255,0.28)';
-  ctx.fill();
+  // Seat the car toward the back of the tile (like buildings) so it sits behind
+  // the DOM label anchored on the tile's front edge, not over the price.
+  const ground = { x: c.x + offset.x, y: c.y - cfg.tileH * 0.14 + offset.y };
+  drawSprite(ctx, img, ground, cfg.tileW * CAR_WIDTH, 1.0);
 }
 
 export type { BuildingKind };
-export { VISUAL_HEIGHT, FOOTPRINT };
+export { BUILDING_WIDTH };

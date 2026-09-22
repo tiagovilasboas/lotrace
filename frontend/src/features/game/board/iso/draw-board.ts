@@ -2,7 +2,14 @@ import { BOARD, isHotel, type BoardCell, type ImobiliarioState } from '@lotrace/
 import { ringCellPosition } from '@/features/game/board/ring-geometry.ts';
 import { colorGroupCanvas } from '@/features/game/board/iso/board-palette.ts';
 import type { BoardPalette } from '@/features/game/board/iso/board-palette.ts';
-import { drawBuilding, drawCar, type BuildingKind } from '@/features/game/board/iso/draw-pieces.ts';
+import type { BoardAssetKey } from '@/features/game/board/iso/asset-images.ts';
+import {
+  drawBuilding,
+  drawCar,
+  drawCornerAsset,
+  drawTileIcon,
+  type BuildingKind,
+} from '@/features/game/board/iso/draw-pieces.ts';
 import {
   depthKey,
   tileDiamond,
@@ -87,54 +94,32 @@ function drawAccent(
   ctx.fill();
 }
 
-/** A simple white glyph on a corner tile so it reads at a glance. */
-function drawCornerGlyph(
-  ctx: CanvasRenderingContext2D,
-  cell: BoardCell,
-  col: number,
-  row: number,
-  cfg: IsoConfig,
-): void {
-  const c = tileToScreen(col, row, cfg);
-  const s = cfg.tileH * 0.5;
-  ctx.save();
-  ctx.strokeStyle = 'rgba(255,255,255,0.92)';
-  ctx.fillStyle = 'rgba(255,255,255,0.92)';
-  ctx.lineWidth = Math.max(1.5, cfg.tileH * 0.09);
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-
-  if (cell.kind === 'go') {
-    // Arrow pointing right-down (into the track).
-    ctx.beginPath();
-    ctx.moveTo(c.x - s * 0.5, c.y);
-    ctx.lineTo(c.x + s * 0.5, c.y);
-    ctx.moveTo(c.x + s * 0.1, c.y - s * 0.35);
-    ctx.lineTo(c.x + s * 0.5, c.y);
-    ctx.lineTo(c.x + s * 0.1, c.y + s * 0.35);
-    ctx.stroke();
-  } else if (cell.kind === 'jail' || cell.kind === 'goto-jail') {
-    // Prison bars.
-    for (let i = -1; i <= 1; i += 1) {
-      ctx.beginPath();
-      ctx.moveTo(c.x + i * s * 0.3, c.y - s * 0.4);
-      ctx.lineTo(c.x + i * s * 0.3, c.y + s * 0.4);
-      ctx.stroke();
-    }
-  } else if (cell.kind === 'park') {
-    // Tree: broad canopy (two blobs) + short trunk — reads as a tree, not a pin.
-    ctx.beginPath();
-    ctx.arc(c.x - s * 0.18, c.y - s * 0.05, s * 0.3, 0, Math.PI * 2);
-    ctx.arc(c.x + s * 0.18, c.y - s * 0.05, s * 0.3, 0, Math.PI * 2);
-    ctx.arc(c.x, c.y - s * 0.28, s * 0.28, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.lineWidth = Math.max(2, cfg.tileH * 0.13);
-    ctx.beginPath();
-    ctx.moveTo(c.x, c.y + s * 0.05);
-    ctx.lineTo(c.x, c.y + s * 0.38);
-    ctx.stroke();
+/** The SVG asset used as the corner glyph for a corner-kind cell. */
+function cornerAsset(cell: BoardCell): BoardAssetKey | null {
+  switch (cell.kind) {
+    case 'go':
+      return 'corner-go';
+    case 'jail':
+      return 'corner-jail';
+    case 'goto-jail':
+      return 'corner-goto-jail';
+    case 'park':
+      return 'corner-park';
+    default:
+      return null;
   }
-  ctx.restore();
+}
+
+/** The SVG icon shown on a non-property tile (station / tax) with no building. */
+function tileIconAsset(cell: BoardCell): BoardAssetKey | null {
+  switch (cell.kind) {
+    case 'station':
+      return 'station';
+    case 'tax':
+      return 'tax';
+    default:
+      return null;
+  }
 }
 
 /** House count → building kind (0 = none). */
@@ -183,20 +168,29 @@ export function drawBoard(
     }
   }
 
-  // One back-to-front pass: tile ground, then its building, then its cars.
+  // One back-to-front pass: tile ground + colour accent, then its glyph/asset,
+  // then its building, then its cars — so nearer sprites overlap the ones behind.
   for (const { cell, col, row } of placedCells()) {
     fillDiamond(ctx, col, row, cfg, cellFill(cell, palette), 'rgba(0,0,0,0.28)');
 
     if (cell.kind === 'property' && cell.colorGroup) {
       drawAccent(ctx, col, row, cfg, colorGroupCanvas(cell.colorGroup, palette));
-    } else if (cell.kind === 'go' || cell.kind === 'jail' || cell.kind === 'goto-jail' || cell.kind === 'park') {
-      drawCornerGlyph(ctx, cell, col, row, cfg);
+    }
+
+    const corner = cornerAsset(cell);
+    if (corner) drawCornerAsset(ctx, col, row, cfg, corner);
+
+    const houses = G ? (G.houses[cell.index] ?? 0) : 0;
+    const kind = buildingFor(houses);
+    if (kind) {
+      drawBuilding(ctx, col, row, cfg, kind);
+    } else {
+      // No building: show the tile's own icon (station / tax) as the landmark.
+      const icon = tileIconAsset(cell);
+      if (icon) drawTileIcon(ctx, col, row, cfg, icon);
     }
 
     if (G) {
-      const kind = buildingFor(G.houses[cell.index] ?? 0);
-      if (kind) drawBuilding(ctx, col, row, cfg, kind);
-
       const cars = carsByCell.get(cell.index);
       if (cars) {
         cars.forEach((id, i) => drawCar(ctx, col, row, cfg, id, carOffset(i, cfg)));

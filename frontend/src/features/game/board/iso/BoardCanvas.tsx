@@ -1,5 +1,6 @@
 import type { ImobiliarioState } from '@lotrace/shared';
 import { useEffect, useRef, type ReactElement } from 'react';
+import { useBoardAssets } from '@/features/game/board/iso/asset-images.ts';
 import { readBoardPalette } from '@/features/game/board/iso/board-palette.ts';
 import { BoardCanvasCenter } from '@/features/game/board/iso/BoardCanvasCenter.tsx';
 import { BoardTextOverlay } from '@/features/game/board/iso/BoardTextOverlay.tsx';
@@ -20,6 +21,7 @@ export function BoardCanvas({ G }: BoardCanvasProps): ReactElement {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const layout = useIsoLayout(wrapRef);
+  const assetsTick = useBoardAssets();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -36,7 +38,7 @@ export function BoardCanvas({ G }: BoardCanvasProps): ReactElement {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     drawBoard(ctx, cfg, readBoardPalette(), boxW, boxH, G);
-  }, [layout, G]);
+  }, [layout, G, assetsTick]);
 
   return (
     <div ref={wrapRef} className="board-canvas-wrap" data-testid="board-canvas">
