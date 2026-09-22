@@ -759,6 +759,19 @@
    * `cqmin` relative to THIS board — so when the board grows, all parts
    * grow proportionally. No viewport units inside the board.
    */
+  /* Iso canvas board (Phase 3) — fills the board area; square box. */
+  .board-canvas-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .board-canvas {
+    display: block;
+  }
+
   .board-square {
     height: 100%;
     aspect-ratio: 1 / 1;

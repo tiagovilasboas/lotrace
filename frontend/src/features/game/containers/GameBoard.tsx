@@ -1,10 +1,12 @@
 import type { ImobiliarioState, TurnStage } from '@lotrace/shared';
 import type { BoardProps } from 'boardgame.io/react';
 import { useEffect, type ReactElement } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useSeatFollow } from '@/features/game/lib/seat-follow.ts';
 import { TopBar } from '@/features/game/board/TopBar.tsx';
 import { BoardCenter } from '@/features/game/board/BoardCenter.tsx';
 import { BoardRing } from '@/features/game/board/BoardRing.tsx';
+import { BoardCanvas } from '@/features/game/board/iso/BoardCanvas.tsx';
 import { ActionBar } from '@/features/game/components/ActionBar.tsx';
 import { EventLog } from '@/features/game/components/EventLog.tsx';
 import { PlayerList } from '@/features/game/components/PlayerList.tsx';
@@ -35,6 +37,11 @@ export function GameBoard({
   const chrome      = useMatchChrome();
   const playerCount = Object.keys(G.players).length;
   const playerList  = Object.values(G.players);
+
+  /* Board renderer flag: ?render=canvas opts into the WIP iso canvas board.
+   * Default stays the shipped CSS ring until the canvas phase is complete. */
+  const [searchParams] = useSearchParams();
+  const useCanvas = searchParams.get('render') === 'canvas';
 
   /* Hotseat only: follow the active player automatically. No-op online
    * (SeatFollow is null there). Reports on every turn change; the handler
@@ -77,17 +84,21 @@ export function GameBoard({
        * Flat CSS felt (tiles, names, prices) tilted via rotateX. Pieces are
        * 2D SVGs living inside the tiles (cars, houses/hotels, icons). */}
       <div className="board-area">
-        <div className="board-square">
-          <BoardRing
-            players={G.players}
-            owners={G.owners}
-            houses={G.houses}
-            pendingCell={G.pendingCell}
-            center={
-              <BoardCenter dice={G.lastDice} events={G.log} players={G.players} />
-            }
-          />
-        </div>
+        {useCanvas ? (
+          <BoardCanvas />
+        ) : (
+          <div className="board-square">
+            <BoardRing
+              players={G.players}
+              owners={G.owners}
+              houses={G.houses}
+              pendingCell={G.pendingCell}
+              center={
+                <BoardCenter dice={G.lastDice} events={G.log} players={G.players} />
+              }
+            />
+          </div>
+        )}
       </div>
 
       {/* ── Footer action bar ── */}

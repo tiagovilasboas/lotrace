@@ -63,21 +63,38 @@ export function depthKey(col: number, row: number): number {
  * choose a tile size and origin so the whole diamond fits centred.
  * For an N×N grid the iso bounding box is N*tileW wide and N*tileH tall.
  */
+export type FitOptions = {
+  /** Fraction of the box the diamond should fill (0..1). Default 0.98. */
+  fill?: number;
+  /** Iso squash: tileH / tileW. 0.5 = classic 2:1. Higher = taller diamond. */
+  ratio?: number;
+  /** Extra headroom (fraction of box height) kept at the top for tall buildings. */
+  headroom?: number;
+};
+
 export function fitIso(
   cols: number,
   rows: number,
   boxW: number,
   boxH: number,
+  opts: FitOptions = {},
 ): IsoConfig {
-  // Diamond bounding box: width = (cols + rows) * tileW/2, height = (cols + rows) * tileH/2.
+  const fill = opts.fill ?? 0.98;
+  const ratio = opts.ratio ?? 0.5;
+  const headroom = opts.headroom ?? 0;
   const span = cols + rows;
-  // Keep the 2:1 iso ratio (tileH = tileW / 2). Fit both axes.
-  const tileWByWidth = (boxW * 2) / span;
-  const tileWByHeight = (boxH * 4) / span; // since tileH = tileW/2, height uses /4
+
+  // Diamond box: width = span * tileW/2, height = span * (tileW*ratio)/2.
+  const usableH = boxH * (1 - headroom);
+  const tileWByWidth = (boxW * fill * 2) / span;
+  const tileWByHeight = (usableH * fill * 2) / (span * ratio);
   const tileW = Math.min(tileWByWidth, tileWByHeight);
-  const tileH = tileW / 2;
-  // Origin: horizontally centre the diamond; top vertex near the top of the box.
+  const tileH = tileW * ratio;
+
+  const diamondH = span * (tileH / 2);
   const originX = boxW / 2;
-  const originY = (boxH - span * (tileH / 2)) / 2 + tileH / 2;
+  // Centre vertically within the usable (headroom-reduced) area, pushed down
+  // by the headroom so tall buildings have room to rise into the top space.
+  const originY = boxH * headroom + (usableH - diamondH) / 2 + tileH / 2;
   return { tileW, tileH, originX, originY };
 }

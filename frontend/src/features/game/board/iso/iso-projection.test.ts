@@ -62,20 +62,31 @@ describe('depthKey', () => {
 });
 
 describe('fitIso', () => {
-  it('keeps the 2:1 iso ratio', () => {
+  it('defaults to the 2:1 iso ratio', () => {
     const cfg = fitIso(7, 7, 700, 700);
     expect(cfg.tileH).toBeCloseTo(cfg.tileW / 2);
+  });
+
+  it('honours a custom ratio (taller diamond)', () => {
+    const cfg = fitIso(7, 7, 700, 700, { ratio: 0.62 });
+    expect(cfg.tileH).toBeCloseTo(cfg.tileW * 0.62);
   });
 
   it('produces a tile size that fits the box width', () => {
     const cfg = fitIso(7, 7, 700, 700);
     const span = 7 + 7;
-    // Diamond width = span * tileW/2 must not exceed the box.
+    // Diamond width = span * tileW/2 must not exceed the box (with fill).
     expect((span * cfg.tileW) / 2).toBeLessThanOrEqual(700 + 0.001);
   });
 
   it('centres horizontally at half the box width', () => {
     const cfg = fitIso(7, 7, 700, 500);
     expect(cfg.originX).toBe(350);
+  });
+
+  it('pushes the diamond down when headroom is reserved', () => {
+    const noHead = fitIso(7, 7, 700, 900, { headroom: 0 });
+    const withHead = fitIso(7, 7, 700, 900, { headroom: 0.2 });
+    expect(withHead.originY).toBeGreaterThan(noHead.originY);
   });
 });
