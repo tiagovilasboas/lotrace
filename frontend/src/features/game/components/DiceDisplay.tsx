@@ -89,8 +89,8 @@ export function DiceDisplay({ dice }: DiceDisplayProps): ReactElement {
     : t('diceAriaEmpty');
 
   return (
-    <div className="flex flex-col items-center gap-1.5" role="img" aria-label={label}>
-      <div className="flex items-center justify-center gap-1.5">
+    <div className="flex flex-col items-center" role="img" aria-label={label} style={{ gap: '1cqw' }}>
+      <div className="flex items-center justify-center" style={{ gap: '2cqw' }}>
         <span className="-rotate-[9deg]">
           <DieFace value={die1} rolling={rolling} delayMs={0} />
         </span>

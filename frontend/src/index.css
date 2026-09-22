@@ -365,18 +365,18 @@
   .board-outer {
     background-color: var(--lr-brass);
     padding: 0.9cqmin;
-    border-radius: 4.7cqmin;
+    border-radius: 20px;
     box-shadow:
-      0 0 0 0.13cqmin var(--lr-brass-dim),
-      0 2cqmin 5cqmin rgba(3,10,24,0.65),
-      inset 0 0.13cqmin 0 rgba(255,249,236,0.18);
+      0 0 0 1px var(--lr-brass-dim),
+      0 16px 40px rgba(3,10,24,0.65),
+      inset 0 1px 0 rgba(255,249,236,0.18);
   }
 
-  /* Board inner (JSON: innerBorderRadius=15px=1.9cqmin) */
+  /* Board inner */
   .board-inner {
     background-color: var(--surface-board);
     padding: 0.9cqmin;
-    border-radius: 1.9cqmin;
+    border-radius: 14px;
     height: 100%;
   }
 
@@ -385,11 +385,11 @@
     display: grid;
     height: 100%;
     width: 100%;
-    gap: 0.13cqmin;
+    gap: 1px;
     grid-template-columns: minmax(0,1.28fr) repeat(5,minmax(0,1fr)) minmax(0,1.28fr);
     grid-template-rows:    minmax(0,1.28fr) repeat(5,minmax(0,1fr)) minmax(0,1.28fr);
     background-color: var(--surface-board);
-    border-radius: 1cqmin;
+    border-radius: 8px;
     overflow: hidden;
   }
 
@@ -408,7 +408,7 @@
     color: var(--board-ink);
     box-shadow: var(--shadow-tile);
     border: 0.13cqmin solid var(--border-tile);
-    border-radius: 8cqmin;
+    border-radius: 4px;
   }
 
   .board-tile--pending {
@@ -461,8 +461,8 @@
   /* ── Corner circles — 34% of the corner tile (atomic) ── */
   .corner-circle {
     border-radius: 50%;
-    width:  34cqmin;
-    height: 34cqmin;
+    width:  50cqmin;
+    height: 50cqmin;
     flex-shrink: 0;
     box-shadow: 0 0.5cqmin 2cqmin rgba(0,0,0,0.35), inset 0 0.3cqmin 0 rgba(255,255,255,0.25);
   }
@@ -648,13 +648,15 @@
   /* ── Die faces ── */
   .die-face {
     display: grid;
-    width: 2.7rem;
-    height: 2.7rem;
+    width: 11cqmin;
+    height: 11cqmin;
+    min-width: 2.4rem;
+    min-height: 2.4rem;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    gap: 0.12rem;
-    padding: 0.28rem;
-    border-radius: 0.45rem;
+    gap: 6%;
+    padding: 12%;
+    border-radius: 18%;
     background: var(--die-surface);
     border: 1px solid var(--die-border);
     box-shadow: var(--die-shadow);

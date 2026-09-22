@@ -1,13 +1,12 @@
 import { getCell, JAIL_FEE, JAIL_WAIT_TURNS, type ImobiliarioState, type TurnStage } from '@lotrace/shared';
 import { Dices } from 'lucide-react';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { BuyHouseActions } from '@/features/game/components/BuyHouseActions.tsx';
 import { FooterBar } from '@/features/game/board/FooterBar.tsx';
 import { useRollBusy } from '@/features/game/hooks/use-roll-busy.ts';
 import { listBuildableLots } from '@/features/game/lib/buildable-lots.ts';
 import { formatCash } from '@/features/game/lib/format-cash.ts';
-import { tokenCssVar } from '@/features/game/player-tokens.ts';
 import { t } from '@/lib/i18n.ts';
 
 type GameMoves = {
@@ -28,50 +27,6 @@ type ActionBarProps = {
   viewerID: string;
   moves: GameMoves;
 };
-
-function TurnAvatar({ playerID }: { playerID: string }): ReactElement {
-  return (
-    <span
-      className="turn-avatar shrink-0"
-      style={{ backgroundColor: tokenCssVar(playerID) }}
-      aria-hidden
-    />
-  );
-}
-
-/** Single-line prompt row: avatar + title + hint */
-function TurnPrompt({ playerID, title, hint }: { playerID: string; title: string; hint: string }): ReactElement {
-  return (
-    <div className="turn-prompt-row">
-      <TurnAvatar playerID={playerID} />
-      <div className="min-w-0 flex-1">
-        <p className="turn-title">{title}</p>
-        <p className="turn-hint">{hint}</p>
-      </div>
-    </div>
-  );
-}
-
-function PrimaryCTA({ children, onClick, disabled, loading, ariaLabel }: {
-  children: ReactNode;
-  onClick?: () => void;
-  disabled?: boolean;
-  loading?: boolean;
-  ariaLabel?: string;
-}): ReactElement {
-  return (
-    <Button
-      size="lg"
-      className="match-cta w-full"
-      onClick={onClick}
-      disabled={disabled}
-      loading={loading}
-      aria-label={ariaLabel}
-    >
-      {children}
-    </Button>
-  );
-}
 
 export function ActionBar({ G, stage, isActive, currentName, viewerID, moves }: ActionBarProps): ReactElement {
   const { rollBusy, beginRoll } = useRollBusy(stage, isActive);
@@ -104,51 +59,50 @@ export function ActionBar({ G, stage, isActive, currentName, viewerID, moves }: 
       {(!isActive || stage === 'roll' || rollBusy) ? (
         <FooterBar playerID={viewerID} title={title}>
           {rollBusy ? (
-            <Button size="lg" className="match-cta" loading aria-label={t('rolling')}>{t('rolling')}</Button>
+            <Button className="footer-btn footer-btn--primary" loading aria-label={t('rolling')}>
+              {t('rolling')}
+            </Button>
           ) : stage === 'roll' ? (
-            <Button size="lg" className="match-cta" onClick={handleRoll} aria-label={t('roll')}>
-              <Dices className="size-3" aria-hidden /> {t('roll')}
+            <Button className="footer-btn footer-btn--primary" onClick={handleRoll} aria-label={t('roll')}>
+              <Dices className="size-3 shrink-0" aria-hidden /> {t('roll')}
             </Button>
           ) : (
-            /* Waiting for other player — no button */
-            <span className="turn-hint truncate max-w-[140px]">{hint}</span>
+            /* Waiting for other player — no button, hint on right */
+            <span className="footerbar-hint">{hint}</span>
           )}
         </FooterBar>
-      ) : (
-        /* ── Multi-choice stages: compact panel ── */
-        <div className="turn-panel">
-          <div className="turn-prompt-row">
-            <span className="turn-avatar shrink-0" style={{ backgroundColor: tokenCssVar(viewerID) }} aria-hidden />
-            <div className="min-w-0 flex-1">
-              <p className="turn-title">{title}</p>
-              <p className="turn-hint">{hint}</p>
-            </div>
-          </div>
-
-          {stage === 'buy' && pending ? (
-            <div className="grid grid-cols-2 gap-2">
-              <Button size="lg" className="match-cta w-full" disabled={!canAfford} onClick={() => moves.buyProperty?.()}>{t('buy')}</Button>
-              <Button size="lg" className="match-secondary w-full" onClick={() => moves.skipBuy?.()}>{t('skip')}</Button>
-            </div>
+      ) : stage === 'buy' && pending ? (
+        /* ── Buy: two buttons in the footer ── */
+        <FooterBar playerID={viewerID} title={hint}>
+          <Button className="footer-btn footer-btn--primary" disabled={!canAfford} onClick={() => moves.buyProperty?.()}>
+            {t('buy')}
+          </Button>
+          <Button className="footer-btn footer-btn--secondary" onClick={() => moves.skipBuy?.()}>
+            {t('skip')}
+          </Button>
+        </FooterBar>
+      ) : stage === 'jail' ? (
+        <FooterBar playerID={viewerID} title={hint}>
+          <Button className="footer-btn footer-btn--primary" disabled={!canJail} onClick={() => moves.payJail?.()}>
+            {t('payJail')}
+          </Button>
+          <Button className="footer-btn footer-btn--secondary" onClick={() => moves.waitJail?.()}>
+            {t('waitJail')}
+          </Button>
+        </FooterBar>
+      ) : stage === 'end' ? (
+        /* ── Build stage: houses row (if any) + end-turn in footer ── */
+        <div className="flex flex-col gap-1.5">
+          {buildable.length > 0 ? (
+            <BuyHouseActions lots={buildable} onBuy={(i) => moves.buyHouse?.(i)} />
           ) : null}
-
-          {stage === 'jail' ? (
-            <div className="grid grid-cols-2 gap-2">
-              <Button size="lg" className="match-cta w-full" disabled={!canJail} onClick={() => moves.payJail?.()}>{t('payJail')}</Button>
-              <Button size="lg" className="match-secondary w-full" onClick={() => moves.waitJail?.()}>{t('waitJail')}</Button>
-            </div>
-          ) : null}
-
-          {stage === 'end' ? (
-            <>
-              {buildable.length > 0 ? (
-                <BuyHouseActions lots={buildable} onBuy={(i) => moves.buyHouse?.(i)} />
-              ) : null}
-              <Button size="lg" className="match-secondary w-full" onClick={() => moves.endTurn?.()}>{t('endTurn')}</Button>
-            </>
-          ) : null}
+          <FooterBar playerID={viewerID} title={title}>
+            <Button className="footer-btn footer-btn--secondary" onClick={() => moves.endTurn?.()}>
+              {t('endTurn')}
+            </Button>
+          </FooterBar>
         </div>
-      )}
+      ) : null}
     </>
   );
 }

@@ -54,7 +54,7 @@ export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactE
           className="text-center font-black leading-none tracking-tight"
           style={{
             fontFamily: 'var(--font-brand)',
-            fontSize: '9cqw',
+            fontSize: '12cqw',
             color: 'var(--lr-ivory-light)',
             letterSpacing: '1px',
             textShadow: '0 2px 14px rgba(0,0,0,0.45)',
@@ -67,7 +67,7 @@ export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactE
         <p
           className="text-center font-bold uppercase"
           style={{
-            fontSize: '2.2cqw',
+            fontSize: '2.8cqw',
             letterSpacing: '0.22em',
             color: 'var(--lr-brass)',
           }}
@@ -75,8 +75,8 @@ export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactE
           COMPRE · CONSTRUA · ACELERE
         </p>
 
-        {/* Dice — spec diceScale 0.75 on mobile */}
-        <div style={{ transform: 'scale(0.82)', transformOrigin: 'center center', margin: '2px 0' }}>
+        {/* Dice — scale atomically with the board via .die-face cqmin */}
+        <div style={{ margin: '0.6cqw 0' }}>
           <DiceDisplay dice={dice} />
         </div>
 

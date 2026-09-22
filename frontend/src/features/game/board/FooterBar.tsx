@@ -1,15 +1,15 @@
 /**
  * FooterBar — 32px height, single line.
- * Avatar dot + title + action button.
- * Used when isActive=false (waiting) or as a minimal CTA bar.
+ * Buttons are centred; optional title sits to the left, hint to the right.
+ * Kept minimal so it fits the 32px footer.
  */
 import type { ReactElement, ReactNode } from 'react';
 import { tokenCssVar } from '@/features/game/player-tokens.ts';
 
 type FooterBarProps = {
   playerID: string;
-  title: string;
-  children: ReactNode; // the CTA button
+  title?: string;
+  children: ReactNode; // the CTA button(s)
 };
 
 export function FooterBar({ playerID, title, children }: FooterBarProps): ReactElement {
@@ -21,8 +21,12 @@ export function FooterBar({ playerID, title, children }: FooterBarProps): ReactE
         style={{ backgroundColor: tokenCssVar(playerID) }}
         aria-hidden
       />
-      <span className="footerbar-title min-w-0 flex-1 truncate">{title}</span>
-      {children}
+
+      {/* Optional title on the left */}
+      {title ? <span className="footerbar-title">{title}</span> : <span className="flex-1" />}
+
+      {/* Buttons — centred group */}
+      <div className="footerbar-actions">{children}</div>
     </div>
   );
 }

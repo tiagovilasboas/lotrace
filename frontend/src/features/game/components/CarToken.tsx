@@ -76,16 +76,21 @@ export function CarToken({ playerID, size = 'board', side }: CarTokenProps): Rea
     );
   }
 
-  /* board / lobby sizes — top-down vertical orientation */
+  /* board / lobby sizes — top-down vertical orientation.
+   * Board tokens scale atomically with the board via cqmin (piso em rem). */
   const isLobby = size === 'lobby';
+  const boardStyle = isLobby
+    ? undefined
+    : { width: 'max(1.35rem, 34cqmin)', height: 'max(2.1rem, 53cqmin)' };
   return (
     <svg
       viewBox="0 0 28 44"
       className={cn(
         'car-token-arrive shrink-0 overflow-visible drop-shadow-md',
-        isLobby ? 'h-10 w-7' : 'h-[2.1rem] w-[1.35rem]',
+        isLobby ? 'h-10 w-7' : undefined,
         side ? tokenRotateClass(side) : undefined,
       )}
+      style={boardStyle}
       aria-hidden="true"
       focusable="false"
     >
