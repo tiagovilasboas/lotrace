@@ -17,7 +17,8 @@ function readTheme(): 'light' | 'dark' {
 
 function applyTheme(theme: 'light' | 'dark'): void {
   document.documentElement.classList.toggle('dark', theme === 'dark');
-  const color = theme === 'dark' ? '#0c1a16' : '#f4f1e8';
+  // theme-color meta tag: always midnight (the game is always dark-chrome)
+  const color = '#061221';
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color);
 }
 

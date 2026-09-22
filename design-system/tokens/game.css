@@ -1,0 +1,64 @@
+/**
+ * LotRace Design Tokens — Game
+ * Domain-specific tokens for board, pieces and game state.
+ * Import order: primitives.css → semantic.css → game.css
+ */
+
+:root {
+  /* ─── Board ──────────────────────────────────────────────────── */
+  --board-track:         var(--lr-ivory);
+  --board-felt:          var(--lr-felt);
+  --board-ink:           var(--lr-ink-tile);
+  --board-frame:         var(--lr-brass);
+  --board-frame-inner:   var(--lr-felt-dark);
+
+  /* ─── Felt texture (CSS-only, no image) ─────────────────────── */
+  --board-felt-bg:
+    radial-gradient(circle at 48% 30%,
+      rgba(255, 255, 255, 0.05), transparent 42%),
+    radial-gradient(circle at 60% 80%,
+      rgba(0, 0, 0, 0.12), transparent 50%),
+    var(--lr-felt);
+
+  /* ─── Property groups ────────────────────────────────────────── */
+  --group-brown:  var(--lr-group-brown);
+  --group-sky:    var(--lr-group-sky);
+  --group-pink:   var(--lr-group-pink);
+  --group-orange: var(--lr-group-orange);
+  --group-red:    var(--lr-group-red);
+  --group-yellow: var(--lr-group-yellow);
+  --group-green:  var(--lr-group-green);
+  --group-navy:   var(--lr-group-navy);
+
+  /* ─── Special cells ──────────────────────────────────────────── */
+  --cell-go:      var(--lr-go);
+  --cell-jail:    var(--lr-jail);
+  --cell-tax:     var(--lr-tax);
+  --cell-station: var(--lr-station);
+  --cell-park:    var(--lr-park);
+
+  /* ─── Pieces ─────────────────────────────────────────────────── */
+  --piece-outline:       var(--lr-ivory);        /* contorno marfim nas peças     */
+  --piece-shadow:        rgba(0, 0, 0, 0.28);    /* sombra elíptica no chão       */
+  --piece-window:        rgba(125, 211, 252, 0.9);/* vidro do carro               */
+  --piece-window-glare:  rgba(255, 255, 255, 0.55);/* reflexo no vidro            */
+  --piece-wheel:         var(--lr-ink);          /* pneu                          */
+  --piece-wheel-hub:     #d6d3d1;                /* aro                           */
+  --piece-stripe:        rgba(250, 246, 232, 0.35);/* listras de carroceria       */
+
+  /* ─── Die (dados) ────────────────────────────────────────────── */
+  --die-surface:         linear-gradient(145deg, #fffdf4 0%, #e4dfd0 100%);
+  --die-border:          rgba(15, 23, 42, 0.14);
+  --die-shadow:          2px 3px 0 rgba(15, 23, 42, 0.30),
+                         inset 2px 2px 2px rgba(255, 255, 255, 0.80);
+  --die-pip:             var(--lr-ink);
+  --die-pip-inset:       inset 0 1px 1px rgba(255, 255, 255, 0.28);
+
+  /* ─── HUD match surfaces ──────────────────────────────────────── */
+  --match-navy:          var(--lr-midnight);
+  --match-card:          var(--lr-midnight-60);
+
+  /* ─── Owner dot ─────────────────────────────────────────────── */
+  --owner-dot-size:      0.5rem;
+  --owner-dot-ring:      2px solid var(--lr-ivory);
+}

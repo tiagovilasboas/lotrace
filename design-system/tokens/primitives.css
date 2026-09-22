@@ -1,0 +1,47 @@
+/**
+ * LotRace Design Tokens — Primitives
+ * Raw values. Never reference these directly in components — use semantic or game tokens.
+ * Source: lotrace-design-system · Palette from new-design/lotrace-ui-system-concept
+ */
+
+:root {
+  /* ─── Brand palette ─────────────────────────────────────────── */
+  --lr-midnight:     #061221;   /* darkest table surface            */
+  --lr-midnight-80:  #0d1e30;   /* slightly lighter navy layer      */
+  --lr-midnight-60:  #0d2942;   /* HUD card surface                 */
+  --lr-felt:         #0e473a;   /* board felt base                  */
+  --lr-felt-dark:    #0b3a28;   /* city silhouette / deep shadow    */
+  --lr-felt-light:   #1a5c4a;   /* felt highlight                   */
+  --lr-ivory:        #f7f0de;   /* tile background / paper          */
+  --lr-ivory-dim:    #ede6ce;   /* tile border / subtle divider     */
+  --lr-brass:        #e4b44a;   /* board frame / accent gold        */
+  --lr-brass-dim:    #d4a840;   /* brass shadow                     */
+  --lr-brass-glow:   #d4b45a;   /* dashed path / city accent        */
+  --lr-action:       #3b82f6;   /* primary CTA — LANÇAR DADOS       */
+  --lr-action-hover: #2563eb;   /* CTA hover                        */
+  --lr-signal:       #57d8ff;   /* turn highlight — active player   */
+  --lr-signal-dim:   #38bdf8;   /* signal hover                     */
+
+  /* ─── Neutrals ──────────────────────────────────────────────── */
+  --lr-ink:          #1c1917;   /* dark text / die pip              */
+  --lr-ink-tile:     #1a1208;   /* tile label text                  */
+  --lr-fog:          #e8d48a;   /* board center label (brass-light) */
+  --lr-shadow:       #0f0f0f;
+
+  /* ─── Property group colors ─────────────────────────────────── */
+  --lr-group-brown:  #955436;
+  --lr-group-sky:    #aae0fa;
+  --lr-group-pink:   #d93a96;
+  --lr-group-orange: #f7941d;
+  --lr-group-red:    #ed1b24;
+  --lr-group-yellow: #fef200;
+  --lr-group-green:  #1fb25a;
+  --lr-group-navy:   #0072bb;
+
+  /* ─── Special cells ─────────────────────────────────────────── */
+  --lr-go:           #1fb25a;
+  --lr-jail:         #6b7280;
+  --lr-tax:          #9b0000;
+  --lr-station:      #111111;
+  --lr-park:         #57d8ff;   /* free parking corner              */
+}

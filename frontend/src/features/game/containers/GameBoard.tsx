@@ -41,32 +41,71 @@ export function GameBoard({
 
   return (
     <div className="match-table grid min-h-dvh w-full grid-rows-[auto_auto_minmax(0,1fr)_auto]">
-      <header className="flex items-center gap-2 px-3 pb-1 pt-[max(0.4rem,env(safe-area-inset-top))]">
+
+      {/* ── Header bar ─────────────────────────────────────────── */}
+      <header
+        className="flex items-center gap-2 px-3 pb-1 pt-[max(0.4rem,env(safe-area-inset-top))]"
+        style={{ backgroundColor: 'var(--surface-hud-raised)' }}
+      >
+        {/* Logo */}
         <div className="flex min-w-0 flex-1 items-center gap-2">
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sky-400/15 text-sky-300">
+          <span
+            className="flex size-8 shrink-0 items-center justify-center rounded-lg"
+            style={{
+              backgroundColor: 'color-mix(in srgb, var(--turn-highlight) 15%, transparent)',
+              color: 'var(--turn-highlight)',
+            }}
+          >
             <Dices className="size-4" aria-hidden />
           </span>
           <div className="min-w-0">
-            <p className="text-lg font-black tracking-tight text-white">{t('appName')}</p>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-300/80">
+            <p
+              className="text-lg font-black tracking-tight"
+              style={{ fontFamily: 'var(--font-brand)', color: 'var(--text-on-table)' }}
+            >
+              {t('appName')}
+            </p>
+            <p
+              className="text-[10px] font-semibold uppercase"
+              style={{
+                letterSpacing: '0.22em',
+                color: 'color-mix(in srgb, var(--turn-highlight) 80%, transparent)',
+              }}
+            >
               {t('brandSub')}
             </p>
           </div>
         </div>
+
+        {/* Layout chrome (switch seat / leave) */}
         {chrome ? (
-          <div className="flex shrink-0 items-center gap-1 [&_button]:h-8 [&_button]:border-white/20 [&_button]:bg-white/5 [&_button]:px-2.5 [&_button]:text-xs [&_button]:text-white">
-            {chrome}
+          <div
+            className="flex shrink-0 items-center gap-1"
+            style={{
+              ['--btn-border' as string]: 'var(--border-hud)',
+              ['--btn-bg' as string]: 'var(--action-secondary)',
+              ['--btn-text' as string]: 'var(--text-on-table)',
+            }}
+          >
+            <div className="flex items-center gap-1 [&_button]:h-8 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color:var(--border-hud)] [&_button]:bg-[color:var(--action-secondary)] [&_button]:px-2.5 [&_button]:text-xs [&_button]:text-[color:var(--text-on-table)]">
+              {chrome}
+            </div>
           </div>
         ) : null}
-        <ThemeToggle className="text-white hover:bg-white/10" />
+
+        <ThemeToggle
+          className="text-[color:var(--text-on-table-dim)] hover:bg-[color:var(--action-secondary)]"
+        />
       </header>
 
+      {/* ── Player cards ───────────────────────────────────────── */}
       <PlayerList
         players={Object.values(G.players)}
         currentPlayer={ctx.currentPlayer}
         viewerID={viewerID}
       />
 
+      {/* ── Board hero ─────────────────────────────────────────── */}
       <div className="relative min-h-0">
         <div className="absolute inset-0 flex items-center justify-center px-2">
           <div className="aspect-square h-full max-h-full w-auto max-w-full">
@@ -83,9 +122,16 @@ export function GameBoard({
         </div>
       </div>
 
+      {/* ── Action bar ─────────────────────────────────────────── */}
       <div className="px-3 pb-[max(0.85rem,env(safe-area-inset-bottom))] pt-2">
         {winner ? (
-          <p className="rounded-2xl bg-sky-400 px-4 py-3 text-center text-lg font-bold text-slate-950">
+          <p
+            className="rounded-2xl px-4 py-3 text-center text-lg font-bold"
+            style={{
+              backgroundColor: 'var(--turn-highlight)',
+              color: 'var(--turn-badge-text)',
+            }}
+          >
             {t('winner', { name: winner })}
           </p>
         ) : (
@@ -98,13 +144,17 @@ export function GameBoard({
             moves={moves}
           />
         )}
-        <p className="mt-2 text-center text-[11px] font-medium text-white/45">
+        <p
+          className="mt-2 text-center text-[11px] font-medium"
+          style={{ color: 'var(--text-on-table-dim)' }}
+        >
           {t('playerCount', { count: String(playerCount) })}
         </p>
         <div className="sr-only">
           <EventLog events={G.log} players={G.players} />
         </div>
       </div>
+
     </div>
   );
 }

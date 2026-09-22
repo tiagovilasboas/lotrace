@@ -1,0 +1,55 @@
+/**
+ * LotRace Design Tokens — Typography
+ * Scale, weights and font families.
+ * Import order: primitives.css → semantic.css → game.css → typography.css
+ */
+
+:root {
+  /* ─── Families ───────────────────────────────────────────────── */
+  --font-brand:  'Sora', 'Inter', system-ui, sans-serif;  /* logotype, headlines  */
+  --font-ui:     'Inter', system-ui, -apple-system,
+                 BlinkMacSystemFont, 'Segoe UI', sans-serif; /* body, HUD, numbers */
+  --font-sans:   var(--font-ui);                            /* Tailwind compat alias */
+
+  /* ─── Scale ──────────────────────────────────────────────────── */
+  /* display  — LOTRACE wordmark, game over screen */
+  --text-display-size:   clamp(2rem, 7vw, 3rem);
+  --text-display-weight: 800;
+  --text-display-tracking: -0.03em;
+  --text-display-font:   var(--font-brand);
+
+  /* title    — section headers, room code, property modal name */
+  --text-title-size:   clamp(1.25rem, 4vw, 1.5rem);
+  --text-title-weight: 800;
+  --text-title-font:   var(--font-brand);
+
+  /* hud      — player name, cash amount */
+  --text-hud-size:   0.875rem;     /* 14px */
+  --text-hud-weight: 700;
+
+  /* body     — prompts, hints, descriptions */
+  --text-body-size:   0.875rem;    /* 14px */
+  --text-body-weight: 500;
+
+  /* tile     — property name on board */
+  --text-tile-size:   clamp(0.46rem, 16cqmin, 0.8rem);
+  --text-tile-weight: 700;
+  --text-tile-leading: 1.08;
+  --text-tile-tracking: -0.02em;
+
+  /* price    — tile price on board */
+  --text-price-size:   clamp(0.4rem, 12cqmin, 0.62rem);
+  --text-price-weight: 600;
+
+  /* micro    — badge, label, "VEZ", "YOU" */
+  --text-micro-size:   0.5625rem;  /* 9px */
+  --text-micro-weight: 700;
+  --text-micro-tracking: 0.08em;
+  --text-micro-transform: uppercase;
+
+  /* board-label — LOTRACE center text, ÚLTIMO MOVIMENTO */
+  --text-board-label-size:    0.6875rem; /* 11px */
+  --text-board-label-weight:  700;
+  --text-board-label-tracking: 0.20em;
+  --text-board-label-transform: uppercase;
+}

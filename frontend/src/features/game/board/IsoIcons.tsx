@@ -25,7 +25,7 @@ function IsoSvg({
 }
 
 function GroundShadow(): ReactElement {
-  return <ellipse cx="16" cy="28.6" rx="10.5" ry="2.1" fill="#1c1917" opacity="0.28" />;
+  return <ellipse cx="16" cy="28.6" rx="10.5" ry="2.1" fill="var(--piece-shadow)" />;
 }
 
 export function HouseIso({ className }: IsoIconProps): ReactElement {
@@ -61,10 +61,10 @@ export function StationIso({ className }: IsoIconProps): ReactElement {
     <IsoSvg className={className}>
       <GroundShadow />
       <path d="M6 20.4h20v2.2H6z" fill="#44403c" />
-      <circle cx="11.2" cy="22.8" r="2.3" fill="#1c1917" />
-      <circle cx="20.8" cy="22.8" r="2.3" fill="#1c1917" />
-      <circle cx="11.2" cy="22.8" r="0.8" fill="#d6d3d1" />
-      <circle cx="20.8" cy="22.8" r="0.8" fill="#d6d3d1" />
+      <circle cx="11.2" cy="22.8" r="2.3" fill="var(--piece-wheel)" />
+      <circle cx="20.8" cy="22.8" r="2.3" fill="var(--piece-wheel)" />
+      <circle cx="11.2" cy="22.8" r="0.8" fill="var(--piece-wheel-hub)" />
+      <circle cx="20.8" cy="22.8" r="0.8" fill="var(--piece-wheel-hub)" />
       <path d="M7.4 13.2 16 9.2 24.6 13.2 24.6 20.2 7.4 20.2Z" fill="#0ea5e9" />
       <path d="M7.4 13.2 16 9.2 16 16.2 7.4 20.2Z" fill="#0369a1" />
       <path d="M16 9.2 24.6 13.2 22.8 13.8 16 10.4Z" fill="#7dd3fc" opacity="0.8" />

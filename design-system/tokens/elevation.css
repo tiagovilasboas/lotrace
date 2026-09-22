@@ -1,0 +1,56 @@
+/**
+ * LotRace Design Tokens — Elevation
+ * Box-shadows and z-index layers.
+ * Import order: primitives.css → semantic.css → game.css → elevation.css
+ */
+
+:root {
+  /* ─── Shadows ────────────────────────────────────────────────── */
+
+  /* Tile: paper raised on felt */
+  --shadow-tile:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 1px 2px rgba(7, 20, 40, 0.35);
+
+  /* Board outer container */
+  --shadow-board:
+    0 24px 60px rgba(0, 0, 0, 0.45);
+
+  /* Board frame (inset brass + deep inner) */
+  --shadow-board-frame:
+    inset 0 0 0 4px var(--lr-brass),
+    inset 0 0 0 6px var(--lr-felt-dark);
+
+  /* HUD card */
+  --shadow-card:
+    0 4px 16px rgba(0, 0, 0, 0.35);
+
+  /* HUD card — active turn */
+  --shadow-card-active:
+    0 0 0 2px var(--lr-signal),
+    0 0 18px rgba(87, 216, 255, 0.28);
+
+  /* Die (dado) */
+  --shadow-die:
+    2px 3px 0 rgba(15, 23, 42, 0.30),
+    inset 2px 2px 2px rgba(255, 255, 255, 0.80);
+
+  /* Primary CTA button */
+  --shadow-action:
+    0 8px 18px rgba(59, 130, 246, 0.40);
+
+  /* Tile pending (about-to-buy highlight) */
+  --shadow-tile-pending:
+    0 0 0 2px var(--lr-signal),
+    0 0 8px rgba(87, 216, 255, 0.30);
+
+  /* ─── Z-index layers ──────────────────────────────────────────── */
+  --z-board-tile:   1;
+  --z-board-piece:  10;
+  --z-board-token:  20;
+  --z-fx-canvas:    30;  /* GameFxCanvas — pointer-events: none */
+  --z-hud:          40;
+  --z-action-bar:   50;
+  --z-modal:        60;
+  --z-toast:        70;
+}

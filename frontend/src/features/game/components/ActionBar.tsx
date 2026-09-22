@@ -41,11 +41,11 @@ function PromptCard({
 }): ReactElement {
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-3 rounded-2xl bg-[color-mix(in_srgb,var(--match-card)_92%,transparent)] px-3 py-2.5 ring-1 ring-white/10">
+      <div className="flex items-center gap-3 rounded-2xl px-3 py-2.5 surface-card ring-1 ring-[color:var(--border-hud)]">
         <CarToken playerID={viewerID} size="hud" />
         <div className="min-w-0 flex-1">
-          <p className="truncate text-base font-bold leading-tight text-white">{title}</p>
-          <p className="text-xs leading-snug text-white/65">{hint}</p>
+          <p className="truncate text-base font-bold leading-tight text-on-table">{title}</p>
+          <p className="text-xs leading-snug text-on-table-dim">{hint}</p>
         </div>
       </div>
       {children}
@@ -140,7 +140,7 @@ export function ActionBar({
           <Button
             size="lg"
             variant="outline"
-            className="rounded-full border-white/25 bg-transparent text-white hover:bg-white/10"
+            className="match-secondary"
             onClick={() => moves.skipBuy?.()}
           >
             {t('skip')}
@@ -160,7 +160,7 @@ export function ActionBar({
           <Button
             size="lg"
             variant="outline"
-            className="rounded-full border-white/25 bg-transparent text-white hover:bg-white/10"
+            className="match-secondary"
             onClick={() => moves.waitJail?.()}
           >
             {t('waitJail')}
@@ -176,7 +176,7 @@ export function ActionBar({
           <Button
             size="lg"
             variant="outline"
-            className="rounded-full border-white/25 bg-transparent text-white hover:bg-white/10"
+            className="match-secondary"
             onClick={() => moves.endTurn?.()}
           >
             {t('endTurn')}
