@@ -272,9 +272,9 @@
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
-    padding: 10px 12px;
+    padding: 8px 10px;
     width: 148px;
-    height: 72px;
+    height: 66px;
     border-radius: 16px;
     background-color: var(--surface-hud);
     border: 1px solid var(--border-hud);
@@ -283,7 +283,7 @@
   }
 
   .player-card--active {
-    width: 172px;
+    width: 168px;
     background-color: var(--surface-hud-active);
     border: 2px solid var(--turn-highlight);
     box-shadow: 0 0 0 0 var(--lr-signal), 0 0 16px rgba(85,216,255,0.22);
@@ -304,8 +304,7 @@
   .player-name {
     font-size: 11px;
     font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.02em;
     line-height: 1;
     overflow: hidden;
     text-overflow: ellipsis;

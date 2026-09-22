@@ -40,7 +40,7 @@ export function CarToken({ playerID, size = 'board', side }: CarTokenProps): Rea
     return (
       <svg
         viewBox="0 0 72 36"
-        className="car-token-arrive h-8 w-[3.8rem] shrink-0 overflow-visible drop-shadow-md"
+        className="car-token-arrive h-7 w-[2.9rem] shrink-0 overflow-visible drop-shadow-md"
         aria-hidden="true"
         focusable="false"
       >

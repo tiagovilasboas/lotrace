@@ -8,7 +8,6 @@ import { BoardRing } from '@/features/game/board/BoardRing.tsx';
 import { ActionBar } from '@/features/game/components/ActionBar.tsx';
 import { EventLog } from '@/features/game/components/EventLog.tsx';
 import { PlayerList } from '@/features/game/components/PlayerList.tsx';
-import { PiecesCanvas } from '@/features/game/pieces3d/PiecesCanvas.tsx';
 import { useMatchChrome } from '@/features/game/lib/match-chrome.ts';
 import { t } from '@/lib/i18n.ts';
 
@@ -44,7 +43,7 @@ export function GameBoard({
      */
     <div
       className="game-screen flex h-dvh w-full flex-col overflow-hidden"
-      style={{ padding: '12px 12px 0 12px', gap: '10px' }}
+      style={{ padding: '10px 10px 0 10px', gap: '8px' }}
     >
       {/* ── Header — card arredondado com logo, subtítulo e toggle ── */}
       <header className="game-header shrink-0">
@@ -97,8 +96,9 @@ export function GameBoard({
               pendingCell={G.pendingCell}
               center={<BoardCenter dice={G.lastDice} events={G.log} players={G.players} />}
             />
-            {/* Three.js pieces overlay */}
+            {/* PiecesCanvas desativado — calibrar posições antes de reativar
             <PiecesCanvas G={G} />
+            */}
           </div>
         </div>
       </div>

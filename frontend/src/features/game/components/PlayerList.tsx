@@ -41,7 +41,8 @@ export function PlayerList({ players, currentPlayer, viewerID }: PlayerListProps
             {/* Bottom: name + balance */}
             <div className="min-w-0">
               <p className={cn('player-name', isViewer ? 'player-name--viewer' : 'player-name--other')}>
-                {isViewer ? t('you') : player.nickname}
+                {player.nickname}
+                {isViewer ? <span className="player-badge-vez ml-1">{t('you')}</span> : null}
               </p>
               <p className="player-balance">
                 {player.bankrupt ? t('bankrupt') : formatCash(player.cash)}
