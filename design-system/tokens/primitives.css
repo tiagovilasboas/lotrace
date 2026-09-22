@@ -8,12 +8,12 @@
   /* ─── Brand palette ─────────────────────────────────────────── */
   --lr-midnight:     #061221;   /* darkest table surface            */
   --lr-midnight-80:  #0d1e30;   /* slightly lighter navy layer      */
-  --lr-midnight-60:  #0d2942;   /* HUD card surface                 */
+  --lr-midnight-60:  #0d304b;   /* HUD card surface — spec #0D304B  */
   --lr-felt:         #0e473a;   /* board felt base                  */
   --lr-felt-dark:    #0b3a28;   /* city silhouette / deep shadow    */
   --lr-felt-light:   #1a5c4a;   /* felt highlight                   */
-  --lr-ivory:        #f7f0de;   /* tile background / paper          */
-  --lr-ivory-dim:    #ede6ce;   /* tile border / subtle divider     */
+  --lr-ivory:        #f4e6c4;   /* tile background / paper — spec #F4E6C4 */
+  --lr-ivory-dim:    #e8d8b0;   /* tile border / subtle divider     */
   --lr-brass:        #e4b44a;   /* board frame / accent gold        */
   --lr-brass-dim:    #d4a840;   /* brass shadow                     */
   --lr-brass-glow:   #d4b45a;   /* dashed path / city accent        */

@@ -41,25 +41,25 @@ export function HomeScreen({
   return (
     <div
       className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-6 px-4 py-8"
-      style={{ backgroundColor: 'var(--surface-table)' }}
+      style={{ backgroundColor: 'var(--lr-ivory)' }}
     >
       {/* ── Brand hero ─────────────────────────────────────────── */}
       <header className="flex flex-col items-center gap-1 text-center">
         <p
           className="text-[0.6875rem] font-bold uppercase tracking-[0.22em]"
-          style={{ color: 'var(--turn-highlight)' }}
+          style={{ color: 'var(--lr-felt)' }}
         >
           {t('appName')}
         </p>
         <h1
           className="text-4xl font-black tracking-tight"
-          style={{ fontFamily: 'var(--font-brand)', color: 'var(--text-on-table)' }}
+          style={{ fontFamily: 'var(--font-brand)', color: 'var(--lr-midnight)' }}
         >
           {t('tagline')}
         </h1>
         <p
           className="mt-1 text-sm"
-          style={{ color: 'var(--text-on-table-dim)' }}
+          style={{ color: 'rgba(6,18,33,0.55)' }}
         >
           {t('homeMinPlayers')}
         </p>
@@ -69,13 +69,14 @@ export function HomeScreen({
       <section
         className="flex flex-col gap-3 rounded-2xl p-4"
         style={{
-          backgroundColor: 'var(--surface-hud)',
-          border: '1px solid var(--border-hud)',
+          backgroundColor: '#ffffff',
+          border: '1px solid rgba(6,18,33,0.10)',
+          boxShadow: '0 2px 12px rgba(6,18,33,0.08)',
         }}
       >
         <label
           className="text-sm font-semibold"
-          style={{ color: 'var(--text-on-table)' }}
+          style={{ color: 'var(--lr-midnight)' }}
           htmlFor="nickname"
         >
           {t('nickname')}
@@ -89,6 +90,7 @@ export function HomeScreen({
           required
           minLength={2}
           maxLength={20}
+          className="border-[rgba(6,18,33,0.18)] bg-[var(--lr-ivory)] text-[var(--lr-midnight)] placeholder:text-[rgba(6,18,33,0.35)] focus-visible:border-[var(--lr-midnight)]"
         />
         <form onSubmit={submitCreate}>
           <Button
@@ -105,7 +107,7 @@ export function HomeScreen({
           <p
             id="create-need-nickname"
             className="text-xs"
-            style={{ color: 'var(--text-on-table-dim)' }}
+            style={{ color: 'rgba(6,18,33,0.45)' }}
           >
             {t('createNeedNickname')}
           </p>
@@ -114,27 +116,28 @@ export function HomeScreen({
 
       {/* ── Divider ────────────────────────────────────────────── */}
       <div className="flex items-center gap-3">
-        <div className="h-px flex-1" style={{ backgroundColor: 'var(--border-hud)' }} />
+        <div className="h-px flex-1" style={{ backgroundColor: 'rgba(6,18,33,0.14)' }} />
         <span
           className="text-xs font-semibold uppercase tracking-widest"
-          style={{ color: 'var(--text-on-table-dim)' }}
+          style={{ color: 'rgba(6,18,33,0.35)' }}
         >
           ou
         </span>
-        <div className="h-px flex-1" style={{ backgroundColor: 'var(--border-hud)' }} />
+        <div className="h-px flex-1" style={{ backgroundColor: 'rgba(6,18,33,0.14)' }} />
       </div>
 
       {/* ── Join ───────────────────────────────────────────────── */}
       <section
         className="flex flex-col gap-3 rounded-2xl p-4"
         style={{
-          backgroundColor: 'var(--surface-hud)',
-          border: '1px solid var(--border-hud)',
+          backgroundColor: '#ffffff',
+          border: '1px solid rgba(6,18,33,0.10)',
+          boxShadow: '0 2px 12px rgba(6,18,33,0.08)',
         }}
       >
         <label
           className="text-sm font-semibold"
-          style={{ color: 'var(--text-on-table)' }}
+          style={{ color: 'var(--lr-midnight)' }}
           htmlFor="code"
         >
           {t('roomCode')}
@@ -148,6 +151,7 @@ export function HomeScreen({
           minLength={6}
           maxLength={6}
           autoCapitalize="characters"
+          className="border-[rgba(6,18,33,0.18)] bg-[var(--lr-ivory)] text-[var(--lr-midnight)] placeholder:text-[rgba(6,18,33,0.35)] focus-visible:border-[var(--lr-midnight)] font-mono tracking-[0.2em] text-lg"
         />
         <form onSubmit={submitJoin}>
           <Button
@@ -164,14 +168,14 @@ export function HomeScreen({
           <p
             id="join-need-nickname-and-code"
             className="text-xs"
-            style={{ color: 'var(--text-on-table-dim)' }}
+            style={{ color: 'rgba(6,18,33,0.45)' }}
           >
             {t('joinNeedNicknameAndCode')}
           </p>
         ) : null}
         <p
           className="text-center text-xs"
-          style={{ color: 'var(--text-on-table-dim)' }}
+          style={{ color: 'rgba(6,18,33,0.35)' }}
         >
           {t('layoutCodeHint')}
         </p>

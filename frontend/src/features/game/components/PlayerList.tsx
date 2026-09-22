@@ -67,6 +67,18 @@ export function PlayerList({
 
             {/* Name + cash — right of car */}
             <div className="min-w-0 flex-1">
+              {/* Badge VEZ — above name when active */}
+              {isTurn ? (
+                <span
+                  className="mb-0.5 inline-block rounded-full px-1.5 py-px text-[8px] font-black uppercase leading-none tracking-wider"
+                  style={{
+                    backgroundColor: 'var(--turn-badge-bg)',
+                    color: 'var(--turn-badge-text)',
+                  }}
+                >
+                  {t('yourTurnBadge')}
+                </span>
+              ) : null}
               <p
                 className="truncate text-[10px] font-bold uppercase leading-none tracking-wide"
                 style={{
@@ -84,19 +96,6 @@ export function PlayerList({
                 {player.bankrupt ? t('bankrupt') : formatCash(player.cash)}
               </p>
             </div>
-
-            {/* VEZ badge — bottom right, tiny */}
-            {isTurn ? (
-              <span
-                className="absolute bottom-0.5 right-1 rounded-sm px-1 py-px text-[7px] font-black uppercase leading-none tracking-wide"
-                style={{
-                  backgroundColor: 'var(--turn-badge-bg)',
-                  color: 'var(--turn-badge-text)',
-                }}
-              >
-                {t('yourTurnBadge')}
-              </span>
-            ) : null}
           </li>
         );
       })}
