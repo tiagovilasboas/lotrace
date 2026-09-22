@@ -54,13 +54,13 @@ export function hueBarLayout(side: RingSide): HueBarLayout {
 export function tokenDockClass(side: RingSide): string {
   switch (side) {
     case 'south':
-      return 'inset-x-0 top-0 h-[max(1.8rem,44cqmin)] justify-center';
+      return 'inset-x-0 top-0 h-[max(1.5rem,30cqh)] justify-center';
     case 'north':
-      return 'inset-x-0 bottom-0 h-[max(1.8rem,44cqmin)] justify-center';
+      return 'inset-x-0 bottom-0 h-[max(1.5rem,30cqh)] justify-center';
     case 'west':
-      return 'inset-y-0 right-0 w-[max(1.8rem,44cqmin)] flex-col justify-center';
+      return 'inset-y-0 right-0 w-[max(1.5rem,30cqh)] flex-col justify-center';
     case 'east':
-      return 'inset-y-0 left-0 w-[max(1.8rem,44cqmin)] flex-col justify-center';
+      return 'inset-y-0 left-0 w-[max(1.5rem,30cqh)] flex-col justify-center';
   }
 }
 

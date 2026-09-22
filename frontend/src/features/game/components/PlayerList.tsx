@@ -1,7 +1,7 @@
 import type { PlayerState } from '@lotrace/shared';
 import type { ReactElement } from 'react';
 import { CarToken } from '@/features/game/components/CarToken.tsx';
-import { formatCash } from '@/features/game/lib/format-cash.ts';
+import { formatCashShort } from '@/features/game/lib/format-cash.ts';
 import { t } from '@/lib/i18n.ts';
 import { cn } from '@/lib/utils.ts';
 
@@ -30,24 +30,24 @@ export function PlayerList({ players, currentPlayer, viewerID }: PlayerListProps
               player.bankrupt && 'opacity-40',
             )}
           >
-            {/* Top: car + badge */}
-            <div className="flex items-center justify-between gap-1">
-              <CarToken playerID={player.id} size="hud" />
-              {isTurn ? (
-                <span className="player-badge-vez">{t('yourTurnBadge')}</span>
-              ) : null}
-            </div>
+            {/* Car token on the left */}
+            <CarToken playerID={player.id} size="hud" />
 
-            {/* Bottom: name + balance */}
-            <div className="min-w-0">
+            {/* Name + balance stacked on the right */}
+            <div className="min-w-0 flex-1">
               <p className={cn('player-name', isViewer ? 'player-name--viewer' : 'player-name--other')}>
-                {player.nickname}
-                {isViewer ? <span className="player-badge-vez ml-1">{t('you')}</span> : null}
+                {isViewer ? t('you') : player.nickname}
               </p>
               <p className="player-balance">
-                {player.bankrupt ? t('bankrupt') : formatCash(player.cash)}
+                {player.bankrupt ? t('bankrupt') : formatCashShort(player.cash)}
               </p>
             </div>
+
+            {/* Turn badge — only for opponents; the viewer's turn is already
+             * shown by the cyan card border, the header and the footer. */}
+            {isTurn && !isViewer ? (
+              <span className="player-badge-vez shrink-0">{t('yourTurnBadge')}</span>
+            ) : null}
           </li>
         );
       })}

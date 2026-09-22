@@ -18,8 +18,8 @@ export function OwnerDot({ ownerID }: OwnerDotProps): ReactElement | null {
       className="shrink-0 rounded-full"
       style={{
         ...tokenBgStyle(ownerID),
-        width: 'max(0.6rem, 11cqmin)',
-        height: 'max(0.6rem, 11cqmin)',
+        width: 'max(0.65rem, 12cqmin)',
+        height: 'max(0.65rem, 12cqmin)',
         boxShadow: '0 0 0 1.5px var(--lr-ivory), 0 0 0 2.5px rgba(0,0,0,0.25)',
       }}
       title={t('owned')}

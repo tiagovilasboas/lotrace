@@ -42,16 +42,22 @@ export function HouseMarkers({ count, side }: HouseMarkersProps): ReactElement |
       }
     >
       {isHotel(level) ? (
+        /* Ruler: hotel is the top asset — biggest single object (~55% width). */
         <HotelIso
           className="drop-shadow-md"
-          style={{ width: 'max(1.6rem, 32cqmin)', height: 'max(1.6rem, 32cqmin)' }}
+          style={{ width: 'max(2rem, 46cqmin)', height: 'max(2rem, 46cqmin)' }}
         />
       ) : (
+        /* Ruler: houses are the asset — bigger than the car. Each shrinks a
+         * little as more sit side by side so the row fits the coloured band. */
         Array.from({ length: houses }, (_, index) => (
           <HouseIso
             key={index}
             className="drop-shadow-sm"
-            style={{ width: 'max(1.05rem, 21cqmin)', height: 'max(1.05rem, 21cqmin)' }}
+            style={{
+              width: `max(1.2rem, ${houses >= 3 ? 26 : 34}cqmin)`,
+              height: `max(1.2rem, ${houses >= 3 ? 26 : 34}cqmin)`,
+            }}
           />
         ))
       )}

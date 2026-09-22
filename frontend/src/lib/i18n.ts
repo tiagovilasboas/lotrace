@@ -34,7 +34,7 @@ const messages = {
   jailHint: 'Prisão: perde 2 rodadas. Pague R$50 para sair agora, ou espere {turns} rodada(s).',
   yourTurn: 'Sua vez',
   yourTurnNamed: 'Sua vez, {name}!',
-  yourTurnBadge: 'Sua vez',
+  yourTurnBadge: 'VEZ',
   waitTurn: 'Vez de {name}',
   rollHint: 'Lance os dados para mover seu peão.',
   waitHint: 'Espere {name} jogar.',

@@ -40,7 +40,7 @@ export function CarToken({ playerID, size = 'board', side }: CarTokenProps): Rea
     return (
       <svg
         viewBox="0 0 72 36"
-        className="car-token-arrive h-7 w-[2.9rem] shrink-0 overflow-visible drop-shadow-md"
+        className="car-token-arrive h-6 w-9 shrink-0 overflow-visible drop-shadow-md"
         aria-hidden="true"
         focusable="false"
       >
@@ -79,9 +79,12 @@ export function CarToken({ playerID, size = 'board', side }: CarTokenProps): Rea
   /* board / lobby sizes — top-down vertical orientation.
    * Board tokens scale atomically with the board via cqmin (piso em rem). */
   const isLobby = size === 'lobby';
+  /* Proportion ruler (proportions.json): the car is only a POSITION MARKER,
+   * the smallest movable — buildings (the asset) read bigger. ~24 units:
+   * height 28% of street DEPTH (cqh), width ~22% of street WIDTH (cqw). */
   const boardStyle = isLobby
     ? undefined
-    : { width: 'max(1.15rem, 28cqmin)', height: 'max(1.8rem, 44cqmin)' };
+    : { width: 'max(1rem, 22cqw)', height: 'max(1.5rem, 28cqh)' };
   return (
     <svg
       viewBox="0 0 28 44"
@@ -139,7 +142,8 @@ export function CarTokenStack({
 
   const stacked = side === 'west' || side === 'east';
   const count   = playerIDs.length;
-  const scale   = count === 1 ? 1 : count === 2 ? 0.84 : count <= 4 ? 0.70 : 0.60;
+  /* proportions.json pieces.stackScale */
+  const scale   = count === 1 ? 1 : count === 2 ? 0.74 : count <= 4 ? 0.58 : 0.48;
 
   /* Overlap proportional to the board car size (height ~78cqmin, width ~50cqmin).
    * When scaled down for stacks, tuck the pieces closer so they share the dock. */

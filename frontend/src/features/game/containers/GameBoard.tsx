@@ -7,6 +7,7 @@ import { BoardCenter } from '@/features/game/board/BoardCenter.tsx';
 import { BoardRing } from '@/features/game/board/BoardRing.tsx';
 import { ActionBar } from '@/features/game/components/ActionBar.tsx';
 import { EventLog } from '@/features/game/components/EventLog.tsx';
+import { PlayerList } from '@/features/game/components/PlayerList.tsx';
 import { useMatchChrome } from '@/features/game/lib/match-chrome.ts';
 import { t } from '@/lib/i18n.ts';
 
@@ -57,12 +58,19 @@ export function GameBoard({
       className="game-screen flex h-dvh w-full flex-col overflow-hidden"
       style={{ gap: '6px', padding: '6px 8px 0' }}
     >
-      {/* ── 32px top bar with inline player chips ── */}
+      {/* ── 32px top bar: logo + viewer balance + chrome ── */}
       <TopBar
         players={playerList}
         currentPlayer={ctx.currentPlayer}
         viewerID={viewerID}
         chrome={chrome}
+      />
+
+      {/* ── Player cards strip — all players (car + name + balance + VEZ) ── */}
+      <PlayerList
+        players={playerList}
+        currentPlayer={ctx.currentPlayer}
+        viewerID={viewerID}
       />
 
       {/* ── Board fills everything, stays square, max width & height ──

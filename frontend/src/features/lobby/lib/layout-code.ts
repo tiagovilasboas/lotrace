@@ -27,5 +27,5 @@ export const LAYOUT_PLAYERS = 4;
 export function layoutNicknames(nickname: string): [string, string, string, string] {
   const trimmed = nickname.trim();
   const you = trimmed.length >= 2 ? trimmed : 'Você';
-  return [you, LAYOUT_GUEST_NAME, 'Jogador 3', 'Jogador 4'];
+  return [you, LAYOUT_GUEST_NAME, 'Ana', 'Bia'];
 }

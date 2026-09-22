@@ -12,7 +12,7 @@ import { CarTokenStack } from '@/features/game/components/CarToken.tsx';
  * SVG is inline and flat — readable at any tile size.
  */
 function CornerMark({ kind }: { kind: CellKind }): ReactElement | null {
-  const size = 'max(2rem, 40cqmin)';
+  const size = 'max(2.4rem, 48cqmin)';
 
   switch (kind) {
     case 'go':

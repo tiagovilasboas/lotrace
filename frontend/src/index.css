@@ -498,40 +498,37 @@
   .corner-circle--return { background-color: var(--corner-return); }
   .corner-circle--park   { background-color: var(--corner-park); }
 
-  /* ── Player list (JSON: gap=11px) ── */
+  /* ── Player strip — thin row of all players, fits without stealing the
+   * board's height. 4 equal columns on mobile; wraps only if truly tight. */
   .player-list {
-    display: flex;
-    gap: clamp(6px, 1.2vw, 11px);
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 5px;
+    flex-shrink: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
 
-  .player-list::-webkit-scrollbar { display: none; }
-
-  /* Player card (JSON: 200×80 active / 199×80, r=21/18, p=13/17) */
+  /* Compact horizontal card: car + (name / balance). ~46px tall. */
   .player-card {
-    flex-shrink: 0;
+    min-width: 0;
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
     overflow: hidden;
-    padding: clamp(8px, 1.1dvh, 13px) clamp(10px, 1.9vw, 17px);
-    width: clamp(130px, 22vw, 200px);
-    height: clamp(60px, 6.7dvh, 80px);
-    border-radius: clamp(12px, 2vw, 18px);
+    padding: 5px 8px;
+    height: 46px;
+    border-radius: 10px;
     background-color: var(--surface-hud);
     border: 1px solid var(--border-hud);
-    scroll-snap-align: start;
     transition: border-color 200ms ease, box-shadow 200ms ease;
   }
 
   .player-card--active {
-    border-radius: clamp(14px, 2.3vw, 21px);
     background-color: var(--surface-hud-active);
-    border: 2px solid var(--turn-highlight);
-    box-shadow: 0 0 16px rgba(85,216,255,0.22);
+    border: 1.5px solid var(--turn-highlight);
+    box-shadow: 0 0 12px rgba(85,216,255,0.22);
   }
 
   .player-badge-vez {
@@ -546,12 +543,13 @@
     color: var(--turn-badge-text);
   }
 
-  /* JSON: nameFontSize=14 amountFontSize=14 */
+  /* Compact strip: name is secondary (may truncate), balance is the
+   * game info and must stay readable. */
   .player-name {
-    font-size: clamp(10px, 1.6vw, 14px);
-    font-weight: 800;
-    letter-spacing: 0.02em;
-    line-height: 1;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1.1;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -561,15 +559,13 @@
   .player-name--other  { color: var(--text-on-table-dim); }
 
   .player-balance {
-    font-size: clamp(10px, 1.6vw, 14px);
-    font-weight: 700;
+    font-size: 11px;
+    font-weight: 800;
     font-variant-numeric: tabular-nums;
-    line-height: 1;
+    line-height: 1.1;
     color: var(--text-on-table);
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
-    margin-top: 2px;
+    margin-top: 1px;
   }
 
   /* ── Turn panel — compact card above footerbar when multi-action ── */
@@ -674,10 +670,10 @@
   /* ── Die faces ── */
   .die-face {
     display: grid;
-    width: 10cqmin;
-    height: 10cqmin;
-    min-width: 2rem;
-    min-height: 2rem;
+    width: 13cqmin;
+    height: 13cqmin;
+    min-width: 2.4rem;
+    min-height: 2.4rem;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 6%;

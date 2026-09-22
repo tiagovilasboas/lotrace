@@ -9,23 +9,31 @@ export function formatCash(amount: number): string {
  *   950       -> "R$ 950"
  */
 export function formatCashCompact(amount: number): string {
+  return `R$ ${formatCashShort(amount)}`;
+}
+
+/**
+ * Currency without the "R$ " prefix, for very tight spots (player strip)
+ * where the context already reads as money.
+ *   1_760_000 -> "1,76M"   340_000 -> "340k"   950 -> "950"
+ */
+export function formatCashShort(amount: number): string {
   const abs = Math.abs(amount);
   const sign = amount < 0 ? '-' : '';
 
   if (abs >= 1_000_000) {
     const millions = abs / 1_000_000;
-    // 1 decimal, but drop a trailing ",0" (3,0M -> 3M)
     const text = millions.toLocaleString('pt-BR', {
       minimumFractionDigits: 0,
       maximumFractionDigits: millions >= 10 ? 0 : 2,
     });
-    return `${sign}R$ ${text}M`;
+    return `${sign}${text}M`;
   }
 
   if (abs >= 1_000) {
     const thousands = Math.round(abs / 1_000);
-    return `${sign}R$ ${thousands}k`;
+    return `${sign}${thousands}k`;
   }
 
-  return `${sign}R$ ${abs.toLocaleString('pt-BR')}`;
+  return `${sign}${abs.toLocaleString('pt-BR')}`;
 }

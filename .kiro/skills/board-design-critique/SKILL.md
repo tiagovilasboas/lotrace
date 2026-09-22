@@ -15,6 +15,49 @@ looking at a physical board**, not like an engineer checking if things fit.
 - Compare the current screenshot side by side with the concept. If a piece/text feels
   smaller or weaker than the concept, it is wrong.
 
+## Proportion ruler (source of truth — measure, don't guess)
+Absolute scale: **board = 1000, 1 unit = 0.1% of the board side.** The full token
+set lives in `design-system/tokens/proportions.json` — that file is the source of
+truth; this table is the working summary.
+
+A street (property tile) is **83.33 wide × 125 deep**. Piece sizes are expressed
+relative to the STREET (not the whole board), which maps to container-query units
+because each `.board-tile` is a container:
+- **% of street width** → `cqw` (≈ `cqmin` on tall tiles)
+- **% of street depth** → `cqh`
+
+**Semantics drive size: buildings (the ASSET the player built) are the biggest;
+the car is only a position marker and stays small.** A dominant car misreads the
+game — it makes the marker look like the asset. Wealth = houses/hotels, so they win.
+
+| Element              | Units | % of street        | CSS driver               |
+| -------------------- | ----: | ------------------ | ------------------------ |
+| House (small build)  |    34 | 40% width          | `40cqw`                  |
+| Mid building         |    42 | 50% width          | `50cqw`                  |
+| Hotel (top asset)    |    50 | 60% width          | `60cqw`                  |
+| Property/corner icon |    40 | 48% width          | `48cqmin`                |
+| Player piece (car)   |    24 | 28% depth / 20% w  | `height: 28cqh` (mobile) |
+| Selected piece       |    28 | 32% depth          | `height: 32cqh`          |
+| Colour strip height  |    22 | 18% depth          | `18cqh`                  |
+| Owner dot            |    12 | 14% width          | `14cqw`                  |
+| Dice                 |    75 | 10% of 750 centre  | `~10cqmin` of board      |
+
+Visual weight (asset first, marker last): `car 24 < icon 40 < house 40 < building 50 < hotel 60` (street=100).
+The car is the SMALLEST movable — it marks position, it is not the wealth.
+
+Stacks (same tile) — from proportions.json pieces.stackScale:
+1→100%, 2→74%, 3-4→58%, 5-6→48%.
+
+Visual size vs hit area (critical for digital):
+- The drawn piece may be smaller, but the interactive/touch target must be >=40–44px. Pad, don't shrink the hit area.
+
+Rules of thumb:
+- Buildings are clearly LARGER than the car — the house/hotel is the wealth, the car just marks position.
+- Hotel is the biggest single object on a tile (~60% of the street); houses substantial (~40%); car small (~28% depth).
+- Multiple houses shrink a bit to fit side by side, but each still reads bigger than the car.
+- Dice prominent in the centre but the ring as a whole stays the hero.
+- Everything atomic (`cqw`/`cqh`/`cqmin`) so it scales on every screen; desktop tones down via media query.
+
 ## Player-first lens (ask these first)
 1. Do the **pieces have physical presence**? On a real board the car and houses are
    objects you see from across the table. If they look like tiny stickers, they are too small.
