@@ -360,22 +360,23 @@
     display: none; /* hidden at 32px — no room */
   }
 
-  /* ── Board outer (JSON: outerBorderRadius=37 border≈7px) ── */
+  /* ── Board outer (JSON: border≈7px=0.9cqmin, radius=37px=4.7cqmin) ──
+   * ATOMIC: cqmin relative to .board-square. Board grows → frame grows. */
   .board-outer {
     background-color: var(--lr-brass);
-    padding: clamp(4px, 0.9%, 8px);
-    border-radius: clamp(20px, 4.7vw, 37px);
+    padding: 0.9cqmin;
+    border-radius: 4.7cqmin;
     box-shadow:
-      0 0 0 1px var(--lr-brass-dim),
-      0 16px 40px rgba(3,10,24,0.65),
-      inset 0 1px 0 rgba(255,249,236,0.18);
+      0 0 0 0.13cqmin var(--lr-brass-dim),
+      0 2cqmin 5cqmin rgba(3,10,24,0.65),
+      inset 0 0.13cqmin 0 rgba(255,249,236,0.18);
   }
 
-  /* Board inner (JSON: innerBorderRadius=15) */
+  /* Board inner (JSON: innerBorderRadius=15px=1.9cqmin) */
   .board-inner {
     background-color: var(--surface-board);
-    padding: clamp(4px, 0.9%, 8px);
-    border-radius: clamp(8px, 1.7vw, 15px);
+    padding: 0.9cqmin;
+    border-radius: 1.9cqmin;
     height: 100%;
   }
 
@@ -384,15 +385,17 @@
     display: grid;
     height: 100%;
     width: 100%;
-    gap: 1px;
+    gap: 0.13cqmin;
     grid-template-columns: minmax(0,1.28fr) repeat(5,minmax(0,1fr)) minmax(0,1.28fr);
     grid-template-rows:    minmax(0,1.28fr) repeat(5,minmax(0,1fr)) minmax(0,1.28fr);
     background-color: var(--surface-board);
-    border-radius: clamp(4px, 1vw, 8px);
+    border-radius: 1cqmin;
     overflow: hidden;
   }
 
-  /* ── Tile base (JSON: r=8 band=17px≈16cqh) ── */
+  /* ── Tile base (JSON: r=8) — own container-query context ──
+   * ATOMIC: each tile is a container so its contents (name, price,
+   * accent, corner) scale with the tile, which scales with the board. */
   .board-tile {
     container-type: size;
     position: relative;
@@ -404,63 +407,64 @@
     background-color: var(--surface-tile);
     color: var(--board-ink);
     box-shadow: var(--shadow-tile);
-    border: 1px solid var(--border-tile);
-    border-radius: clamp(4px, 8%, 8px);
+    border: 0.13cqmin solid var(--border-tile);
+    border-radius: 8cqmin;
   }
 
   .board-tile--pending {
     border-color: var(--turn-highlight);
-    box-shadow: 0 0 0 2px var(--turn-highlight), 0 0 8px rgba(85,216,255,0.3);
+    box-shadow: 0 0 0 0.3cqmin var(--turn-highlight), 0 0 1.2cqmin rgba(85,216,255,0.3);
     z-index: 10;
   }
 
-  /* Colour accent band (JSON: propertyBandHeight=17px → ~16cqh) */
+  /* Colour accent band — atomic padding via cqmin */
   .tile-accent {
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 0 2px;
+    padding: 0 2cqmin;
   }
 
-  .tile-accent--h { height: clamp(6px, 16cqh, 17px); width: 100%; }
-  .tile-accent--v { width: clamp(6px, 16cqw, 17px); height: 100%; }
+  /* Accent band — 16% of the tile (JSON band=17px on 106px cell) */
+  .tile-accent--h { height: 16cqh; width: 100%; }
+  .tile-accent--v { width: 16cqw; height: 100%; }
 
-  /* Tile name (JSON: 10px 700 lh=12) */
+  /* Tile name — pure cqmin, scales with tile → board (atomic) */
   .tile-name-line {
     display: block;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: clamp(0.44rem, 15cqmin, 0.625rem);
+    font-size: 16cqmin;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.15;
     letter-spacing: -0.01em;
     color: var(--board-ink);
   }
 
-  /* Tile price (JSON: 8px 600) */
+  /* Tile price — pure cqmin */
   .tile-price {
     display: block;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: clamp(0.36rem, 11cqmin, 0.5rem);
+    font-size: 12cqmin;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     line-height: 1;
     color: var(--text-on-tile-price);
   }
 
-  /* ── Corner circles (JSON: diameter=35 → 33cqmin of corner tile) ── */
+  /* ── Corner circles — 34% of the corner tile (atomic) ── */
   .corner-circle {
     border-radius: 50%;
-    width:  clamp(1.4rem, 33cqmin, 2.4rem);
-    height: clamp(1.4rem, 33cqmin, 2.4rem);
+    width:  34cqmin;
+    height: 34cqmin;
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.25);
+    box-shadow: 0 0.5cqmin 2cqmin rgba(0,0,0,0.35), inset 0 0.3cqmin 0 rgba(255,255,255,0.25);
   }
 
   .corner-circle--go     { background-color: var(--corner-go); }
@@ -706,17 +710,19 @@
 
   /*
    * Square board that always fits both axes of the flex container.
-   * Two constraints:
-   *   height: 100%  + aspect-ratio → square sized by height (landscape)
-   *   max-width: 100%              → caps by width  (portrait)
-   * The flex parent (align/justify center) keeps it centred either way.
-   * On portrait the width cap wins and the effective height shrinks to match,
-   * because aspect-ratio keeps it square while max-width is authoritative.
+   *
+   * ATOMIC DESIGN: this element is a container-query context.
+   * Everything inside (frame, radius, padding, tiles, text) measures in
+   * `cqmin` relative to THIS board — so when the board grows, all parts
+   * grow proportionally. No viewport units inside the board.
    */
   .board-square {
     height: 100%;
     aspect-ratio: 1 / 1;
     max-width: 100%;
+    /* Container-query context for everything inside the board */
+    container-type: size;
+    container-name: board;
     /* CSS 3D tilt */
     transform: rotateX(18deg);
     transform-origin: center 55%;

@@ -54,7 +54,7 @@ export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactE
           className="text-center font-black leading-none tracking-tight"
           style={{
             fontFamily: 'var(--font-brand)',
-            fontSize: 'clamp(1.5rem, 9cqw, 2.75rem)',
+            fontSize: '9cqw',
             color: 'var(--lr-ivory-light)',
             letterSpacing: '1px',
             textShadow: '0 2px 14px rgba(0,0,0,0.45)',
@@ -67,7 +67,7 @@ export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactE
         <p
           className="text-center font-bold uppercase"
           style={{
-            fontSize: 'clamp(0.4rem, 2.2cqw, 0.5625rem)',
+            fontSize: '2.2cqw',
             letterSpacing: '0.22em',
             color: 'var(--lr-brass)',
           }}
@@ -83,17 +83,18 @@ export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactE
         {/* Last move pill — spec rgba(1,31,27,0.82), borderRadius 18 */}
         {latest ? (
           <div
-            className="flex max-w-[76%] flex-col items-center gap-0.5 px-3 py-1.5"
+            className="flex max-w-[76%] flex-col items-center px-3 py-1.5"
             style={{
+              gap: '0.4cqw',
               backgroundColor: 'rgba(1,31,27,0.82)',
-              borderRadius: '18px',
+              borderRadius: '2.3cqw',
               backdropFilter: 'blur(4px)',
             }}
           >
             <span
               className="font-bold uppercase"
               style={{
-                fontSize: 'clamp(0.36rem, 1.8cqw, 0.5rem)',
+                fontSize: '1.8cqw',
                 letterSpacing: '0.2em',
                 color: 'var(--lr-brass)',
               }}
@@ -103,7 +104,7 @@ export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactE
             <span
               className="truncate text-center font-semibold leading-snug"
               style={{
-                fontSize: 'clamp(0.48rem, 2.6cqw, 0.6875rem)',
+                fontSize: '2.6cqw',
                 color: 'var(--lr-ivory-light)',
               }}
             >
@@ -113,7 +114,7 @@ export function BoardCenter({ dice, events, players }: BoardCenterProps): ReactE
         ) : (
           <p
             style={{
-              fontSize: 'clamp(0.48rem, 2.6cqw, 0.6875rem)',
+              fontSize: '2.6cqw',
               color: 'var(--text-board-label)',
             }}
           >
