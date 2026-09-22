@@ -1,13 +1,11 @@
 import type { ImobiliarioState, TurnStage } from '@lotrace/shared';
 import type { BoardProps } from 'boardgame.io/react';
-import { Dices } from 'lucide-react';
 import type { ReactElement } from 'react';
-import { ThemeToggle } from '@/components/theme-toggle.tsx';
+import { TopBar } from '@/features/game/board/TopBar.tsx';
 import { BoardCenter } from '@/features/game/board/BoardCenter.tsx';
 import { BoardRing } from '@/features/game/board/BoardRing.tsx';
 import { ActionBar } from '@/features/game/components/ActionBar.tsx';
 import { EventLog } from '@/features/game/components/EventLog.tsx';
-import { PlayerList } from '@/features/game/components/PlayerList.tsx';
 import { useMatchChrome } from '@/features/game/lib/match-chrome.ts';
 import { t } from '@/lib/i18n.ts';
 
@@ -28,40 +26,34 @@ export function GameBoard({
   playerID,
   isActive,
 }: BoardProps<ImobiliarioState>): ReactElement {
-  const viewerID = playerID ?? '0';
-  const stage = ctx.activePlayers?.[ctx.currentPlayer] as TurnStage | undefined;
-  const current = G.players[ctx.currentPlayer];
-  const winner = readWinner(ctx.gameover, G.players);
-  const chrome = useMatchChrome();
+  const viewerID    = playerID ?? '0';
+  const stage       = ctx.activePlayers?.[ctx.currentPlayer] as TurnStage | undefined;
+  const current     = G.players[ctx.currentPlayer];
+  const winner      = readWinner(ctx.gameover, G.players);
+  const chrome      = useMatchChrome();
   const playerCount = Object.keys(G.players).length;
+  const playerList  = Object.values(G.players);
 
   return (
-    <div className="game-screen flex h-dvh w-full flex-col overflow-hidden" style={{ gap: '8px', padding: '8px 10px 0' }}>
+    /**
+     * 3 rows:
+     *   TopBar  32px  — logo + player chips + toggle
+     *   Board   flex-1 — hero
+     *   Footer  auto   — action bar
+     */
+    <div
+      className="game-screen flex h-dvh w-full flex-col overflow-hidden"
+      style={{ gap: '6px', padding: '6px 8px 0' }}
+    >
+      {/* ── 32px top bar with inline player chips ── */}
+      <TopBar
+        players={playerList}
+        currentPlayer={ctx.currentPlayer}
+        viewerID={viewerID}
+        chrome={chrome}
+      />
 
-      {/* ── Header: single line, minimal height ── */}
-      <header className="game-header shrink-0 flex items-center gap-2">
-        <span className="game-logo-icon shrink-0">
-          <Dices className="size-3.5" aria-hidden />
-        </span>
-        <span className="game-logo-title min-w-0 flex-1 truncate">{t('appName')}</span>
-        {chrome ? (
-          <div className="flex shrink-0 items-center gap-1 [&_button]:h-6 [&_button]:rounded-md [&_button]:border [&_button]:border-[color:var(--border-hud)] [&_button]:bg-[color:var(--surface-hud)] [&_button]:px-2 [&_button]:text-[10px] [&_button]:text-[color:var(--text-on-table)]">
-            {chrome}
-          </div>
-        ) : null}
-        <ThemeToggle className="size-7 shrink-0 text-[color:var(--text-on-table-dim)]" />
-      </header>
-
-      {/* ── Player chips ── */}
-      <div className="shrink-0">
-        <PlayerList
-          players={Object.values(G.players)}
-          currentPlayer={ctx.currentPlayer}
-          viewerID={viewerID}
-        />
-      </div>
-
-      {/* ── Board hero — all remaining space ── */}
+      {/* ── Board fills everything ── */}
       <div className="board-3d-scene relative min-h-0 flex-1">
         <div className="absolute inset-0 flex items-end justify-center">
           <div
@@ -73,14 +65,19 @@ export function GameBoard({
               owners={G.owners}
               houses={G.houses}
               pendingCell={G.pendingCell}
-              center={<BoardCenter dice={G.lastDice} events={G.log} players={G.players} />}
+              center={
+                <BoardCenter dice={G.lastDice} events={G.log} players={G.players} />
+              }
             />
           </div>
         </div>
       </div>
 
-      {/* ── Footer: turn panel, minimal ── */}
-      <div className="shrink-0" style={{ paddingBottom: 'max(8px, env(safe-area-inset-bottom))' }}>
+      {/* ── Footer action bar ── */}
+      <div
+        className="shrink-0"
+        style={{ paddingBottom: 'max(6px, env(safe-area-inset-bottom))' }}
+      >
         {winner ? (
           <p className="winner-banner">{t('winner', { name: winner })}</p>
         ) : (

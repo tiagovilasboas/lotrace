@@ -101,24 +101,187 @@
     background-size: 18px 18px;
   }
 
-  /* ── Header — single line, minimal height ── */
-  .game-header {
-    background-color: var(--surface-hud-raised);
-    border: 1px solid var(--border-hud);
-    border-radius: clamp(10px, 2vw, 16px);
-    padding: 0 clamp(10px, 1.5vw, 14px);
+  /* ══════════════════════════════════════════════════════════
+   * TOPBAR — 32px, single line
+   * Layout: [icon] [title] [chips...flex-1] [chrome?] [toggle]
+   * ══════════════════════════════════════════════════════════ */
+  .topbar {
+    height: 32px;
     display: flex;
     align-items: center;
-    gap: clamp(6px, 1vw, 10px);
-    min-height: clamp(36px, 4dvh, 48px);
+    gap: 6px;
+    padding: 0 8px;
+    background-color: var(--surface-hud-raised);
+    border: 1px solid var(--border-hud);
+    border-radius: 10px;
+    flex-shrink: 0;
+    margin-top: env(safe-area-inset-top, 0px);
+    overflow: hidden;
+  }
+
+  .topbar-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    background-color: var(--surface-board);
+    border: 1px solid var(--lr-brass);
+    color: var(--lr-ivory-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .topbar-title {
+    font-family: var(--font-brand);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.5px;
+    color: var(--text-on-table);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Player chips row — takes all space between title and toggle */
+  .topbar-chips {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  /* Individual chip — 24px tall pill */
+  .topbar-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 24px;
+    padding: 0 6px;
+    border-radius: 6px;
+    background-color: var(--surface-hud);
+    border-style: solid;
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .topbar-chip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .topbar-chip-name {
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60px;
+  }
+
+  .topbar-chip-balance {
+    font-size: 10px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--text-on-table);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .topbar-chrome {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .topbar-chrome button {
+    height: 22px;
+    padding: 0 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-hud);
+    background-color: var(--surface-hud);
+    color: var(--text-on-table);
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .topbar-toggle {
+    width: 24px !important;
+    height: 24px !important;
+    flex-shrink: 0;
+    color: var(--text-on-table-dim);
+  }
+
+  /* ══════════════════════════════════════════════════════════
+   * FOOTERBAR — 32px, single line: dot + title + button
+   * ══════════════════════════════════════════════════════════ */
+  .footerbar {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 6px;
+    background-color: var(--surface-hud);
+    border: 1px solid var(--border-hud);
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+
+  .footerbar-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+
+  .footerbar-title {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--text-on-table);
+  }
+
+  /* CTA button inside footerbar */
+  .footerbar .match-cta {
+    height: 24px;
+    min-width: 90px;
+    flex-shrink: 0;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 0 10px;
+    border-radius: 6px;
+  }
+
+  /* ── Legacy .game-header alias (kept for Lobby reuse) ── */
+  .game-header {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 10px;
+    background-color: var(--surface-hud-raised);
+    border: 1px solid var(--border-hud);
+    border-radius: 10px;
+    flex-shrink: 0;
     margin-top: env(safe-area-inset-top, 0px);
   }
 
-  /* Logo icon — compact */
   .game-logo-icon {
-    width:  clamp(26px, 3.5vw, 34px);
-    height: clamp(26px, 3.5vw, 34px);
-    border-radius: clamp(6px, 1vw, 9px);
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
     background-color: var(--surface-board);
     border: 1px solid var(--lr-brass);
     color: var(--lr-ivory-light);
@@ -130,21 +293,15 @@
 
   .game-logo-title {
     font-family: var(--font-brand);
-    font-size: clamp(13px, 1.8vw, 18px);
+    font-size: 13px;
     font-weight: 700;
     line-height: 1;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.6px;
     color: var(--text-on-table);
   }
 
   .game-logo-sub {
-    font-size: clamp(6px, 0.9vw, 8px);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    line-height: 1;
-    color: var(--lr-signal);
-    margin-top: 2px;
+    display: none; /* hidden at 32px — no room */
   }
 
   /* ── Board outer (JSON: outerBorderRadius=37 border≈7px) ── */
@@ -329,36 +486,36 @@
     margin-top: 2px;
   }
 
-  /* ── Turn panel — minimal footer ── */
+  /* ── Turn panel — compact card above footerbar when multi-action ── */
   .turn-panel {
-    border-radius: clamp(12px, 2vw, 18px);
-    padding: clamp(8px, 1dvh, 12px) clamp(10px, 1.5vw, 14px);
+    border-radius: 10px;
+    padding: 6px 10px;
     background-color: var(--surface-hud);
     border: 1px solid var(--border-hud);
     display: flex;
     flex-direction: column;
-    gap: clamp(6px, 0.8dvh, 8px);
+    gap: 6px;
   }
 
   .turn-prompt-row {
+    height: 32px;
     display: flex;
     align-items: center;
-    gap: clamp(8px, 1.2vw, 12px);
+    gap: 8px;
   }
 
-  /* Avatar — compact */
   .turn-avatar {
-    width:  clamp(24px, 3.5vw, 32px);
-    height: clamp(24px, 3.5vw, 32px);
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     flex-shrink: 0;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 4px rgba(0,0,0,0.3);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
   }
 
   .turn-title {
-    font-size: clamp(12px, 1.6vw, 15px);
+    font-size: 12px;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1;
     color: var(--text-on-table);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -366,14 +523,14 @@
   }
 
   .turn-hint {
-    font-size: clamp(9px, 1vw, 11px);
+    font-size: 10px;
     font-weight: 500;
-    line-height: 1.3;
+    line-height: 1;
     color: var(--text-on-table-dim);
-    margin-top: 1px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin-top: 1px;
   }
 
   .winner-banner {

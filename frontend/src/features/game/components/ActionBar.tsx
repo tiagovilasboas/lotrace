@@ -3,6 +3,7 @@ import { Dices } from 'lucide-react';
 import type { ReactElement, ReactNode } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { BuyHouseActions } from '@/features/game/components/BuyHouseActions.tsx';
+import { FooterBar } from '@/features/game/board/FooterBar.tsx';
 import { useRollBusy } from '@/features/game/hooks/use-roll-busy.ts';
 import { listBuildableLots } from '@/features/game/lib/buildable-lots.ts';
 import { formatCash } from '@/features/game/lib/format-cash.ts';
@@ -98,36 +99,47 @@ export function ActionBar({ G, stage, isActive, currentName, viewerID, moves }: 
     : t('yourTurnNamed', { name: viewerName });
 
   return (
-    <div className="turn-panel">
-      <TurnPrompt playerID={viewerID} title={title} hint={hint} />
-
-      {isActive ? (
-        <>
+    <>
+      {/* ── Roll / waiting: single 32px FooterBar ── */}
+      {(!isActive || stage === 'roll' || rollBusy) ? (
+        <FooterBar playerID={viewerID} title={title}>
           {rollBusy ? (
-            <PrimaryCTA loading ariaLabel={t('rolling')}>{t('rolling')}</PrimaryCTA>
-          ) : null}
+            <Button size="lg" className="match-cta" loading aria-label={t('rolling')}>{t('rolling')}</Button>
+          ) : stage === 'roll' ? (
+            <Button size="lg" className="match-cta" onClick={handleRoll} aria-label={t('roll')}>
+              <Dices className="size-3" aria-hidden /> {t('roll')}
+            </Button>
+          ) : (
+            /* Waiting for other player — no button */
+            <span className="turn-hint truncate max-w-[140px]">{hint}</span>
+          )}
+        </FooterBar>
+      ) : (
+        /* ── Multi-choice stages: compact panel ── */
+        <div className="turn-panel">
+          <div className="turn-prompt-row">
+            <span className="turn-avatar shrink-0" style={{ backgroundColor: tokenCssVar(viewerID) }} aria-hidden />
+            <div className="min-w-0 flex-1">
+              <p className="turn-title">{title}</p>
+              <p className="turn-hint">{hint}</p>
+            </div>
+          </div>
 
-          {!rollBusy && stage === 'roll' ? (
-            <PrimaryCTA onClick={handleRoll} ariaLabel={t('roll')}>
-              <Dices className="size-3.5" aria-hidden /> {t('roll')}
-            </PrimaryCTA>
-          ) : null}
-
-          {!rollBusy && stage === 'buy' && pending ? (
+          {stage === 'buy' && pending ? (
             <div className="grid grid-cols-2 gap-2">
-              <PrimaryCTA disabled={!canAfford} onClick={() => moves.buyProperty?.()}>{t('buy')}</PrimaryCTA>
+              <Button size="lg" className="match-cta w-full" disabled={!canAfford} onClick={() => moves.buyProperty?.()}>{t('buy')}</Button>
               <Button size="lg" className="match-secondary w-full" onClick={() => moves.skipBuy?.()}>{t('skip')}</Button>
             </div>
           ) : null}
 
-          {!rollBusy && stage === 'jail' ? (
+          {stage === 'jail' ? (
             <div className="grid grid-cols-2 gap-2">
-              <PrimaryCTA disabled={!canJail} onClick={() => moves.payJail?.()}>{t('payJail')}</PrimaryCTA>
+              <Button size="lg" className="match-cta w-full" disabled={!canJail} onClick={() => moves.payJail?.()}>{t('payJail')}</Button>
               <Button size="lg" className="match-secondary w-full" onClick={() => moves.waitJail?.()}>{t('waitJail')}</Button>
             </div>
           ) : null}
 
-          {!rollBusy && stage === 'end' ? (
+          {stage === 'end' ? (
             <>
               {buildable.length > 0 ? (
                 <BuyHouseActions lots={buildable} onBuy={(i) => moves.buyHouse?.(i)} />
@@ -135,8 +147,8 @@ export function ActionBar({ G, stage, isActive, currentName, viewerID, moves }: 
               <Button size="lg" className="match-secondary w-full" onClick={() => moves.endTurn?.()}>{t('endTurn')}</Button>
             </>
           ) : null}
-        </>
-      ) : null}
-    </div>
+        </div>
+      )}
+    </>
   );
 }
