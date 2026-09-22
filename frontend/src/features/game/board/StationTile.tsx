@@ -1,7 +1,6 @@
 import type { ReactElement } from 'react';
 import { BOARD_COLOR } from '@/features/game/board/board-colors.ts';
 import { HueStripe } from '@/features/game/board/HueStripe.tsx';
-import { StationIso } from '@/features/game/board/IsoIcons.tsx';
 import { hueBarLayout, tileBodyClass } from '@/features/game/board/ring-geometry.ts';
 import { tileCaptionLines } from '@/features/game/board/tile-caption.ts';
 import { TileName } from '@/features/game/board/TileName.tsx';
@@ -11,6 +10,10 @@ import { CarTokenStack } from '@/features/game/components/CarToken.tsx';
 import { formatCash } from '@/features/game/lib/format-cash.ts';
 import { cn } from '@/lib/utils.ts';
 
+/**
+ * Station tile — spec: stripe + name + price only.
+ * No isometric icon inside the tile (too small at board scale).
+ */
 export function StationTile({
   cell,
   occupants,
@@ -24,13 +27,7 @@ export function StationTile({
     <div className={cn(tileSurfaceClass(isPending), bar.containerClass)}>
       <HueStripe hue={BOARD_COLOR.station} side={side} ownerID={ownerID} />
       <CarTokenStack playerIDs={occupants} side={side} />
-      <div
-        className={cn(
-          'flex min-h-0 min-w-0 flex-1 flex-col gap-0.5',
-          tileBodyClass(side),
-        )}
-      >
-        <StationIso className="h-5 w-5 sm:h-6 sm:w-6" />
+      <div className={cn('flex min-h-0 min-w-0 flex-1 flex-col gap-0.5', tileBodyClass(side))}>
         <TileName lines={tileCaptionLines(cell)} align="center" />
         {cell.price !== undefined ? (
           <span className="tile-price">{formatCash(cell.price)}</span>

@@ -15,8 +15,7 @@ export function PlayerList({ players, currentPlayer, viewerID }: PlayerListProps
   return (
     /* Horizontal snap-scroll carousel. Tailwind: layout + scroll behaviour only. */
     <ul
-      className="flex gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      style={{ scrollSnapType: 'x mandatory' }}
+      className="player-list"
     >
       {players.map((player) => {
         const isTurn    = player.id === currentPlayer;

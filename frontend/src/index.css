@@ -243,6 +243,18 @@
   .corner-circle--return { background-color: var(--corner-return); }
   .corner-circle--park   { background-color: var(--corner-park); }
 
+  /* ── Player list container ── */
+  .player-list {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+
+  .player-list::-webkit-scrollbar { display: none; }
+
   /* ── Player cards carousel (spec: 148/168×66px, r=16px) ── */
   .player-card {
     flex-shrink: 0;
@@ -453,5 +465,52 @@
 
   @media (prefers-reduced-motion: reduce) {
     .dice-face-roll, .car-token-arrive, .player-turn-pulse { animation: none; }
+  }
+
+  /* ═══ Responsive — tablet 768px ═══════════════════════════════
+   * Spec: pageMaxWidth=760, players layout=grid 4 cols, boardMaxWidth=720
+   ═══════════════════════════════════════════════════════════════ */
+  @media (min-width: 768px) {
+    .game-screen {
+      /* Centred container, max 760px */
+      max-width: 760px;
+      margin-inline: auto;
+    }
+
+    /* Players: grid instead of carousel */
+    .player-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      overflow-x: visible;
+    }
+
+    .player-card {
+      width: auto;          /* fills grid cell */
+      scroll-snap-align: none;
+    }
+
+    .player-card--active {
+      width: auto;
+    }
+  }
+
+  /* ═══ Responsive — desktop 1024px ═════════════════════════════
+   * Spec: maxWidth=830, horizontalMargin=35, topPadding=34, sectionGap=16
+   *       header height=80 paddingX=18, turnPanel padding=18
+   ═══════════════════════════════════════════════════════════════ */
+  @media (min-width: 1024px) {
+    .game-screen {
+      max-width: 830px;
+      margin-inline: auto;
+    }
+
+    .game-header {
+      height: 80px;
+      padding-inline: 18px;
+    }
+
+    .turn-panel {
+      padding: 18px;
+    }
   }
 }
