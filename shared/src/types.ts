@@ -129,9 +129,17 @@ export const GAME_NAME = 'lotrace';
 export const MIN_PLAYERS = 2;
 export const MAX_PLAYERS = 6;
 export const BOARD_SIZE = 24;
-export const GO_SALARY = 200;
-export const STARTING_CASH = 2500;
-export const JAIL_FEE = 50;
+
+/**
+ * Economy constants — rebalanced to create real tension on a 24-cell board.
+ *
+ * Ratio STARTING_CASH / cheapest lot ≈ 12.5x  (same as Monopoly classic ~25x / 2 lots)
+ * Ratio STARTING_CASH / most expensive ≈ 1.9x  (players feel risk after 2–3 turns)
+ * GO_SALARY = 10 % of STARTING_CASH (Monopoly: 200/1500 ≈ 13%)
+ */
+export const GO_SALARY = 300;
+export const STARTING_CASH = 3_000;
+export const JAIL_FEE = 100;
 export const JAIL_WAIT_TURNS = 2;
 export const JAIL_INDEX = 6;
 export const GO_TO_JAIL_INDEX = 18;
@@ -139,4 +147,9 @@ export const MAX_CONSECUTIVE_DOUBLES = 3;
 export const MAX_HOUSES = 4;
 export const HOTEL_LEVEL = 5;
 export const MAX_LOG = 20;
-export const STATION_RENTS = [25, 50, 100, 200] as const;
+
+/**
+ * Station rents scale with number of stations owned by the same player.
+ * 1 station = R$100, 4 stations = R$800 (8x multiplier, same as Monopoly).
+ */
+export const STATION_RENTS = [100, 200, 400, 800] as const;

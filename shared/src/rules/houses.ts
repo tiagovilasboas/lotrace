@@ -3,15 +3,19 @@ import type { BoardCell, ColorGroup, ImobiliarioState } from '../types.ts';
 import { HOTEL_LEVEL, MAX_HOUSES, STATION_RENTS } from '../types.ts';
 import { getPlayer, pushLog } from './players.ts';
 
+/**
+ * House / hotel cost per color group.
+ * Rule: cost ≈ 50 % of the cheaper lot in the group (same as Monopoly).
+ */
 const HOUSE_COST_BY_GROUP: Record<ColorGroup, number> = {
-  brown: 50,
-  sky: 50,
-  pink: 100,
-  orange: 100,
-  red: 150,
-  yellow: 150,
-  green: 200,
-  navy: 200,
+  brown:  200,
+  sky:    200,
+  pink:   400,
+  orange: 400,
+  red:    600,
+  yellow: 600,
+  green:  800,
+  navy:   800,
 };
 
 export function houseCost(cell: BoardCell): number {

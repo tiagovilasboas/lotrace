@@ -19,31 +19,70 @@ function lot(
   };
 }
 
+/**
+ * LotRace board — 24 cells.
+ *
+ * Economy rationale (rebalanced):
+ *   STARTING_CASH = R$3 000
+ *   GO_SALARY     = R$300
+ *   Cheapest lot  = R$240  (~8 % of start)
+ *   Most expensive= R$1 600 (~53 % of start)
+ *   Ratio mirrors Monopoly Classic so players feel pressure
+ *   after 3–4 turns instead of 10+.
+ *
+ * Rent ladder: [bare, 1 house, 2 houses, 3 houses, 4 houses, hotel]
+ * Bare monopoly doubles [0] automatically in rentOnProperty().
+ */
 export const BOARD: BoardCell[] = [
   { index: 0, name: 'Partida', kind: 'go' },
-  lot(1, 'Leblon', 'brown', 60, [2, 10, 30, 90, 160, 250]),
-  { index: 2, name: 'IPTU', kind: 'tax', tax: 200 },
-  lot(3, 'Ipanema', 'brown', 80, [4, 20, 60, 180, 320, 450]),
-  { index: 4, name: 'Estação Rio', kind: 'station', price: 200, rent: 25 },
-  lot(5, 'Copacabana', 'sky', 100, [6, 30, 90, 270, 400, 550]),
+
+  // ── Brown (cheapest) ─────────────────────────────────────────
+  lot(1,  'Leblon',        'brown',   240, [    20,   100,   300,   900, 1_600, 2_500]),
+  { index: 2, name: 'IPTU',        kind: 'tax', tax: 400 },
+  lot(3,  'Ipanema',       'brown',   320, [    40,   200,   600, 1_800, 3_200, 4_500]),
+
+  { index: 4, name: 'Estação Rio', kind: 'station', price: 800, rent: 100 },
+
+  // ── Sky ──────────────────────────────────────────────────────
+  lot(5,  'Copacabana',    'sky',     400, [    60,   300,   900, 2_700, 4_000, 5_500]),
+
   { index: 6, name: 'Visita', kind: 'jail' },
-  lot(7, 'Jardins', 'pink', 140, [10, 50, 150, 450, 625, 750]),
-  lot(8, 'Vila Madalena', 'pink', 160, [12, 60, 180, 500, 700, 900]),
-  { index: 9, name: 'Estação SP', kind: 'station', price: 200, rent: 25 },
-  lot(10, 'Paulista', 'orange', 180, [14, 70, 200, 550, 750, 950]),
-  lot(11, 'Pinheiros', 'orange', 200, [16, 80, 220, 600, 800, 1000]),
+
+  // ── Pink ─────────────────────────────────────────────────────
+  lot(7,  'Jardins',       'pink',    560, [   100,   500, 1_500, 4_500, 6_250, 7_500]),
+  lot(8,  'Vila Madalena', 'pink',    640, [   120,   600, 1_800, 5_000, 7_000, 9_000]),
+
+  { index: 9, name: 'Estação SP', kind: 'station', price: 800, rent: 100 },
+
+  // ── Orange ───────────────────────────────────────────────────
+  lot(10, 'Paulista',      'orange',  720, [   140,   700, 2_000, 5_500, 7_500, 9_500]),
+  lot(11, 'Pinheiros',     'orange',  800, [   160,   800, 2_200, 6_000, 8_000, 10_000]),
+
   { index: 12, name: 'Parque', kind: 'park' },
-  lot(13, 'Recife', 'red', 220, [18, 90, 250, 700, 875, 1050]),
-  lot(14, 'Salvador', 'red', 240, [20, 100, 300, 750, 925, 1100]),
-  { index: 15, name: 'Estação NE', kind: 'station', price: 200, rent: 25 },
-  lot(16, 'Brasília', 'yellow', 260, [22, 110, 330, 800, 975, 1150]),
-  lot(17, 'Savassi', 'yellow', 280, [24, 120, 360, 850, 1025, 1200]),
+
+  // ── Red ──────────────────────────────────────────────────────
+  lot(13, 'Recife',        'red',     880, [   180,   900, 2_500, 7_000, 8_750, 10_500]),
+  lot(14, 'Salvador',      'red',     960, [   200, 1_000, 3_000, 7_500, 9_250, 11_000]),
+
+  { index: 15, name: 'Estação NE', kind: 'station', price: 800, rent: 100 },
+
+  // ── Yellow ───────────────────────────────────────────────────
+  lot(16, 'Brasília',      'yellow', 1_040, [  220, 1_100, 3_300, 8_000, 9_750, 11_500]),
+  lot(17, 'Savassi',       'yellow', 1_120, [  240, 1_200, 3_600, 8_500, 10_250, 12_000]),
+
   { index: 18, name: 'Vá preso', kind: 'goto-jail' },
-  lot(19, 'Batel', 'green', 300, [26, 130, 390, 900, 1100, 1275]),
-  { index: 20, name: 'Estação Sul', kind: 'station', price: 200, rent: 25 },
-  lot(21, 'Floripa', 'green', 320, [28, 150, 450, 1000, 1200, 1400]),
-  { index: 22, name: 'IR', kind: 'tax', tax: 100 },
-  lot(23, 'Moinhos', 'navy', 400, [50, 200, 600, 1400, 1700, 2000]),
+
+  // ── Green ────────────────────────────────────────────────────
+  lot(19, 'Batel',         'green',  1_200, [  260, 1_300, 3_900, 9_000, 11_000, 12_750]),
+
+  { index: 20, name: 'Estação Sul', kind: 'station', price: 800, rent: 100 },
+
+  lot(21, 'Floripa',       'green',  1_280, [  280, 1_500, 4_500, 10_000, 12_000, 14_000]),
+
+  { index: 22, name: 'IR', kind: 'tax', tax: 300 },
+
+  // ── Navy (premium) ───────────────────────────────────────────
+  lot(23, 'Moinhos',       'navy',   1_600, [  200, 1_000, 3_000, 7_500, 9_250, 11_000]),
 ];
 
 if (BOARD.length !== BOARD_SIZE) {
