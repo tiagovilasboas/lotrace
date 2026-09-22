@@ -90,18 +90,24 @@ export function ActionBar({ G, stage, isActive, currentName, viewerID, moves }: 
             {t('waitJail')}
           </Button>
         </FooterBar>
-      ) : stage === 'end' ? (
-        /* ── Build stage: houses row (if any) + end-turn in footer ── */
-        <div className="flex flex-col gap-1.5">
-          {buildable.length > 0 ? (
-            <BuyHouseActions lots={buildable} onBuy={(i) => moves.buyHouse?.(i)} />
-          ) : null}
-          <FooterBar playerID={viewerID} title={title}>
+      ) : stage === 'end' && buildable.length > 0 ? (
+        /* ── Build stage with options: compact panel (pills + [Build][End]) ── */
+        <BuyHouseActions
+          lots={buildable}
+          onBuy={(i) => moves.buyHouse?.(i)}
+          endButton={
             <Button variant="bare" size="none" className="footer-btn footer-btn--secondary" onClick={() => moves.endTurn?.()}>
               {t('endTurn')}
             </Button>
-          </FooterBar>
-        </div>
+          }
+        />
+      ) : stage === 'end' ? (
+        /* ── Build stage, nothing to build: just end the turn ── */
+        <FooterBar playerID={viewerID} title={title}>
+          <Button variant="bare" size="none" className="footer-btn footer-btn--secondary" onClick={() => moves.endTurn?.()}>
+            {t('endTurn')}
+          </Button>
+        </FooterBar>
       ) : null}
     </>
   );

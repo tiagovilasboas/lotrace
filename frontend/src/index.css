@@ -265,6 +265,25 @@
     gap: 6px;
   }
 
+  /* Inline row of same-height buttons (e.g. Build + End in the build stage) */
+  .footerbar-actions-inline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  /* Build stage panel — compact: optional pills row + button row. */
+  .build-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 5px 8px;
+    background-color: var(--surface-hud-raised);
+    border: 1px solid var(--border-hud);
+    border-radius: 10px;
+  }
+
   /* Hint text (when waiting, no button) */
   .footerbar-hint {
     font-size: 10px;

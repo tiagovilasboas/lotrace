@@ -26,9 +26,12 @@ because each `.board-tile` is a container:
 - **% of street width** → `cqw` (≈ `cqmin` on tall tiles)
 - **% of street depth** → `cqh`
 
-**Semantics drive size: buildings (the ASSET the player built) are the biggest;
-the car is only a position marker and stays small.** A dominant car misreads the
-game — it makes the marker look like the asset. Wealth = houses/hotels, so they win.
+**Visual language = SimCity BuildIt, not digitised Monopoly.** Footprint is
+controlled but building VISUAL HEIGHT is strongly exaggerated (house ~1.2u tall,
+tower ~4u, landmark ~5.5u). Tall assets may overlap the tile behind (accepted,
+BuildIt-style) — control with z-index so they never cover a neighbour's name.
+The car ≈ the road width so the player instantly finds their piece, but it stays
+a low marker; the wealth (buildings) reads through HEIGHT, not ground size.
 
 | Element              | Units | % of street        | CSS driver               |
 | -------------------- | ----: | ------------------ | ------------------------ |
@@ -110,6 +113,19 @@ Go through every item on each screenshot. Name the offending element and the fix
 3. **Issues**: ranked list — element, what's wrong, concrete fix (with the CSS var / component).
 4. **Diff from concept**: 1-3 biggest gaps vs `lotrace-match-concept.png`.
 5. **Stop or continue**: continue the loop unless every category is >=4 and no material issue remains.
+
+## Interaction states (Phase 2 — clicking buttons)
+When reviewing a screenshot of a STATE reached by clicking (roll, buy, jail, build,
+end turn, winner), also judge:
+- **H. Action clarity**: the available action(s) are obvious; the primary CTA stands out;
+  disabled actions look disabled (afford/jail rules). Only one clear primary per state.
+- **I. Footer fit**: all buttons share the `.footer-btn` height; 2 buttons (buy/skip,
+  pay/wait) sit side by side without clipping; text not truncated.
+- **J. State feedback**: rolling shows a busy/loading state; the last-move pill and log
+  reflect what happened; the turn/seat indicator matches the acting player.
+- **K. No dead ends**: from every state there is a visible way forward (a button, or an
+  automatic pass). The player is never stuck with no affordance.
+Score H-K 1-5 alongside A-G; target >=4. Capture one screenshot per state.
 
 ## Loop discipline
 - One coherent set of fixes per iteration, then re-run `npm run e2e:layout` and re-critique.

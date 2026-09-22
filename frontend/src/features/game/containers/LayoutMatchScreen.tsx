@@ -36,6 +36,9 @@ export function LayoutMatchScreen({
       Client({
         game: {
           ...Imobiliario,
+          /* Fixed seed → deterministic dice in the LAYOUT preview, so the
+           * E2E interaction flows reach the same state every run. */
+          seed: 'lotrace-layout',
           setup: () => buildLayoutMockState(names),
         },
         board: GameBoard,
