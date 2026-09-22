@@ -28,17 +28,17 @@ type ActionBarProps = {
   moves: GameMoves;
 };
 
-/* Avatar circle — only inline style is the player-specific bg colour */
 function TurnAvatar({ playerID }: { playerID: string }): ReactElement {
   return (
     <span
-      className="turn-avatar"
+      className="turn-avatar shrink-0"
       style={{ backgroundColor: tokenCssVar(playerID) }}
       aria-hidden
     />
   );
 }
 
+/** Single-line prompt row: avatar + title + hint */
 function TurnPrompt({ playerID, title, hint }: { playerID: string; title: string; hint: string }): ReactElement {
   return (
     <div className="turn-prompt-row">
@@ -52,7 +52,11 @@ function TurnPrompt({ playerID, title, hint }: { playerID: string; title: string
 }
 
 function PrimaryCTA({ children, onClick, disabled, loading, ariaLabel }: {
-  children: ReactNode; onClick?: () => void; disabled?: boolean; loading?: boolean; ariaLabel?: string;
+  children: ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  loading?: boolean;
+  ariaLabel?: string;
 }): ReactElement {
   return (
     <Button
@@ -67,6 +71,7 @@ function PrimaryCTA({ children, onClick, disabled, loading, ariaLabel }: {
     </Button>
   );
 }
+
 export function ActionBar({ G, stage, isActive, currentName, viewerID, moves }: ActionBarProps): ReactElement {
   const { rollBusy, beginRoll } = useRollBusy(stage, isActive);
   const viewer     = G.players[viewerID];
@@ -104,21 +109,21 @@ export function ActionBar({ G, stage, isActive, currentName, viewerID, moves }: 
 
           {!rollBusy && stage === 'roll' ? (
             <PrimaryCTA onClick={handleRoll} ariaLabel={t('roll')}>
-              <Dices className="size-4" aria-hidden /> {t('roll')}
+              <Dices className="size-3.5" aria-hidden /> {t('roll')}
             </PrimaryCTA>
           ) : null}
 
           {!rollBusy && stage === 'buy' && pending ? (
             <div className="grid grid-cols-2 gap-2">
               <PrimaryCTA disabled={!canAfford} onClick={() => moves.buyProperty?.()}>{t('buy')}</PrimaryCTA>
-              <Button size="lg" className="match-secondary h-8 w-full" onClick={() => moves.skipBuy?.()}>{t('skip')}</Button>
+              <Button size="lg" className="match-secondary w-full" onClick={() => moves.skipBuy?.()}>{t('skip')}</Button>
             </div>
           ) : null}
 
           {!rollBusy && stage === 'jail' ? (
             <div className="grid grid-cols-2 gap-2">
               <PrimaryCTA disabled={!canJail} onClick={() => moves.payJail?.()}>{t('payJail')}</PrimaryCTA>
-              <Button size="lg" className="match-secondary h-8 w-full" onClick={() => moves.waitJail?.()}>{t('waitJail')}</Button>
+              <Button size="lg" className="match-secondary w-full" onClick={() => moves.waitJail?.()}>{t('waitJail')}</Button>
             </div>
           ) : null}
 
@@ -127,7 +132,7 @@ export function ActionBar({ G, stage, isActive, currentName, viewerID, moves }: 
               {buildable.length > 0 ? (
                 <BuyHouseActions lots={buildable} onBuy={(i) => moves.buyHouse?.(i)} />
               ) : null}
-              <Button size="lg" className="match-secondary h-8 w-full" onClick={() => moves.endTurn?.()}>{t('endTurn')}</Button>
+              <Button size="lg" className="match-secondary w-full" onClick={() => moves.endTurn?.()}>{t('endTurn')}</Button>
             </>
           ) : null}
         </>

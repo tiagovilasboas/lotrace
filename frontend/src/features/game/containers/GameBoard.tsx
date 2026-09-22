@@ -36,43 +36,24 @@ export function GameBoard({
   const playerCount = Object.keys(G.players).length;
 
   return (
-    /**
-     * Layout: flex-col h-dvh, padding uniforme 12px.
-     * Board row: flex-1 min-h-0 — pega tudo que sobrar.
-     * Sem px fixos em altura — proporcional ao viewport.
-     */
-    /* JSON: page gaps → headerToPlayers=17 playersToBoard=27 boardToTurnPanel=27
-     * At 1200px: 17/1200=1.4dvh, 27/1200=2.25dvh
-     * clamp ensures minimum usable spacing on small phones */
-    <div
-      className="game-screen flex h-dvh w-full flex-col overflow-hidden"
-      style={{ padding: 'clamp(8px,2.8dvh,34px) clamp(8px,3.9vw,35px) 0', gap: 'clamp(8px,1.4dvh,17px)' }}
-    >
-      {/* ── Header — card arredondado com logo, subtítulo e toggle ── */}
-      <header className="game-header shrink-0">
-        {/* Logo icon: felt bg + brass border */}
-        <span className="game-logo-icon">
-          <Dices className="size-4" aria-hidden />
+    <div className="game-screen flex h-dvh w-full flex-col overflow-hidden" style={{ gap: '8px', padding: '8px 10px 0' }}>
+
+      {/* ── Header: single line, minimal height ── */}
+      <header className="game-header shrink-0 flex items-center gap-2">
+        <span className="game-logo-icon shrink-0">
+          <Dices className="size-3.5" aria-hidden />
         </span>
-
-        {/* Wordmark */}
-        <div className="min-w-0 flex-1">
-          <p className="game-logo-title">{t('appName')}</p>
-          <p className="game-logo-sub">{t('brandSub')}</p>
-        </div>
-
-        {/* Layout-mode chrome buttons */}
+        <span className="game-logo-title min-w-0 flex-1 truncate">{t('appName')}</span>
         {chrome ? (
-          <div className="flex shrink-0 items-center gap-1 [&_button]:h-7 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color:var(--border-hud)] [&_button]:bg-[color:var(--surface-hud)] [&_button]:px-2 [&_button]:text-[10px] [&_button]:text-[color:var(--text-on-table)]">
+          <div className="flex shrink-0 items-center gap-1 [&_button]:h-6 [&_button]:rounded-md [&_button]:border [&_button]:border-[color:var(--border-hud)] [&_button]:bg-[color:var(--surface-hud)] [&_button]:px-2 [&_button]:text-[10px] [&_button]:text-[color:var(--text-on-table)]">
             {chrome}
           </div>
         ) : null}
-
-        <ThemeToggle className="size-8 shrink-0 text-[color:var(--text-on-table-dim)]" />
+        <ThemeToggle className="size-7 shrink-0 text-[color:var(--text-on-table-dim)]" />
       </header>
 
-      {/* Player carousel — gap to board = 27px (JSON playersToBoard) */}
-      <div className="shrink-0" style={{ marginBottom: 'clamp(0px, 0.83dvh, 10px)' }}>
+      {/* ── Player chips ── */}
+      <div className="shrink-0">
         <PlayerList
           players={Object.values(G.players)}
           currentPlayer={ctx.currentPlayer}
@@ -80,14 +61,9 @@ export function GameBoard({
         />
       </div>
 
-      {/* ── Board hero — fills all remaining height ── */}
+      {/* ── Board hero — all remaining space ── */}
       <div className="board-3d-scene relative min-h-0 flex-1">
         <div className="absolute inset-0 flex items-end justify-center">
-          {/*
-           * board-3d-tilt: CSS rotateX perspective.
-           * Height: 96% of the container — leaves a sliver for visual breathing.
-           * aspect-square: always square regardless of container shape.
-           */}
           <div
             className="board-3d-tilt relative aspect-square max-w-full"
             style={{ height: '96%', width: 'auto' }}
@@ -99,18 +75,12 @@ export function GameBoard({
               pendingCell={G.pendingCell}
               center={<BoardCenter dice={G.lastDice} events={G.log} players={G.players} />}
             />
-            {/* PiecesCanvas desativado — calibrar posições antes de reativar
-            <PiecesCanvas G={G} />
-            */}
           </div>
         </div>
       </div>
 
-      {/* ── Turn panel / footer ── */}
-      <div
-        className="shrink-0"
-        style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}
-      >
+      {/* ── Footer: turn panel, minimal ── */}
+      <div className="shrink-0" style={{ paddingBottom: 'max(8px, env(safe-area-inset-bottom))' }}>
         {winner ? (
           <p className="winner-banner">{t('winner', { name: winner })}</p>
         ) : (

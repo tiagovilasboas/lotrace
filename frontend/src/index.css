@@ -101,27 +101,26 @@
     background-size: 18px 18px;
   }
 
-  /* ── Header — floating card (JSON: h=79 r=23 p=16/17) ── */
+  /* ── Header — single line, minimal height ── */
   .game-header {
     background-color: var(--surface-hud-raised);
     border: 1px solid var(--border-hud);
-    border-radius: clamp(14px, 2.56vw, 23px);
-    padding: 0 clamp(12px, 1.9vw, 17px);
+    border-radius: clamp(10px, 2vw, 16px);
+    padding: 0 clamp(10px, 1.5vw, 14px);
     display: flex;
     align-items: center;
-    gap: clamp(8px, 1.1vw, 12px);
-    /* h=79 at 1200px → 6.6dvh */
-    min-height: clamp(52px, 6.6dvh, 79px);
+    gap: clamp(6px, 1vw, 10px);
+    min-height: clamp(36px, 4dvh, 48px);
     margin-top: env(safe-area-inset-top, 0px);
   }
 
-  /* Logo icon — JSON: 49×49 r=14 */
+  /* Logo icon — compact */
   .game-logo-icon {
-    width:  clamp(32px, 5.4vw, 49px);
-    height: clamp(32px, 5.4vw, 49px);
-    border-radius: clamp(9px, 1.6vw, 14px);
+    width:  clamp(26px, 3.5vw, 34px);
+    height: clamp(26px, 3.5vw, 34px);
+    border-radius: clamp(6px, 1vw, 9px);
     background-color: var(--surface-board);
-    border: 1.5px solid var(--lr-brass);
+    border: 1px solid var(--lr-brass);
     color: var(--lr-ivory-light);
     display: flex;
     align-items: center;
@@ -129,25 +128,23 @@
     flex-shrink: 0;
   }
 
-  /* JSON: title 24px 700 ls=1.1 */
   .game-logo-title {
     font-family: var(--font-brand);
-    font-size: clamp(16px, 2.7vw, 24px);
+    font-size: clamp(13px, 1.8vw, 18px);
     font-weight: 700;
     line-height: 1;
-    letter-spacing: clamp(0.6px, 0.12vw, 1.1px);
+    letter-spacing: 0.8px;
     color: var(--text-on-table);
   }
 
-  /* JSON: subtitle 10px 600 ls=1.1 */
   .game-logo-sub {
-    font-size: clamp(7px, 1.1vw, 10px);
+    font-size: clamp(6px, 0.9vw, 8px);
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1.1px;
+    letter-spacing: 1px;
     line-height: 1;
     color: var(--lr-signal);
-    margin-top: 3px;
+    margin-top: 2px;
   }
 
   /* ── Board outer (JSON: outerBorderRadius=37 border≈7px) ── */
@@ -332,35 +329,34 @@
     margin-top: 2px;
   }
 
-  /* ── Turn panel (JSON: h=115 r=27 p=20/18/12/19 icon=41×41 r=21) ── */
+  /* ── Turn panel — minimal footer ── */
   .turn-panel {
-    border-radius: clamp(18px, 3vw, 27px);
-    padding: clamp(12px, 1.7dvh, 20px) clamp(12px, 2vw, 19px) clamp(8px, 1dvh, 12px);
+    border-radius: clamp(12px, 2vw, 18px);
+    padding: clamp(8px, 1dvh, 12px) clamp(10px, 1.5vw, 14px);
     background-color: var(--surface-hud);
     border: 1px solid var(--border-hud);
     display: flex;
     flex-direction: column;
-    gap: clamp(8px, 1dvh, 12px);
+    gap: clamp(6px, 0.8dvh, 8px);
   }
 
   .turn-prompt-row {
     display: flex;
     align-items: center;
-    gap: clamp(10px, 1.4vw, 14px);
+    gap: clamp(8px, 1.2vw, 12px);
   }
 
-  /* JSON: statusIcon 41×41 r=21 */
+  /* Avatar — compact */
   .turn-avatar {
-    width:  clamp(28px, 4.6vw, 41px);
-    height: clamp(28px, 4.6vw, 41px);
+    width:  clamp(24px, 3.5vw, 32px);
+    height: clamp(24px, 3.5vw, 32px);
     border-radius: 50%;
     flex-shrink: 0;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 2px 6px rgba(0,0,0,0.35);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 4px rgba(0,0,0,0.3);
   }
 
-  /* JSON: title 16px 700 lh=19 */
   .turn-title {
-    font-size: clamp(13px, 1.8vw, 16px);
+    font-size: clamp(12px, 1.6vw, 15px);
     font-weight: 700;
     line-height: 1.2;
     color: var(--text-on-table);
@@ -369,13 +365,12 @@
     white-space: nowrap;
   }
 
-  /* JSON: subtitle 10px 500 lh=13 */
   .turn-hint {
-    font-size: clamp(9px, 1.1vw, 10px);
+    font-size: clamp(9px, 1vw, 11px);
     font-weight: 500;
     line-height: 1.3;
     color: var(--text-on-table-dim);
-    margin-top: clamp(3px, 0.5dvh, 6px);
+    margin-top: 1px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
