@@ -43,9 +43,9 @@ export function useIsoLayout(wrapRef: RefObject<HTMLElement | null>): IsoLayout 
       const tileCentres: Record<number, ScreenPoint> = {};
       for (const { cell, col, row } of cells.current) {
         const c = tileToScreen(col, row, cfg);
-        // Anchor the label on the tile's front edge (toward the camera), not
-        // its centre, so tall buildings rising from the centre don't cover it.
-        tileCentres[cell.index] = { x: c.x, y: c.y + cfg.tileH * 0.32 };
+        // Anchor the label ahead of the tile's front edge (toward the camera),
+        // not its centre, so tall buildings rising from the tile never crowd it.
+        tileCentres[cell.index] = { x: c.x, y: c.y + cfg.tileH * 0.46 };
       }
       setLayout({ cfg, boxW, boxH, tileCentres });
     };
