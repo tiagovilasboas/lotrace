@@ -66,10 +66,13 @@ export function GameBoard({
         viewerID={viewerID}
       />
 
-      {/* Board hero */}
-      <div className="relative min-h-0">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="aspect-square h-full max-h-full max-w-full" style={{ width: 'auto' }}>
+      {/* Board hero — CSS 3D perspective */}
+      <div className="board-3d-scene relative min-h-0">
+        <div className="absolute inset-0 flex items-end justify-center pb-2">
+          <div
+            className="board-3d-tilt aspect-square max-h-full max-w-full"
+            style={{ height: '88%', width: 'auto' }}
+          >
             <BoardRing
               players={G.players}
               owners={G.owners}

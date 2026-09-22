@@ -457,7 +457,26 @@
     margin-top: 6px;
   }
 
-  /* ── Animations ── */
+  /* ── CSS 3D perspective — tabuleiro inclinado como board game físico ── */
+  .board-3d-scene {
+    perspective: 900px;
+    perspective-origin: 50% 20%;
+  }
+
+  .board-3d-tilt {
+    transform: rotateX(30deg);
+    transform-origin: center 60%;
+    transform-style: preserve-3d;
+    /* Compensar o espaço visual perdido no topo pela inclinação */
+    will-change: transform;
+  }
+
+  /* Desabilita perspectiva para prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    .board-3d-tilt {
+      transform: none;
+    }
+  }
   .dice-face-roll   { animation: lr-dice-roll var(--duration-roll) var(--ease-out-spring) both; }
   .car-token-arrive { animation: lr-token-arrive var(--duration-arrive) var(--ease-out-spring); }
   .player-turn-pulse {
