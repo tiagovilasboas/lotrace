@@ -24,7 +24,7 @@ export function PlayerList({
           <li
             key={player.id}
             className={cn(
-              'flex min-w-0 flex-1 basis-[calc(50%-0.25rem)] items-center gap-2.5 rounded-2xl px-3 py-2.5',
+              'flex min-w-0 flex-1 basis-[calc(50%-0.25rem)] items-center gap-3 rounded-2xl px-3 py-3',
               'surface-card',
               isTurn ? 'surface-card-active' : '',
               player.bankrupt && 'opacity-45',
