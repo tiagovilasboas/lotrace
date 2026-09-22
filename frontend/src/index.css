@@ -419,8 +419,29 @@
     min-height: 0;
     min-width: 0;
     flex-direction: column;
-    gap: 4cqmin;
+    gap: 3cqmin;
+    padding: 5cqmin;
+  }
+
+  /* Corner tile body — icon over a centred label, with breathing room.
+   * Corner cells are larger (1.28fr) so cqmin here is generous. */
+  .corner-body {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3cqmin;
     padding: 6cqmin;
+  }
+
+  /* Corner label sits under the mark — a touch smaller than a tile name
+   * so two-line captions (VÁ / PRESO) fit without truncation. */
+  .corner-body .tile-name-line {
+    font-size: 13cqmin;
+    line-height: 1.05;
   }
 
   .board-tile--pending {
@@ -449,9 +470,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 22cqmin;
+    font-size: 17cqmin;
     font-weight: 700;
-    line-height: 1.1;
+    line-height: 1.12;
     letter-spacing: -0.01em;
     color: var(--board-ink);
   }
@@ -463,7 +484,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 17cqmin;
+    font-size: 14cqmin;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     line-height: 1;
@@ -660,10 +681,10 @@
   /* ── Die faces ── */
   .die-face {
     display: grid;
-    width: 16cqmin;
-    height: 16cqmin;
-    min-width: 3.2rem;
-    min-height: 3.2rem;
+    width: 13cqmin;
+    height: 13cqmin;
+    min-width: 2.6rem;
+    min-height: 2.6rem;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 6%;
@@ -750,6 +771,18 @@
     transform-origin: center 55%;
     transform-style: preserve-3d;
     will-change: transform;
+  }
+
+  /* 3D pieces overlay — mirrors the board tilt so top-down pieces lean
+   * with the felt and stay aligned to the tile grid. */
+  .pieces-overlay {
+    transform: rotateX(18deg);
+    transform-origin: center 55%;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pieces-overlay { transform: none; }
   }
 
   /* Portrait / narrow: width is the limiting axis */

@@ -7,7 +7,7 @@ import { TileName } from '@/features/game/board/TileName.tsx';
 import type { BoardTileProps } from '@/features/game/board/tile-types.ts';
 import { tileSurfaceClass } from '@/features/game/board/tile-surface.ts';
 import { CarTokenStack } from '@/features/game/components/CarToken.tsx';
-import { formatCash } from '@/features/game/lib/format-cash.ts';
+import { formatCashCompact } from '@/features/game/lib/format-cash.ts';
 import { cn } from '@/lib/utils.ts';
 
 export function StationTile({ cell, occupants, ownerID, isPending, side }: BoardTileProps): ReactElement {
@@ -19,7 +19,7 @@ export function StationTile({ cell, occupants, ownerID, isPending, side }: Board
       <div className={cn('tile-body', tileBodyClass(side))}>
         <TileName lines={tileCaptionLines(cell)} align="center" />
         {cell.price !== undefined ? (
-          <span className="tile-price">{formatCash(cell.price)}</span>
+          <span className="tile-price">{formatCashCompact(cell.price)}</span>
         ) : null}
       </div>
     </div>

@@ -11,7 +11,7 @@ import { Dices } from 'lucide-react';
 import type { PlayerState } from '@lotrace/shared';
 import type { ReactElement, ReactNode } from 'react';
 import { ThemeToggle } from '@/components/theme-toggle.tsx';
-import { formatCash } from '@/features/game/lib/format-cash.ts';
+import { formatCashCompact } from '@/features/game/lib/format-cash.ts';
 import { tokenCssVar } from '@/features/game/player-tokens.ts';
 import { t } from '@/lib/i18n.ts';
 
@@ -54,7 +54,7 @@ function PlayerChip({
       </span>
       {/* Balance */}
       <span className="topbar-chip-balance">
-        {player.bankrupt ? t('bankrupt') : formatCash(player.cash)}
+        {player.bankrupt ? t('bankrupt') : formatCashCompact(player.cash)}
       </span>
     </span>
   );

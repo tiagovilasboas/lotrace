@@ -14,8 +14,9 @@ type BoardPiecesProps = {
   G: ImobiliarioState;
 };
 
-/** Uniform up-scale of every 3D piece (+50% vs the base geometry). */
-const PIECE_SCALE = 1.5;
+/** Uniform scale of every 3D piece. 1.0 = the design geometry, which is
+ * calibrated to sit inside one tile (~0.6 world unit) with breathing room. */
+const PIECE_SCALE = 1.0;
 
 /** Car Y rotation (radians) so it faces along its ring side,
  *  mirroring the 2D tokenRotateClass. */

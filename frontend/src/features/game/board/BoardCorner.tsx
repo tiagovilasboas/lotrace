@@ -12,7 +12,7 @@ import { CarTokenStack } from '@/features/game/components/CarToken.tsx';
  * SVG is inline and flat — readable at any tile size.
  */
 function CornerMark({ kind }: { kind: CellKind }): ReactElement | null {
-  const size = 'max(2.6rem, 54cqmin)';
+  const size = 'max(2rem, 40cqmin)';
 
   switch (kind) {
     case 'go':
@@ -81,7 +81,7 @@ export function BoardCorner({ cell, occupants, isPending, side }: BoardTileProps
   return (
     <div className={tileSurfaceClass(isPending)}>
       <CarTokenStack playerIDs={occupants} side={side} dock="center" />
-      <div className="flex h-full min-h-0 min-w-0 flex-col items-center justify-center gap-0.5 px-0.5">
+      <div className="corner-body">
         <CornerMark kind={cell.kind} />
         <TileName lines={tileCaptionLines(cell)} align="center" strong />
       </div>

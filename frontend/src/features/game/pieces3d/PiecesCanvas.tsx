@@ -13,8 +13,9 @@ function CameraSync({ boardPx }: { boardPx: number }): null {
 
   useEffect(() => {
     if (boardPx <= 0) return;
-    // zoom = pixels per world unit × fudge factor so board fills the canvas
-    const zoom = (boardPx / TOTAL) * 0.88;
+    // 1 world unit == 1 inner tile: zoom = board pixels / TOTAL world units.
+    // Top-down camera means this maps the tile grid 1:1 onto the overlay.
+    const zoom = boardPx / TOTAL;
     camera.zoom = zoom;
     camera.updateProjectionMatrix();
   }, [boardPx, camera, size]);
@@ -51,13 +52,19 @@ export function PiecesCanvas({ G }: PiecesCanvasProps): ReactElement {
   return (
     <div
       ref={wrapRef}
+      /* The board itself is tilted by CSS rotateX(18deg). We mirror that
+       * tilt on the overlay so the top-down 3D projection lines up 1:1 with
+       * the tile grid AND leans with the board — no dual-angle mismatch. */
+      className="pieces-overlay"
       style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
     >
       <Canvas
         orthographic
         camera={{
-          /* High-angle ortho — mirrors CSS rotateX(30deg) */
-          position: [0, 16, 10],
+          /* Near-top-down ortho: X/Z maps ~1:1 to the tile grid. A tiny Z
+           * offset avoids the degenerate look-at when pointing straight down.
+           * The visible tilt comes from the CSS rotateX on the wrapper. */
+          position: [0, 20, 0.001],
           zoom: 40,   /* initial non-zero zoom; CameraSync will correct it */
           near: 0.1,
           far: 200,
