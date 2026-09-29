@@ -15,7 +15,7 @@
     "@lotrace/shared": "*",
     "boardgame.io": "^0.50.2",
     "pg": "^8.23.0",
-    "tsx": "^4.19.3"
+    "tsx": "^4.23.15"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
