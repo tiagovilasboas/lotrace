@@ -14,7 +14,7 @@
     "@koa/bodyparser": "^6.1.0",
     "@lotrace/shared": "*",
     "boardgame.io": "^0.50.2",
-    "pg": "^8.23.0",
+    "pg": "^8.23.1",
     "tsx": "^4.23.15"
   },
   "devDependencies": {
