@@ -21,6 +21,6 @@
     "e2e:layout": "npm run e2e:layout -w @lotrace/frontend"
   },
   "devDependencies": {
-    "concurrently": "^10.0.5"
+    "concurrently": "^10.0.6"
   }
 }
